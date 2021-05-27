@@ -6,9 +6,14 @@
 Welcome to uq360's documentation!
 =================================
 
-The Uncertainty Quantification 360 toolkit is an open-source library that supports a range of metrics and methods for uncertainty quantification (UQ) that in turn can make AI predictions trustworthy and actionable, secondly, to disseminate the latest research and education materials that explore UQ's connections to trustworthy AI pillars such as fairness and transparency.
+The Uncertainty Quantification 360 (UQ360) toolkit is an open-source Python package that provides a diverse set of
+algorithms to quantify uncertainty, as well as capabilities to measure and improve UQ to streamline the development
+process. We provide a taxonomy and guidance for choosing these capabilities based on the user's needs. Further, UQ360
+makes the communication method of UQ an integral part of development choices in an AI lifecycle. Developers can make a
+user-centered choice by following the psychology-based guidance on communicating UQ estimates,
+from concise descriptions to detailed visualizations.
 
-For more information and installation instructions, see `our GitHub page <https://github.ibm.com/UQ360/UQ360>`_.
+For more information and installation instructions, see `our GitHub page <https://github.com/IBM/UQ360>`_.
 
 
 .. toctree::
