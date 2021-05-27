@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.7"
+
+# command to install dependencies
+install:
+  - pip3.7 install -r requirements.txt
+
+# commands to run tes
+# before_script: redis-cli ping
+
+script:
+  - python3.7 -m unittest discover
+
+after_success:
+#  - codecov
+
+services:
+#  - redis-server
