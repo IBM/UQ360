@@ -1,10 +1,10 @@
 # UQ360
 
-[![Build Status](https://travis.ibm.com/UQ360/UQ360.svg?token=xXs9JUYE1VxiQPCTrqiH&branch=master)](https://travis.ibm.com/UQ360/UQ360)
+[![Build Status](https://travis-ci.com/IBM/UQ360.svg?branch=main)](https://travis-ci.com/github/IBM/UQ360)
 
 The Uncertainty Quantification 360 (UQ360) toolkit is an open-source Python package that provides a diverse set of algorithms to quantify uncertainty, as well as capabilities to measure and improve UQ to streamline the development process. We provide a taxonomy and guidance for choosing these capabilities based on the user's needs. Further, UQ360 makes the communication method of UQ an integral part of development choices in an AI lifecycle. Developers can make a user-centered choice by following the psychology-based guidance on communicating UQ estimates, from concise descriptions to detailed visualizations.
 
-The [UQ360 interactive experience](http://uq360.mybluemix.net/data) provides a gentle introduction to the concepts and capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available.
+The [UQ360 interactive experience](http://uq360.mybluemix.net/) provides a gentle introduction to the concepts and capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available.
 
 We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your uncertianty estimation algorithms, metrics and applications. To get started as a contributor, please join the #uq360 channel of the [AIF360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q).
 
