@@ -171,5 +171,8 @@ class DummySklearnEstimator(ABC):
         self.base_model_prediction_fn = base_model_prediction_fn
         self.classes_ = [i for i in range(num_classes)]
 
+    def fit(self):
+        pass
+
     def predict_proba(self, X):
         return self.base_model_prediction_fn(X)
