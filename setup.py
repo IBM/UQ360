@@ -12,10 +12,10 @@ setup(
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     install_requires=[
-        'numpy>=1.16,<1.20',
-        'scipy>=1.2.0,<=1.5.3',
+        'numpy>=1.16.5',
+        'scipy>=1.2.0',
         'pandas>=0.24.0',
-        'scikit-learn==0.22',
+        'scikit-learn>=0.22',
         'matplotlib>=3.2.2',
         'autograd>=1.3',
         'torch>=1.6.0',
