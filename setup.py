@@ -16,7 +16,7 @@ setup(
         'scipy>=1.2.0',
         'pandas>=0.24.0',
         'scikit-learn>=0.22',
-        'matplotlib>=3.2.2',
+        'matplotlib>=3.2',
         'autograd>=1.3',
         'torch>=1.6.0',
         'gpytorch>=1.3.0',
