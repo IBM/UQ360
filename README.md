@@ -77,6 +77,16 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 (uq360)$ pip install -e .
 ```
 
+## PIP Installation of Uncertainty Quantification 360
+
+If you would like to quickly start using the UQ360 toolkit without cloning this repository, then you can install the [uq360 pypi package](https://pypi.org/project/uq360/) as follows. 
+
+```bash
+(your environment)$ pip install uq360
+```
+
+If you follow this approach, you may need to download the notebooks in the [examples](./examples) folder separately.
+
 # Using UQ360
 
 The `examples` directory contains a diverse collection of jupyter notebooks that use UQ360 in various ways. Both examples and tutorial notebooks illustrate working code using the toolkit. Tutorials provide additional discussion that walks the user through the various steps of the notebook. See the details about tutorials and examples [here](examples/README.md).
