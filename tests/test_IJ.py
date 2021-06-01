@@ -60,7 +60,7 @@ class LogisticRegression:
         return opt_params
 
     def get_test_acc(self, params, test_targets, test_inputs):
-        preds = np.round(self.predict(test_inputs).T).astype(np.int)
+        preds = np.round(self.predict(test_inputs).T).astype(int)
         err = np.abs(test_targets - preds).sum()
         return 1 - err/ test_targets.shape[1]
 
