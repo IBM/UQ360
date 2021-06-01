@@ -2,7 +2,7 @@ This directory contains a diverse collection of jupyter notebooks that use UQ360
 
 ## Tutorials
 
-- [Calibrated Housing Price Prediction](./tutorials/tutorial-sythetic_housing_dataset.ipynb)<br/>Illustrates using the housing price prediction task the consumption of uncertainties by two personas: the decision maker and the model developer. This tutorial covers the basic concepts of uncertainty quantification and evaluation in a simple regression setting.
+- [Calibrated Housing Price Prediction](./tutorials/tutorial-synthetic_housing_dataset.ipynb)<br/>Illustrates using the housing price prediction task the consumption of uncertainties by two personas: the decision maker and the model developer. This tutorial covers the basic concepts of uncertainty quantification and evaluation in a simple regression setting.
 
 - [Selective Classification on Adult Income Dataset](./tutorials/tutorial-adult_income_dataset.ipynb
 )<br/> Shows the usage of uncertainty information to help end users and developers compare the model's performance with male v.s. female customers. This tutorial covers the basic concepts of uncertainty quantification and evaluation in the selective classification setting.
