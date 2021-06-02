@@ -7,7 +7,8 @@ The Uncertainty Quantification 360 (UQ360) toolkit is an open-source Python pack
 
 The [UQ360 interactive experience](http://uq360.mybluemix.net/) provides a gentle introduction to the concepts and capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available.
 
-We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your uncertianty estimation algorithms, metrics and applications. To get started as a contributor, please join the #uq360 channel of the [AIF360 Community on Slack](https://aix360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aix360/shared_invite/enQtNzEyOTAwOTk1NzY2LTM1ZTMwM2M4OWQzNjhmNGRiZjg3MmJiYTAzNDU1MTRiYTIyMjFhZTI4ZDUwM2M1MGYyODkwNzQ2OWQzMThlN2Q).
+We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your uncertianty estimation algorithms, metrics and applications. 
+To get started as a contributor, please join the #uq360-users or #uq360-developers channel of the [AIF360 Community on Slack](https://aif360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g6tgJQ~7tIAT~S294TQ).
 
 # Supported Uncertainty Evaluation Metrics
 
@@ -76,6 +77,16 @@ Then, navigate to the root directory of the project which contains `setup.py` fi
 ```bash
 (uq360)$ pip install -e .
 ```
+
+## PIP Installation of Uncertainty Quantification 360
+
+If you would like to quickly start using the UQ360 toolkit without cloning this repository, then you can install the [uq360 pypi package](https://pypi.org/project/uq360/) as follows. 
+
+```bash
+(your environment)$ pip install uq360
+```
+
+If you follow this approach, you may need to download the notebooks in the [examples](./examples) folder separately.
 
 # Using UQ360
 
