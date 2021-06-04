@@ -92,6 +92,26 @@ If you follow this approach, you may need to download the notebooks in the [exam
 
 The `examples` directory contains a diverse collection of jupyter notebooks that use UQ360 in various ways. Both examples and tutorial notebooks illustrate working code using the toolkit. Tutorials provide additional discussion that walks the user through the various steps of the notebook. See the details about tutorials and examples [here](examples/README.md).
 
+## Citing UQ360
+
+A technical description of UQ360 is available in this
+[paper](https://arxiv.org/abs/2106.01410). Below is the bibtex entry for this
+paper.
+
+```
+@misc{uq360-june-2021,
+      title={Uncertainty Quantification 360: A Holistic Toolkit for Quantifying 
+      and Communicating the Uncertainty of AI}, 
+      author={Soumya Ghosh and Q. Vera Liao and Karthikeyan Natesan Ramamurthy 
+      and Jiri Navratil and Prasanna Sattigeri 
+      and Kush R. Varshney and Yunfeng Zhang},
+      year={2021},
+      eprint={2106.01410},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+```
+
 ## Acknowledgements
 
 UQ360 is built with the help of several open source packages. All of these are listed in setup.py and some of these include: 
