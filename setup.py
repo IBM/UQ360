@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='uq360',
     version='0.1',
-    url='https://github.ibm.com/UQ360/UQ360',
+    url='https://github.com/IBM/UQ360',
     license='Apache License 2.0',
     author='uq360 developers',
     author_email='uq360@us.ibm.com',
