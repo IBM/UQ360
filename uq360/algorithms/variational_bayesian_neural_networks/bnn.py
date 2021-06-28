@@ -211,7 +211,7 @@ class BnnClassification(BuiltinUQ):
 
         """
         if train_loader is None:
-            train = data_utils.TensorDataset(torch.Tensor(X), torch.Tensor(y.values).long())
+            train = data_utils.TensorDataset(torch.Tensor(X), torch.Tensor(y).long())
             train_loader = data_utils.DataLoader(train, batch_size=self.config['batch_size'], shuffle=True)
 
         torch.manual_seed(1234)
