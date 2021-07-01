@@ -1,8 +1,3 @@
-examples/vanilla_bnn/mnist-data/
-examples/dipvae/data
-uq360/datasets/data/
-**/**.DS_Store
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -110,3 +105,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+**/**.DS_Store

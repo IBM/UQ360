@@ -70,7 +70,7 @@ Clone the latest version of this repository:
 
 If you'd like to run the examples and tutorial notebooks, download the datasets now and place them in
 their respective folders as described in
-[uq360/datasets/data/README.md](uq360/datasets/data/README.md).
+[uq360/data/README.md](uq360/data/README.md).
 
 Then, navigate to the root directory of the project which contains `setup.py` file and run:
 
