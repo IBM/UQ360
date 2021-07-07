@@ -68,7 +68,7 @@ class MEPSDataset():
     demographics, health status and conditions, etc., of the respondents.
     This specific dataset contains MEPS survey data for calendar year 2015 obtained in rounds 3, 4, and 5 of Panel 19,
     and rounds 1, 2, and 3 of Panel 20.
-    See :file:`uq360/datasets/data/meps_data/README.md` for more details on the dataset and instructions on downloading/processing the data.
+    See :file:`uq360/data/meps_data/README.md` for more details on the dataset and instructions on downloading/processing the data.
     References:
         .. [#] `Medical Expenditure Panel Survey data <https://meps.ahrq.gov/mepsweb/>`_
     """
@@ -76,17 +76,19 @@ class MEPSDataset():
     def __init__(self, custom_preprocessing=default_preprocessing, dirpath=None):
         self._dirpath = dirpath
         if not self._dirpath:
-            self._dirpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'meps_data')
+            self._dirpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data', 'meps_data')
 
         self._filepath = os.path.join(self._dirpath, 'h181.csv')
         try:
             df = pd.read_csv(self._filepath, sep=',', na_values=[])
         except IOError as err:
             print("IOError: {}".format(err))
-            print("To use this class, please place the heloc_dataset.csv:")
+            print("To use this class, please place the h181.csv:")
             print("file, as-is, in the folder:")
             print("\n\t{}\n".format(os.path.abspath(os.path.join(
-               os.path.abspath(__file__), 'data', 'meps_data'))))
+               os.path.abspath(__file__), '../data', 'meps_data'))))
+            print("See :file:`uq360/data/meps_data/README.md` for more details on the dataset and instructions "
+                  "on downloading/processing the data.")
             import sys
             sys.exit(1)
 

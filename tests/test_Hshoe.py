@@ -3,7 +3,8 @@ import unittest
 import numpy as np
 import torch
 
-from uq360.algorithms.variational_bayesian_neural_networks.bnn import BnnRegression
+from uq360.algorithms.variational_bayesian_neural_networks.bnn import BnnRegression, BnnClassification
+from uq360.metrics.classification_metrics import entropy_based_uncertainty_decomposition
 from uq360.models.bayesian_neural_networks.layer_utils import InvGammaHalfCauchyLayer
 from uq360.models.bayesian_neural_networks.layers import HorseshoeLayer
 
@@ -30,12 +31,31 @@ class TestHC(unittest.TestCase):
         assert y.shape[0] == 5
         assert y.shape[1] == out_features
 
-    def test_uncertainty(self):
+    def test_uncertainty_classification(self):
+        from sklearn.datasets import make_classification
+        from sklearn.model_selection import train_test_split
+        n_samples = 200
+        n_features = 5
+        n_classes = 4
+        X, y = make_classification(n_samples=n_samples, n_features=n_features, n_classes=n_classes,
+                                   n_informative=n_features, n_redundant=0, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+        config = {'ip_dim': n_features, 'op_dim': n_classes, 'num_nodes': 5, 'num_layers': 1, 'num_epochs': 10,
+                  'step_size': 1e-2}
+        uq_bnn = BnnClassification(config=config)
+        uq_bnn.fit(X_train, y_train)
+        y_pred, y_prob, y_prob_var, y_prob_samples = uq_bnn.predict(X=X_test, mc_samples=10)
+        total_uq, aleatoric_uq, epistemic_uq = entropy_based_uncertainty_decomposition(y_prob_samples)
+        assert total_uq.shape[0] == X_test.shape[0]
+        assert len(total_uq.shape) == 1
+        assert len(total_uq.shape) == len(aleatoric_uq.shape) == len(epistemic_uq.shape)
+
+    def test_uncertainty_regression(self):
         from uq360.utils.generate_1D_regression_data import make_data_sine
         viz = False
         x_train, y_train, x_val, y_val, train_stats = make_data_sine(0, data_count=500) # 20% for training ; 80 % for testing
 
-        config = {'ip_dim': 1, 'op_dim': 1, 'num_nodes': 50, 'num_layers': 1, 'num_epochs': 1000,
+        config = {'ip_dim': 1, 'op_dim': 1, 'num_nodes': 50, 'num_layers': 1, 'num_epochs': 100,
                   'step_size': 1e-2}  # network params, learning epochs, and learning rate
         uq_bnn = BnnRegression(config=config)
         uq_bnn.fit(x_train, y_train)

@@ -13,8 +13,9 @@ def entropy_based_uncertainty_decomposition(y_prob_samples):
             on Machine Learning (pp. 1184-1193). PMLR.
 
     Args:
-        y_prob_samples: list of array-like of shape (n_samples, n_classes) containing class prediction probabilities
-            corresponding to samples from the model posterior.
+        y_prob_samples: ndarray of shape (mc_samples, n_samples, n_classes)
+            Samples from the predictive distribution. Here mc_samples stands for the number of Monte-Carlo samples,
+            n_samples is the number of data points and n_classes is the number of classes.
 
     Returns:
         tuple:
@@ -23,12 +24,11 @@ def entropy_based_uncertainty_decomposition(y_prob_samples):
             - epistemic_uncertainty: epistemic component of the total_uncertainty.
 
     """
-    y_preds_samples_stacked = np.stack(y_prob_samples)
-    preds_mean = np.mean(y_preds_samples_stacked, 0)
+    prob_mean = np.mean(y_prob_samples, 0)
 
-    total_uncertainty = entropy(preds_mean, axis=1)
+    total_uncertainty = entropy(prob_mean, axis=1)
     aleatoric_uncertainty = np.mean(
-        np.concatenate([entropy(y_pred, axis=1).reshape(-1, 1) for y_pred in y_prob_samples], axis=1),
+        np.concatenate([entropy(y_prob, axis=1).reshape(-1, 1) for y_prob in y_prob_samples], axis=1),
         axis=1)
     epistemic_uncertainty = total_uncertainty - aleatoric_uncertainty
 
