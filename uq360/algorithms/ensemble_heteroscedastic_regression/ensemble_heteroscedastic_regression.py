@@ -113,6 +113,3 @@ class EnsembleHeteroscedasticRegression(BuiltinUQ):
             res = Result(*res, y_dists=dists)
 
         return res        
-
-    def get_parameter_uncertainty(self, *argv, **kwargs):
-        raise NotImplementedError
