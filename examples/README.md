@@ -11,7 +11,7 @@ This directory contains a diverse collection of jupyter notebooks that use UQ360
 
 Below is a list of additional notebooks that demonstrate the use of UQ360:
 
-[demo_actively_learned_model_methods_comparison.ipynb](./actively_learned_model/demo_actively_learned_model_methods_comparison.ipynb): illustrates the use of active learning to train a surrogate model of Partial Differential Equations (PDE) and shows the benefit compared to random sampling.
+[demo_actively_learned_model_methods_comparisons.ipynb](./actively_learned_model/demo_actively_learned_model_methods_comparisons.ipynb): illustrates the use of active learning to train a surrogate model of Partial Differential Equations (PDE) and shows the benefit compared to random sampling.
 
 [demo_auxiliary_interval_predictor.ipynb](./auxiliary_interval_predictor/demo_auxiliary_interval_predictor.ipynb): demonstrates the use of Auxiliary Interval Predictors for calibration aware regression.
 
