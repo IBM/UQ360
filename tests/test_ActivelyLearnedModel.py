@@ -18,8 +18,6 @@ class TestActivelyLearnedModel(unittest.TestCase):
         from uq360.algorithms.actively_learned_model import ActivelyLearnedModel
         from uq360.algorithms.ensemble_heteroscedastic_regression import EnsembleHeteroscedasticRegression
         from uq360.metrics import compute_regression_metrics
-        X, y = self._generate_mock_data(200, 3)
-        y = y.reshape(-1, 1)
 
         def sample_(n):
             return np.random.rand(n,3)
@@ -56,6 +54,7 @@ class TestActivelyLearnedModel(unittest.TestCase):
 
         X = sample_(1000)
         y = querry_(X)
+        y = y.reshape(-1, 1)
         yhat, yhat_lb, yhat_ub = uq_model.predict(X)
 
         results = compute_regression_metrics(y, yhat, yhat_lb, yhat_ub)
