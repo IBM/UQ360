@@ -11,18 +11,23 @@ This directory contains a diverse collection of jupyter notebooks that use UQ360
 
 Below is a list of additional notebooks that demonstrate the use of UQ360:
 
-[demo_auxiliary_interval_predictor.ipynb](./auxiliary_interval_predictor/demo_auxiliary_interval_predictor.ipynb): demostrates the use of Auxiliary Interval Predictors for calibration aware regression.
+[demo_actively_learned_model_methods_comparisons.ipynb](./actively_learned_model/demo_actively_learned_model_methods_comparisons.ipynb): illustrates the use of active learning to train a surrogate model of Partial Differential Equations (PDE) and shows the benefit compared to random sampling.
 
-[demo_blackbox_metamodel.ipynb](./blackbox_metamodel/demo_blackbox_metamodel.ipynb): demostrates the use of Blackbox MetaModel for post-hoc extraction of uncertainty from pre-trained models.
+[demo_auxiliary_interval_predictor.ipynb](./auxiliary_interval_predictor/demo_auxiliary_interval_predictor.ipynb): demonstrates the use of Auxiliary Interval Predictors for calibration aware regression.
+
+[demo_blackbox_metamodel.ipynb](./blackbox_metamodel/demo_blackbox_metamodel.ipynb): demonstrates the use of Blackbox MetaModel for post-hoc extraction of uncertainty from pre-trained models.
 
 [demo_bnn_classification.ipynb](./bnn_classification/demo_bnn_classification.ipynb
-): demostrates the use of BNNs and uncertainty decomposition for selective classificaiton on UCI Adult Income Dataset.
+): demonstrates the use of BNNs and uncertainty decomposition for selective classificaiton on UCI Adult Income Dataset.
 
 [demo_gp_regression_meps_dataset.ipynb](./gp_regression/demo_gp_regression_meps_dataset.ipynb
-): demostrates the use of Gaussian Process regression on MEPS dataset for the healthcare utlization prediction task.
+): demonstrates the use of Gaussian Process regression on MEPS dataset for the healthcare utlization prediction task.
 
 [demo_heteroscedastic_regression.ipynb](./heteroscedastic_regression/demo_heteroscedastic_regression.ipynb
-): demostrates the use of regression with heteroscedastic noise.
+): demonstrates the use of regression with heteroscedastic noise.
+
+[demo_ensemble_heteroscedastic_regression.ipynb](./ensemble_heteroscedastic_regression/demo_ensemble_heteroscedastic_regression.ipynb
+): demonstrates the use of an ensemble of regression with heteroscedastic noise.
 
 [demo_infinitesimal_jackknife.ipynb](./infinitesimal_jackknife/demo_infinitesimal_jackknife.ipynb): illustrates the infinitesimal jackknife (IJ) for logistic regression.
 
