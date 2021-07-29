@@ -63,12 +63,7 @@ class ActivelyLearnedModel(BuiltinUQ):
 
 
     def fit(self):
-        """ Fit the actively learned model, by increasing the dataset efficiently.
-        Args:
-            X: array-like of shape (n_samples, n_features).
-                Features vectors of the training data.
-            y: array-like of shape (n_samples,) or (n_samples, n_targets)
-                Target values
+        """ Fit the actively learned model, by increasing the dataset efficiently. NB: it does not take a dataset as argument, because it is building one during training.
         Returns:
             self
         """
