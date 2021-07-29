@@ -68,6 +68,15 @@ class EnsembleHeteroscedasticRegression(BuiltinUQ):
             raise NotImplementedError
     
     def fit(self, X, y):
+        """ Fit the Ensemble of Heteroscedastic Regression models.
+        Args:
+            X: array-like of shape (n_samples, n_features).
+                Features vectors of the training data.
+            y: array-like of shape (n_samples,) or (n_samples, n_targets)
+                Target values
+        Returns:
+            self
+        """
         #TODO:paralellize model training for the ensemble
 
         for i in range(len(self.model.models_)):
@@ -82,7 +91,26 @@ class EnsembleHeteroscedasticRegression(BuiltinUQ):
         return self
 
     def predict(self, X, return_dists=False):
-
+        """
+        Obtain predictions for the test points.
+        In addition to the mean and lower/upper bounds, also returns epistemic uncertainty (return_epistemic=True)
+        and full predictive distribution (return_dists=True).
+        Args:
+            X: array-like of shape (n_samples, n_features).
+                Features vectors of the test points.
+            return_dists: If True, the predictive distribution for each instance using scipy distributions is returned.
+        Returns:
+            namedtuple: A namedtupe that holds
+            y_mean: ndarray of shape (n_samples, [n_output_dims])
+                Mean of predictive distribution of the test points.
+            y_lower: ndarray of shape (n_samples, [n_output_dims])
+                Lower quantile of predictive distribution of the test points.
+            y_upper: ndarray of shape (n_samples, [n_output_dims])
+                Upper quantile of predictive distribution of the test points.
+            dists: list of predictive distribution as `scipy.stats` objects with length n_samples.
+                Only returned when `return_dists` is True.
+        """
+        
         self.model.eval()
 
         X = torch.from_numpy(X).float().to(self.device)

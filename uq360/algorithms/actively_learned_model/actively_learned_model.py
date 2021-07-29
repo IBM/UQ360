@@ -63,6 +63,15 @@ class ActivelyLearnedModel(BuiltinUQ):
 
 
     def fit(self):
+        """ Fit the actively learned model, by increasing the dataset efficiently.
+        Args:
+            X: array-like of shape (n_samples, n_features).
+                Features vectors of the training data.
+            y: array-like of shape (n_samples,) or (n_samples, n_targets)
+                Target values
+        Returns:
+            self
+        """
 
         if self.online:
             self.X = self.config["sampling_function"](self.config["num_init"])
@@ -100,4 +109,20 @@ class ActivelyLearnedModel(BuiltinUQ):
         return self
 
     def predict(self, X):
+        """
+        Obtain predictions for the test points.
+        In addition to the mean and lower/upper bounds, also returns epistemic uncertainty (return_epistemic=True)
+        and full predictive distribution (return_dists=True).
+        Args:
+            X: array-like of shape (n_samples, n_features).
+                Features vectors of the test points.
+        Returns:
+            namedtuple: A namedtupe that holds
+            y_mean: ndarray of shape (n_samples, [n_output_dims])
+                Mean of predictive distribution of the test points.
+            y_lower: ndarray of shape (n_samples, [n_output_dims])
+                Lower quantile of predictive distribution of the test points.
+            y_upper: ndarray of shape (n_samples, [n_output_dims])
+                Upper quantile of predictive distribution of the test points.
+        """
         return self.builtinuqmodel.predict(X)
