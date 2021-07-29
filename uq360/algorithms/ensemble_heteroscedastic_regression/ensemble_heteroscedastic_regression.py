@@ -110,7 +110,7 @@ class EnsembleHeteroscedasticRegression(BuiltinUQ):
             dists: list of predictive distribution as `scipy.stats` objects with length n_samples.
                 Only returned when `return_dists` is True.
         """
-        
+
         self.model.eval()
 
         X = torch.from_numpy(X).float().to(self.device)
@@ -140,4 +140,5 @@ class EnsembleHeteroscedasticRegression(BuiltinUQ):
             Result = namedtuple('res', Result._fields + ('y_dists',))
             res = Result(*res, y_dists=dists)
 
-        return res        
+        return res
+            

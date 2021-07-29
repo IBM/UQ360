@@ -6,7 +6,7 @@ from uq360.algorithms.builtinuq import BuiltinUQ
 
 
 class ActivelyLearnedModel(BuiltinUQ):
-    """ActivelyLearnedModel assumes an existing BuiltinUQ model, and implements an active learning training of this model"""
+    """ActivelyLearnedModel assumes an existing BuiltinUQ model, and implements an active learning training of this model. This code is supporting Pestourie et al. "Active learning of deep surrogates for PDEs: application to metasurface design." npj Computational Materials 6.1 (2020): 1-7."""
 
     def __init__(self, config=None, device=None, verbose=True, online=True):
         """Initializer for Actively learned model. 
