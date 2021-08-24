@@ -12,7 +12,6 @@ from uq360.calibrators.calibrator import Calibrator
 
 class PerfPredictor(Base):
     def __init__(self, calibrator):
-        
         self.random_state = 42
         self._object_registry = {}
         self.fit_status = False
@@ -35,7 +34,6 @@ class PerfPredictor(Base):
     def instance(cls, subtype_name=None, **params):
         subtype_name = subtype_name
         return super(PerfPredictor, cls).instance(subtype_name, **params)
-    
 
     # When asked to 'init' a whitebox feature, set it to zero (for now?)
     def init_whitebox_feature(self, feature_name):
@@ -46,7 +44,6 @@ class PerfPredictor(Base):
         if warn_if_not_initialized and (logged_name not in self.whitebox_features):
             print('ERROR, whitebox feature:', logged_name, 'was not initialized before use')
         self.whitebox_features[logged_name] = value
-
 
     @staticmethod
     def unison_shuffle(x, y):
@@ -86,8 +83,6 @@ class PerfPredictor(Base):
         
         return new_train_x, new_train_y
 
-
-
     @property
     def pkl_registry(self):
         pkl_list = []
@@ -97,7 +92,6 @@ class PerfPredictor(Base):
                 pkl_list.append(self._object_registry[obj]['object'])
                 pkl_names.append(obj)
         return pkl_list, pkl_names
-
 
     def register_pkl_object(self, obj, name):
         self._object_registry[name] = {'object': obj, 'type': 'pkl'}
@@ -112,10 +106,8 @@ class PerfPredictor(Base):
                 json_names.append(obj)
         return json_list, json_names
 
-
     def register_json_object(self, obj, name):
         self._object_registry[name] = {'object': obj, 'type': 'json'}
-
 
     def save(self, output_location=None):
         raise NotImplementedError("save method should be implemented by the predictor")
@@ -133,7 +125,6 @@ class PerfPredictor(Base):
             os.mkdir(output_location)
         else:
             os.mkdir(output_location)
-
 
         # Objects in separate registries are saved with different methods
         registers = self.pkl_registry
@@ -155,10 +146,8 @@ class PerfPredictor(Base):
                 os.mkdir(c_dir)
             self.calibrator.save(c_dir)
 
-
     def load(self, input_location=None):
         raise NotImplementedError("load method should be implemented by the predictor")
-
 
     def _load(self, input_location):
         input_location = os.path.join(input_location, self.name())
@@ -184,10 +173,7 @@ class PerfPredictor(Base):
                 name = tail.replace('.json','').replace(self.name()+'-','')
                 self.register_json_object(obj, name)
 
-
         if self.calibrator is not None:
             c_dir = os.path.join(input_location, 'calibrator-' + self.calibrator.name())
             assert os.path.isdir(c_dir)
             self.calibrator.load(c_dir)
-
-

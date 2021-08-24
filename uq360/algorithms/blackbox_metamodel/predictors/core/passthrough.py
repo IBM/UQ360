@@ -13,13 +13,10 @@ class PassthroughPredictor(PerfPredictor):
     def name(cls):
         return ('passthrough')
 
-
     def fit(self, x_test_unprocessed, x_test, y_test):
         self.fit_status = True
 
-
     def predict(self, X_unprocessed, X):
-        # TODO: add some sanity checks for X
         assert self.fit_status
         assert 'confidence_top' in X.keys()
         preds = X['confidence_top'].values
@@ -32,5 +29,3 @@ class PassthroughPredictor(PerfPredictor):
 
     def load(self, input_location):
         pass
-
-

@@ -13,7 +13,6 @@ class BatchProjection(SingleHistogramFeature):
         super().__init__(bins)
         self.fit_status = False
 
-
     # Extract pointwise features and construct payload to compare to prod set
     def extract_pointwise_and_payload(self, x: np.ndarray, predictions: np.ndarray):
         vec, histogram, edges = self.extract_features(x, predictions)
@@ -23,7 +22,6 @@ class BatchProjection(SingleHistogramFeature):
     def extract_features(self, x, predictions, quantile=0.9, background_hist=None):
         raise NotImplementedError("All projection based batch features must implement 'extract_features()'")
 
-    
     # Extract pointwise features and compute batch feature from test payload
     def extract_pointwise_and_batch(self, x: np.ndarray, predictions: np.ndarray, payload: dict):
         vec, histogram, edges = self.extract_features(x, predictions, background_hist=np.array(payload['histogram_bins']))
@@ -33,7 +31,6 @@ class BatchProjection(SingleHistogramFeature):
         distance = self.compute_distance(hist1, hist2)
         
         return vec, distance
-
 
     # Construct a single histogram
     def extract_histogram(self, vec, quantile, background_hist=None):
@@ -58,9 +55,6 @@ class BatchProjection(SingleHistogramFeature):
         return hist, edges
 
 
-
-
-
 class BatchProjectionPCA(BatchProjection):
     def __init__(self, bins=25):
         super().__init__(bins)
@@ -71,12 +65,10 @@ class BatchProjectionPCA(BatchProjection):
     def name(cls):
         return ('pca_distance')
 
-
     def set_pointwise_transformer(self, pointwise_transformer):
         self.pointwise_transformer = pointwise_transformer
         if pointwise_transformer.fit_status:
             self.fit_status = True
-
 
     def fit(self, x, y):
         if self.fit_status:
@@ -85,7 +77,6 @@ class BatchProjectionPCA(BatchProjection):
             self.pointwise_transformer.fit(x,y)
             self.fit_status = True
 
-
     # Extract features and create histograms
     def extract_features(self, x, predictions, quantile=0.9, background_hist=None):
         vec = np.squeeze(self.extract_vector(x, predictions))
@@ -93,7 +84,6 @@ class BatchProjectionPCA(BatchProjection):
 
         histogram, edges = self.extract_histogram(vec, quantile, background_hist=background_hist)
         return vec, histogram, edges
-
 
 
 class BatchProjectionHighestImportance(BatchProjection):
@@ -111,7 +101,6 @@ class BatchProjectionHighestImportance(BatchProjection):
     def name(cls):
         return ('best_feature_distance')
 
-
     def fit(self, x, y):
         if self.fit_status:
             return
@@ -120,7 +109,6 @@ class BatchProjectionHighestImportance(BatchProjection):
             self.importances = self.pointwise_transformer.model.feature_importances_
             self.index = np.argmax(self.importances)
             self.fit_status = True
-
 
     def set_pointwise_transformer(self, pointwise_transformer):
         self.pointwise_transformer = pointwise_transformer
@@ -135,12 +123,9 @@ class BatchProjectionHighestImportance(BatchProjection):
         self.importances = self.pointwise_transformer.model.feature_importances_
         self.index = np.argmax(self.importances)
 
-
-
     # Extract features and create histograms
     def extract_features(self, x, predictions, quantile=0.9, background_hist=None):
         vec = x[:,self.index]
         assert(len(vec.shape) == 1)
         histogram, edges = self.extract_histogram(vec, quantile, background_hist=background_hist)
         return vec, histogram, edges
-

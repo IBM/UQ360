@@ -86,9 +86,7 @@ class PredictorDriver(object):
 
     def fit(self, x_train, y_train, x_test, y_test, test_predicted_probabilities=None):
         self.timer.start('fit')
-
         self.train_labels = np.unique(y_train)
-
         # Fit the feature extractors
         self.feature_extractor.fit(x_train, y_train)
 

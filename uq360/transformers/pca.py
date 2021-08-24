@@ -2,7 +2,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
 
 
 class PCATransformer(FeatureTransformer):

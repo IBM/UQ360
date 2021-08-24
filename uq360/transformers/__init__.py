@@ -1,14 +1,7 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 from .feature_transformer import FeatureTransformer
 from .class_accuracy import ClassAccuracyTransformer
 from .class_frequency import ClassFrequencyTransformer
-from .clustering_transformer import ClusteringTransformer
 from .confidence_delta import ConfidenceDeltaTransformer
 from .confidence_entropy import ConfidenceEntropyTransformer
 from .confidence_min_max import ConfidenceMinMaxTransformer

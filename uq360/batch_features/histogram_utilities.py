@@ -286,11 +286,3 @@ def compute_cosine_similarity(vec1, vec2):
 
     similarity = num / (sqrt(d1)*sqrt(d2))
     return similarity
-
-
-
-
-
-
-
-

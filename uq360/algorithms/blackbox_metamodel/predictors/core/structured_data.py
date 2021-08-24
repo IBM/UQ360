@@ -87,7 +87,6 @@ class EnsemblePredictor(PerfPredictor):
         gbm = clf1.best_estimator_
         self.metamodel_list.append(gbm)
         self.metamodel_list.append(clf2.best_estimator_)
-
         self.classifier_for_tree_whitebox_features = gbm
 
         # If calibrator is not None, fit

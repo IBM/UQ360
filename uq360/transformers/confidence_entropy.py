@@ -2,7 +2,7 @@
 
 import numpy as np
 from scipy.stats import entropy
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
 
 
 class ConfidenceEntropyTransformer(FeatureTransformer):

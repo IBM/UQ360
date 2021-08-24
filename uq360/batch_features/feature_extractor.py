@@ -17,7 +17,6 @@ class FeatureExtractor:
         self.batch_features = []
         self.batch_feature_objects = {}
 
-        # MA: I can't say I understand what is going on here
         for pwf in pointwise_features:
             if type(pwf) == str:
                 tr = FeatureTransformer.instance(pwf)
@@ -36,9 +35,7 @@ class FeatureExtractor:
                 self.batch_features.append(bf)
                 self.batch_feature_objects[bf] = tr
 
-
     def fit(self, x: np.ndarray, y: np.ndarray):
-
         for pwfo in self.pointwise_feature_objects.values():
             pwfo.fit(x, y)
 
@@ -51,11 +48,8 @@ class FeatureExtractor:
             bfo.fit(x, y)
         self.fit_flag = True
 
-
-
     # Logic shared across transforming test and prod
     def _get_features(self, x, predicted_probabilities):
-
         assert self.fit_flag
         features = OrderedDict()
         for pwf, pwfo in self.pointwise_feature_objects.items():
@@ -72,7 +66,6 @@ class FeatureExtractor:
         features = pd.DataFrame(features, columns=features.keys())
         return features
 
-
     def transform_test(self, x: np.ndarray, predicted_probabilities: np.ndarray):
 
         features = self._get_features(x, predicted_probabilities)
@@ -84,10 +77,7 @@ class FeatureExtractor:
 
         return features, payloads
 
-
-
     def transform_prod(self, x: np.ndarray, predicted_probabilities: np.ndarray, payloads: dict):
-
         features = self._get_features(x, predicted_probabilities)
 
         batch_features = OrderedDict()

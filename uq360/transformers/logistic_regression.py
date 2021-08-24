@@ -1,9 +1,9 @@
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from .feature_transformer import FeatureTransformer
-from .confidence_top import ConfidenceTopTransformer
-from .confidence_delta import ConfidenceDeltaTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
+from uq360.transformers.confidence_top import ConfidenceTopTransformer
+from uq360.transformers.confidence_delta import ConfidenceDeltaTransformer
 
 
 class LogisticRegressionTransformer(FeatureTransformer):

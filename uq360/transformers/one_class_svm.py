@@ -1,7 +1,7 @@
 
 import numpy as np
 from sklearn.svm import OneClassSVM
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
 
 
 class OneClassSVMTransformer(FeatureTransformer):

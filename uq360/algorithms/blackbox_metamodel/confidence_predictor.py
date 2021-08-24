@@ -1,11 +1,3 @@
-import inspect
-from collections import namedtuple
-
-import numpy as np
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.exceptions import NotFittedError
 
 from uq360.algorithms.blackbox_metamodel.predictors.predictor_driver import PredictorDriver
 from uq360.algorithms.posthocuq import PostHocUQ

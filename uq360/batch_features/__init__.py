@@ -1,10 +1,10 @@
 
-from .batch_feature import BatchFeature
-from .batch_basic_pointwise_hist import BatchConfidenceTop, BatchConfidenceDelta, BatchConfidenceEntropy, BatchClassFrequency
-from .batch_shadow_models import BatchShadowGBM, BatchShadowLogisticRegression, BatchShadowRandomForest
-from .batch_projection import BatchProjectionHighestImportance, BatchProjectionPCA
-from .num_important import BatchNumImportant
-from .significance_feature import SignificanceFeature
-from .blackbox_feature import BlackboxFeature, BlackboxBaseEntropyRatio, BlackboxPPEntropy, BlackboxPredictedDrop, BlackboxPredictedUncertainty
-from .blackbox_feature import BlackboxPredictedStd, BlackboxPredictedBootstrap
-from .drift_classifier import DriftClassifier
+from uq360.batch_features.batch_feature import BatchFeature
+from uq360.batch_features.batch_basic_pointwise_hist import BatchConfidenceTop, BatchConfidenceDelta, BatchConfidenceEntropy, BatchClassFrequency
+from uq360.batch_features.batch_shadow_models import BatchShadowGBM, BatchShadowLogisticRegression, BatchShadowRandomForest
+from uq360.batch_features.batch_projection import BatchProjectionHighestImportance, BatchProjectionPCA
+from uq360.batch_features.num_important import BatchNumImportant
+from uq360.batch_features.significance_feature import SignificanceFeature
+from uq360.batch_features.blackbox_feature import BlackboxFeature, BlackboxBaseEntropyRatio, BlackboxPPEntropy, BlackboxPredictedDrop, BlackboxPredictedUncertainty
+from uq360.batch_features.blackbox_feature import BlackboxPredictedStd, BlackboxPredictedBootstrap
+from uq360.batch_features.drift_classifier import DriftClassifier

@@ -2,19 +2,18 @@
 import numpy as np
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
 
+
 class ConfidencePredictor(PerfPredictor):
     def __init__(self, calibrator=None):
         self.predictor = {}
         calibrator = None
         super(ConfidencePredictor, self).__init__(calibrator)
 
-
     @classmethod
     def name(cls):
         return ('confidence')
 
     def get_conf_dict(self, top_confidences, y_test):
-
         # confidence bins
         conf_dict = {(a, a + 10): {'correct': 0, 'total': 0} for a in range(0, 100, 10)}
         for i in range(len(top_confidences)):
@@ -79,7 +78,6 @@ class ConfidencePredictor(PerfPredictor):
         # model will be 89% accurate
         self.fit_status = True
 
-
     def predict(self, X_unprocessed, X):
         # TODO: add some sanity checks for X
         assert self.fit_status
@@ -98,8 +96,6 @@ class ConfidencePredictor(PerfPredictor):
             standard_deviation.append(self.predictor[int(conf / 10)]['std'])
         output = {'confidences': np.array(accuracy_predictions), 'uncertainties': np.array(standard_deviation)}
         return output
-        
-
 
     def save(self, output_location):
         output_json = {}
@@ -107,20 +103,13 @@ class ConfidencePredictor(PerfPredictor):
             output_json[str(key)] = item
         self.register_json_object(output_json, 'output_dict')
         self._save(output_location)
-
     
     def load(self, input_location):
         self._load(input_location)
-
-        
         json_objs, json_names = self.json_registry
         for obj, name in zip(json_objs, json_names):
             if name == 'output_dict':
                 self.predictor = {}
                 for key, item in obj.items():
                     self.predictor[int(key)] = item
-                
-
         self.fit_status = True
-
-

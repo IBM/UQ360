@@ -12,8 +12,6 @@ class BatchShadowModel(MultiHistogramFeature):
         super().__init__(bins)
         self.fit_status = False
 
-
-
     def set_pointwise_transformer(self, pointwise_transformer):
         self.pointwise_transformer = pointwise_transformer
         if pointwise_transformer.fit_status:
@@ -27,9 +25,6 @@ class BatchShadowModel(MultiHistogramFeature):
             self.fit_status = True
 
 
-
-
-
 class BatchShadowGBM(BatchShadowModel):
     def __init__(self, bins=10):
         super().__init__(bins)
@@ -39,8 +34,6 @@ class BatchShadowGBM(BatchShadowModel):
     @classmethod
     def name(cls):
         return ('gbm_distance')
-
-
 
 
 class BatchShadowLogisticRegression(BatchShadowModel):
@@ -63,4 +56,3 @@ class BatchShadowRandomForest(BatchShadowModel):
     @classmethod
     def name(cls):
         return ('random_forest_distance')
-

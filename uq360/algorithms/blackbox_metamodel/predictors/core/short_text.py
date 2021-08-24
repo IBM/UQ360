@@ -13,7 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 """
-The "v2" version of the text ensemble predictor does an "inner" and "outer calibration".
+This version of the text ensemble predictor does an "inner" and "outer calibration".
 Note: For calibration, we just set aside one small subset of data and reuse it for inner and outer calibration
 
 Logic:
@@ -26,11 +26,11 @@ obtain confidences against every single meta model. pass the confidences to the 
 grab the mean of confidences that come from N calibrators (inner calib)
 pass the mean of confidences to the "master calibrator" and predict() again. (outer calib)
 
-
 """
 
 
 class TextEnsembleV2Predictor(PerfPredictor):
+
     def __init__(self, calibrator="isotonic_regression"):
         self.metamodels_considered = ["svm", "gbm", "mlp"]
         self.metamodels = {}
@@ -64,7 +64,6 @@ class TextEnsembleV2Predictor(PerfPredictor):
         return ('text_ensemble_v2')
 
     def fit(self, x_test_unprocessed, x_test, y_test):
-
         self.x_test = x_test
         self.y_test = y_test
 
@@ -83,13 +82,11 @@ class TextEnsembleV2Predictor(PerfPredictor):
                 # fall back to regular train test split and these conditions will be handled downstream
                 x_dev, x_test, y_dev, y_test = train_test_split(x_test, y_test, test_size=0.2,
                                                                 random_state=self.random_state)
-
         else:
             x_dev = x_test
             y_dev = y_test
 
         if len(np.unique(y_dev)) == 1:
-
             if 1 in y_dev:
                 self.return_all_true = True
                 print(
@@ -102,10 +99,8 @@ class TextEnsembleV2Predictor(PerfPredictor):
                     'The base model has an accuracy of 0 percent on the test set. Return predictions of only 0 percent')
                 self.fit_status = True
                 return
-
         # Balance datasets
         x_dev, y_dev = self._balance_data(x_dev, y_dev)
-
         mlp_parameters = {
             "hidden_layer_sizes": [(100,),
                                    (100, 100, 100,),
@@ -212,7 +207,6 @@ class TextEnsembleV2Predictor(PerfPredictor):
         self.fit_status = True
 
     def predict(self, X_unprocessed, X):
-
         X = X.values
         assert self.fit_status
         if self.return_all_true:

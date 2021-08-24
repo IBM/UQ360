@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 from umap import UMAP
 
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
 
 
 class UmapKdeTransformer(FeatureTransformer):

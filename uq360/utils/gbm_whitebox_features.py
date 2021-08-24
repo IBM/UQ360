@@ -67,40 +67,40 @@ class GBM_WhiteboxFeatureExtractor():
         node_accuracy = node_counts_correct / node_counts_total
         node_accuracy = np.nan_to_num(node_accuracy)
         
-        #print ('Correct', node_counts_correct)
-        #print ('Incorrect', node_counts_incorrect)
-        #print ('Total', node_counts_total)
+        # print ('Correct', node_counts_correct)
+        # print ('Incorrect', node_counts_incorrect)
+        # print ('Total', node_counts_total)
         
-        #print ('Accuracy', node_accuracy)
+        # print ('Accuracy', node_accuracy)
 
         # Now call them again with both test and prod, passing in the node accuracies
         # So we can see how they vary
 
         np.set_printoptions(suppress=True)
         node_counts_test, accuracy_test = self.count_nodes(test_leaves, max_node_id, node_accuracy)
-        #print('Test')
-        #print(node_counts_test)
-        #print('Test node accuracy', accuracy_test)
+        # print('Test')
+        # print(node_counts_test)
+        # print('Test node accuracy', accuracy_test)
 
         
         node_counts_prod, accuracy_prod = self.count_nodes(prod_leaves, max_node_id, node_accuracy)
-        #print('Prod')
-        #print(node_counts_prod)
-        #print('Prod node accuracy', accuracy_prod)
+        # print('Prod')
+        # print(node_counts_prod)
+        # print('Prod node accuracy', accuracy_prod)
         
         
-        #print('Delta (abs)')
+        # print('Delta (abs)')
         deltas = abs(node_counts_prod - node_counts_test)
-        #print('max', round(deltas.max(),5))
-        #print('sum', round(deltas.sum(),5))
-        #print('std', round(deltas.std(),5))
+        # print('max', round(deltas.max(),5))
+        # print('sum', round(deltas.sum(),5))
+        # print('std', round(deltas.std(),5))
 
         self.add_whitebox_feature('gbm_node_freq_delta_abs_max', deltas.max())
         self.add_whitebox_feature('gbm_node_freq_delta_abs_sum', deltas.sum())
         self.add_whitebox_feature('gbm_node_freq_delta_abs_std', deltas.std())
         
         delta_accuracy = accuracy_prod - accuracy_test
-        #print("Delta accuracy", round(delta_accuracy,4))
+        # print("Delta accuracy", round(delta_accuracy,4))
 
         self.add_whitebox_feature('gbm_node_accuracy_delta', delta_accuracy)
         self.add_whitebox_feature('gbm_node_accuracy_delta_abs', abs(delta_accuracy))
@@ -116,11 +116,11 @@ class GBM_WhiteboxFeatureExtractor():
         num_trees = shape[1]*shape[2]
         num_nodes = max_node_id * num_trees
         num_data_points = len(data)
-        #print('Max node id', max_node_id)
-        #print('Num trees', num_trees)
-        #print('Num nodes', num_nodes)
-        #print('Num data points', num_data_points)
-        #print ('max_node_id', max_node_id)
+        # print('Max node id', max_node_id)
+        # print('Num trees', num_trees)
+        # print('Num nodes', num_nodes)
+        # print('Num data points', num_data_points)
+        # print ('max_node_id', max_node_id)
         
         node_counts = np.zeros((num_trees, max_node_id))
         for datum in data:
@@ -142,10 +142,10 @@ class GBM_WhiteboxFeatureExtractor():
     def compute_decision_distance(self, x_test, x_prod):
         test = self.compute_depth_sums(x_test)
         prod = self.compute_depth_sums(x_prod)
-        #print ("Test avgs", test)
-        #print ("Prod avgs", prod)
+        # print ("Test avgs", test)
+        # print ("Prod avgs", prod)
         deltas = prod - test
-        #print ("Deltas", deltas)
+        # print ("Deltas", deltas)
 
         i = 0
         for delta in deltas:
@@ -154,13 +154,13 @@ class GBM_WhiteboxFeatureExtractor():
             i+=1
         
         sum_delta = prod.sum() - test.sum()
-        #print ("Sum delta", sum_delta)
+        # print ("Sum delta", sum_delta)
         self.add_whitebox_feature('gbm_delta_sum', sum_delta)
         self.add_whitebox_feature('gbm_delta_sum_abs', abs(sum_delta))
         
     def compute_depth_sums(self, data):
         max_depth = self.gbm.max_depth+1
-        #print ("Max depth", max_depth)
+        # print ("Max depth", max_depth)
         depth_sum_sums = np.zeros(max_depth)
         num_nodes=0
         num_trees=0    
@@ -171,9 +171,9 @@ class GBM_WhiteboxFeatureExtractor():
                 num_nodes += n_nodes
                 depth_sums = self.compute_tree_depth_sums(tree, data, max_depth)
                 depth_sum_sums += depth_sums
-        #print ("Num trees", num_trees)
-        #print ("Num nodes", num_nodes)   
-        #print ("Num data points", len(data))
+        # print ("Num trees", num_trees)
+        # print ("Num nodes", num_nodes)
+        # print ("Num data points", len(data))
 
         # divide by num data points (total, across all trees) so it doesn't matter if test and prod have different number of data points
         depth_sum_avg = depth_sum_sums / (len(data) * num_trees)

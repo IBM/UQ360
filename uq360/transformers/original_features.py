@@ -1,6 +1,6 @@
 
 import numpy as np
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
 
 
 class OriginalFeaturesTransformer(FeatureTransformer):

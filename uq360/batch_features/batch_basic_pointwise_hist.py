@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from .histogram_feature import SingleHistogramFeature
+from uq360.batch_features.histogram_feature import SingleHistogramFeature
 from uq360.transformers.confidence_delta import ConfidenceDeltaTransformer
 from uq360.transformers.confidence_top import ConfidenceTopTransformer
 from uq360.transformers.confidence_entropy import ConfidenceEntropyTransformer
@@ -60,7 +60,6 @@ class BatchConfidenceEntropy(BasicPointwiseHistogramDistance):
     def name(cls):
         return ('confidence_entropy_distance')
 
-
     # Construct a single histogram
     def extract_histogram(self, vec):
         epsilon = 0.001
@@ -91,7 +90,6 @@ class BatchConfidenceEntropy(BasicPointwiseHistogramDistance):
         return hist
 
 
-
 # Predicted class frequency ratio
 class BatchClassFrequency(BasicPointwiseHistogramDistance):
     def __init__(self):
@@ -110,7 +108,6 @@ class BatchClassFrequency(BasicPointwiseHistogramDistance):
             self.pointwise_transformer.fit(x,y)
             self.fit_status = True
 
-
     # Construct a single histogram
     def extract_histogram(self, vec):
         freq = self.pointwise_transformer.class_frequencies
@@ -126,8 +123,3 @@ class BatchClassFrequency(BasicPointwiseHistogramDistance):
         hist , _ = np.histogram(vec, bins=bins, density=False)
         hist = np.divide(hist, float(len(vec)))
         return hist
-
-
-
-
-

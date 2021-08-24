@@ -9,6 +9,7 @@ from sklearn.model_selection import cross_val_predict
 
 from uq360.batch_features.histogram_utilities import compute_scaled_up, compute_hellinger, compute_cosine_similarity, compute_JS, compute_KS, compute_squared, compute_wasserstein
 
+
 class DriftClassifier:
 
     def __init__(self, name):
@@ -45,7 +46,6 @@ class DriftClassifier:
         preds = np.where(prod_proba < 0.5, 0, 1)
         accuracy = accuracy_score(y, preds)
 
-
         # Split apart the probabilities for test and prod 
         test_proba = prod_proba[y == 0]
         prod_proba = prod_proba[y == 1]
@@ -63,32 +63,29 @@ class DriftClassifier:
         test_hist = np.array([x/n1 for x in test_hist])
         prod_hist = np.array([x/n2 for x in prod_hist])
         centers = [0.5*(edges[i]+edges[i+1]) for i in range(len(edges)-1)]
-
         # Note:  Histograms are NOT normalized, but need to be.  We are assuming compute_scaled_up does so (as it should)
         distances = []
 
-        #hellinger = compute_hellinger(test_hist, prod_hist)
-        #distances.append(('hellinger',hellinger))
+        # hellinger = compute_hellinger(test_hist, prod_hist)
+        # distances.append(('hellinger',hellinger))
 
         scale_up, scale_up_sq = compute_scaled_up(test_hist, prod_hist)
         distances.append(('scale_up',scale_up))
         distances.append(('scale_up_sq',scale_up_sq))
 
-        #squared = compute_squared(test_hist, prod_hist)
-        #distances.append(('squared',squared))
+        # squared = compute_squared(test_hist, prod_hist)
+        # distances.append(('squared',squared))
 
         KS = compute_KS(test_hist, prod_hist)
         distances.append(('KS',KS))
 
-        #JS = compute_JS(test_hist, prod_hist)
-        #distances.append(('JS',JS))
+        # JS = compute_JS(test_hist, prod_hist)
+        # distances.append(('JS',JS))
 
-        #cosine = compute_cosine_similarity(test_hist, prod_hist)
-        #distances.append(('cosine',cosine))
+        # cosine = compute_cosine_similarity(test_hist, prod_hist)
+        # distances.append(('cosine',cosine))
         
-        #wasserstein = compute_wasserstein(centers, centers, 1, prob_A=test_hist, prob_B=prod_hist)
-        #distances.append(('wasserstein',wasserstein))
+        # wasserstein = compute_wasserstein(centers, centers, 1, prob_A=test_hist, prob_B=prod_hist)
+        # distances.append(('wasserstein',wasserstein))
 
         return accuracy, distances
-
-
