@@ -1,13 +1,7 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import numpy as np
 from .feature_transformer import FeatureTransformer
+
 
 class ConfidenceMinMaxTransformer(FeatureTransformer):
     def __init__(self):
@@ -25,4 +19,3 @@ class ConfidenceMinMaxTransformer(FeatureTransformer):
 
     def load(self, input_dir=None):
         pass
-    

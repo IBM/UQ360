@@ -1,15 +1,9 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import numpy as np
 from sklearn.metrics import confusion_matrix
 
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
+
 
 class ClassAccuracyTransformer(FeatureTransformer):
     def __init__(self, model=None):
@@ -29,23 +23,18 @@ class ClassAccuracyTransformer(FeatureTransformer):
         self.class_accuracies = cm.diagonal()
         self.fit_status = True
 
-
     def transform(self, x, predictions):
         pred_classes = list(np.argmax(predictions, axis=1))
         class_accuracies = [self.class_accuracies[x] for x in pred_classes]
         return np.array(class_accuracies)
-
-
 
     def save(self, output_location=None):
         json_dump = {"accuracies": self.class_accuracies}
         self.register_json_object(json_dump, 'class_accuracies')
         self._save(output_location)
 
-
     def load(self, input_location=None):
         self._load(input_location)
         self.class_accuracies = self.json_registry[0][0]['accuracies']
         assert type(self.class_accuracies) == list
         self.fit_status = True
-

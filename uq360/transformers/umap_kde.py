@@ -1,10 +1,3 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import numpy as np
 from sklearn.decomposition import PCA
@@ -15,6 +8,7 @@ from tqdm import tqdm
 from umap import UMAP
 
 from .feature_transformer import FeatureTransformer
+
 
 class UmapKdeTransformer(FeatureTransformer):
     def __init__(self, n_components=6, n_neighbors=10, min_dist=0.1):
@@ -83,8 +77,6 @@ class UmapKdeTransformer(FeatureTransformer):
             self.kde_list = kde_list
         self.fit_status = True
 
-
-
     def transform(self, X, predictions):
         assert self.fit_status
         if not self.successful_fit:
@@ -103,7 +95,6 @@ class UmapKdeTransformer(FeatureTransformer):
             highest_prob = np.amax(kde_scores, axis=1, keepdims=False)
             return highest_prob
 
-
     def save(self, output_location=None):
         self.register_pkl_object(self.scaler, 'scaler')
         json_dump = {'num_classes': self.num_classes}
@@ -121,7 +112,6 @@ class UmapKdeTransformer(FeatureTransformer):
         self.register_json_object(json_dump, 'info')
         self._save(output_location)
 
-
     def load(self, input_location=None):
         self._load(input_location)
 
@@ -131,8 +121,6 @@ class UmapKdeTransformer(FeatureTransformer):
             self.ndim = info['ndim']
 
         self.kde_list = [None] * self.num_classes
-
-
         pkl_objs, pkl_names = self.pkl_registry
         for obj, name in zip(pkl_objs, pkl_names):
             if name == 'scaler':
@@ -152,4 +140,3 @@ class UmapKdeTransformer(FeatureTransformer):
                 self.kde_list[index] = obj
 
         self.fit_status = True
-

@@ -1,6 +1,6 @@
 
 import numpy as np
-from .calibrator import Calibrator
+from uq360.calibrators.calibrator import Calibrator
 
 
 class ShiftCalibrator(Calibrator):

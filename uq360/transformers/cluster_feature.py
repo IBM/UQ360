@@ -1,15 +1,10 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 import numpy as np
 import scipy.cluster as spc
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
+
 
 class ClusterBasedFeature(FeatureTransformer):
     def __init__(self):
@@ -104,4 +99,3 @@ class ClusterBasedFeature(FeatureTransformer):
             Pr_s1x = max(self.lookup_dict[code[i]]['nx'], 0.001)/max(self.lookup_dict[code[i]]['mx'],0.001) 
             w = np.hstack((w, self.Pr_s1/Pr_s1x))
         return w
-        

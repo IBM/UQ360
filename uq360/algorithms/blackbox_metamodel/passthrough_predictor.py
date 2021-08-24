@@ -49,5 +49,3 @@ class PassthroughPredictor(PostHocUQ):
             output['predictions_per_datapoint'] = predictions['pointwise_confidences']
 
         return output
-
-

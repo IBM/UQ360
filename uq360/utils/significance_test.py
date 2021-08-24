@@ -5,23 +5,19 @@ import numpy as np
 from scipy.stats import norm
 
 
-class SignificanceTester():
+class SignificanceTester:
     def __init__(self, metric):
         self.metric = self.get_metric_function(metric)
-
 
     def hypothesis_test(self, measurement_1, measurement_2, metric_payload={}, n_iter=1000, tailed='two', verbose=False):
         result = self._permutation_test(measurement_1, measurement_2, metric_payload=metric_payload, 
                                         n_iter=n_iter, tailed=tailed, verbose=verbose)
         return result
 
-
     def confidence_interval(self, measurement, metric_payload={}, metric_kwargs={}, n_iter=10000, alpha=0.05, verbose=False):
         result = self._bootstrap_test(measurement, metric_payload=metric_payload, metric_kwargs=metric_kwargs, 
                                         n_iter=n_iter, alpha=alpha, verbose=verbose)
         return result
-
-
 
     # This computes the BCa version of a bootstrap confidence interval
     def _bootstrap_test(self, measurement, metric_payload={}, metric_kwargs={}, n_iter=10000, alpha=0.05, verbose=False):
@@ -81,7 +77,6 @@ class SignificanceTester():
         theta_high = sorted_bootstraps[ind_high]
         return theta_hat, theta_low, theta_high
 
-
     def resample_compute(self, measurement, indices, metric_payload, metric_kwargs):
         new_payload = {}
         for key, val in metric_payload.items():
@@ -91,10 +86,11 @@ class SignificanceTester():
         theta_resampled = self.metric(np.array(measurement)[indices], **new_payload)
         return theta_resampled
 
-
-    # measurement_1 and measurement_2 are 1-D arrays of equal length holding the (paired) values of some measurement 
-    # metric_function is a function which computes the desired statistic, and metric_payload holds kwargs for this function. 
-    # permutation_test will perform n_iter permutations, and output a p-value for either a two-tailed test, a one-tailed test, or both
+    """
+    measurement_1 and measurement_2 are 1-D arrays of equal length holding the (paired) values of some measurement 
+    metric_function is a function which computes the desired statistic, and metric_payload holds kwargs for this function. 
+    permutation_test will perform n_iter permutations, and output a p-value for either a two-tailed test, a one-tailed test, or both
+    """
     def _permutation_test(self, measurement_1, measurement_2, metric_payload={}, n_iter=1000, tailed='two', verbose=False):
         assert len(measurement_1) == len(measurement_2)
         print("Starting {}-tailed permutation test with {} iterations".format(tailed, n_iter))
@@ -133,14 +129,12 @@ class SignificanceTester():
         else:
             raise Exception("argument 'tailed' must be either 'one', 'two', or 'both'")
 
-
     def get_metric_function(self, metric):
         assert metric in ['LCMR', 'cost', 'auucc', 'average']
         if metric == 'cost':
             return self.get_cost
         elif metric == 'average':
             return self.get_average
-
 
     def get_cost(self, predictions, deltas=[], ratio=0.5, exp=1):
         assert len(predictions) == len(deltas)
@@ -159,4 +153,3 @@ class SignificanceTester():
 
     def get_average(self, predictions):
         return np.mean(np.array(predictions))
-

@@ -1,10 +1,3 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import logging
 from typing import Any, Dict, List, Optional, Union, Tuple 

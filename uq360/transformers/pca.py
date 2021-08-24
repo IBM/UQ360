@@ -1,14 +1,9 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from .feature_transformer import FeatureTransformer
+
 
 class PCATransformer(FeatureTransformer):
     def __init__(self, k=2):
@@ -26,18 +21,15 @@ class PCATransformer(FeatureTransformer):
         self.pca.fit(x_scaled)
         self.fit_status = True
 
-
     def transform(self, x, predictions):
         x_scaled = self.scaler.transform(x)
         x_transformed = self.pca.transform(x_scaled)
         return x_transformed
-        
 
     def save(self, output_location=None):
         self.register_pkl_object(self.scaler, 'scaler')
         self.register_pkl_object(self.pca, 'pca')
         self._save(output_location)
-
 
     def load(self, input_location=None):
         self._load(input_location)
@@ -49,4 +41,3 @@ class PCATransformer(FeatureTransformer):
         assert type(self.scaler) == StandardScaler
         assert type(self.pca) == PCA
         self.fit_status = True
-

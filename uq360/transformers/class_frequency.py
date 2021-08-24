@@ -1,13 +1,7 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import numpy as np
-from .feature_transformer import FeatureTransformer
+from uq360.transformers.feature_transformer import FeatureTransformer
+
 
 class ClassFrequencyTransformer(FeatureTransformer):
     def __init__(self):
@@ -27,17 +21,13 @@ class ClassFrequencyTransformer(FeatureTransformer):
         class_frequencies = [self.class_frequencies[x] for x in pred_classes]
         return np.array(class_frequencies)
 
-
-
     def save(self, output_location=None):
         json_dump = {"frequencies": self.class_frequencies}
         self.register_json_object(json_dump, 'class_frequencies')
         self._save(output_location)
-
 
     def load(self, input_location=None):
         self._load(input_location)
         self.class_frequencies = self.json_registry[0][0]['frequencies']
         assert type(self.class_frequencies) == list
         self.fit_status = True
-

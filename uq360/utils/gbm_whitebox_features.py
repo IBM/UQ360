@@ -1,14 +1,5 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import sys
-
-
 import numpy as np
 
 
@@ -21,20 +12,14 @@ class GBM_WhiteboxFeatureExtractor():
 
     def add_whitebox_feature(self, feature_name, value):
         self.whitebox_features[feature_name] = value
-        
-        
-    # Dive into the internal of the GBM trees to create whitebox features
-    # TODO: Get this all out of ensemble predictor and into helper class
+
     def compute_gbm_internal_whitebox_features(self, x_test, y_test, x_prod):
-        
         self.compute_decision_distance(x_test, x_prod)
         self.compute_leaf_frequencies(x_test, y_test, x_prod)
-
         return self.whitebox_features
-        
 
+    # fyi, a few lines are commented out as they maybe required for debugging
     def compute_leaf_frequencies(self, x_test, y_test, x_prod):
-
         # Track how the right vs wrong nodes from test go through the tree
         # Compute distributions and accuracies for each node
 
@@ -119,11 +104,8 @@ class GBM_WhiteboxFeatureExtractor():
 
         self.add_whitebox_feature('gbm_node_accuracy_delta', delta_accuracy)
         self.add_whitebox_feature('gbm_node_accuracy_delta_abs', abs(delta_accuracy))
-        
-        
 
     def count_nodes(self, data, max_node_id, accuracy_map=None):
-
         if accuracy_map is None:
             compute_accuracy = False
         else:
@@ -157,20 +139,15 @@ class GBM_WhiteboxFeatureExtractor():
             return node_averages, avg_accuracy
         return node_averages
 
-
-
-
     def compute_decision_distance(self, x_test, x_prod):
         test = self.compute_depth_sums(x_test)
         prod = self.compute_depth_sums(x_prod)
-
         #print ("Test avgs", test)
         #print ("Prod avgs", prod)
-        
         deltas = prod - test
         #print ("Deltas", deltas)
 
-        i=0
+        i = 0
         for delta in deltas:
             self.add_whitebox_feature('gbm_delta_depth_' + str(i), delta)
             self.add_whitebox_feature('gbm_delta_depth_abs_' + str(i), abs(delta))
@@ -178,7 +155,6 @@ class GBM_WhiteboxFeatureExtractor():
         
         sum_delta = prod.sum() - test.sum()
         #print ("Sum delta", sum_delta)
-
         self.add_whitebox_feature('gbm_delta_sum', sum_delta)
         self.add_whitebox_feature('gbm_delta_sum_abs', abs(sum_delta))
         
@@ -230,7 +206,3 @@ class GBM_WhiteboxFeatureExtractor():
                 delta = abs(feature_val - threshold_val)
                 depth_sums[depth] += delta
         return depth_sums
-
-
-
-

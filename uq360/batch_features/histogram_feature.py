@@ -3,7 +3,7 @@ from math import log10
 
 from uq360.batch_features import BatchFeature
 from uq360.batch_features.histogram_utilities import compute_KS, compute_scaled_up
-#from ..batch_features.histogram_utilities import compute_JS, compute_hellinger, compute_squared, compute_cosine_similarity, compute_wasserstein
+
 
 # Base class for all histogram-based features
 class HistogramFeature(BatchFeature):
@@ -54,7 +54,6 @@ class HistogramFeature(BatchFeature):
         
         return distances
 
-    
 
 # Histogram Feature that produces only one histogram    
 class SingleHistogramFeature(HistogramFeature):

@@ -7,7 +7,6 @@ from uq360.batch_features.batch_feature import BatchFeature
 from uq360.transformers.feature_transformer import FeatureTransformer
 
 
-
 class FeatureExtractor:
     def __init__(self, pointwise_features, batch_features):
         self.fit_flag = False

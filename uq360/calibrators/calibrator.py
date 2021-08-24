@@ -47,10 +47,8 @@ class Calibrator(Base):
                 json_names.append(obj)
         return json_list, json_names
 
-
     def register_json_object(self, obj, name):
         self._object_registry[name] = {'object': obj, 'type': 'json'}
-
 
     def save(self, output_location=None):
         raise NotImplementedError("save method should be implemented by the calibrator")
@@ -72,10 +70,8 @@ class Calibrator(Base):
             with open(os.path.join(output_location, filename), 'w') as f:
                 json.dump(obj, f)
 
-
     def load(self, input_location=None):
         raise NotImplementedError("load method should be implemented by the calibrator")
-
 
     def _load(self, input_location):
         assert os.path.isdir(input_location)

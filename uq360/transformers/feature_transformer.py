@@ -1,22 +1,15 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
-
 
 import json
 import os
 import pickle
 
-from ...base import Base
+from uq360.base import Base
+
 
 class FeatureTransformer(Base):
     def __init__(self):
         self._object_registry = {}
         self.fit_status = False
-
 
     @property
     def pkl_registry(self):
@@ -27,7 +20,6 @@ class FeatureTransformer(Base):
                 pkl_list.append(self._object_registry[obj]['object'])
                 pkl_names.append(obj)
         return pkl_list, pkl_names
-
 
     def register_pkl_object(self, obj, name):
         self._object_registry[name] = {'object': obj, 'type': 'pkl'}
@@ -42,10 +34,8 @@ class FeatureTransformer(Base):
                 json_names.append(obj)
         return json_list, json_names
 
-
     def register_json_object(self, obj, name):
         self._object_registry[name] = {'object': obj, 'type': 'json'}
-
 
     def save(self, output_location=None):
         raise NotImplementedError("save method should be implemented by the transformer")
@@ -67,10 +57,8 @@ class FeatureTransformer(Base):
             with open(os.path.join(output_location, filename), 'w') as f:
                 json.dump(obj, f)
 
-
     def load(self, input_location=None):
         raise NotImplementedError("load method should be implemented by the transformer")
-
 
     def _load(self, input_location):
         assert os.path.isdir(input_location)
@@ -94,12 +82,8 @@ class FeatureTransformer(Base):
                 name = tail.replace('.json','').replace(self.name()+'-','')
                 self.register_json_object(obj, name)
 
-
-
-
     def fit(self, x, y):
         pass
-
 
     def transform(self):
         raise NotImplementedError("transform method should be implemented by the transformer")
@@ -109,5 +93,3 @@ class FeatureTransformer(Base):
         subtype_name = subtype_name
 
         return super(FeatureTransformer, cls).instance(subtype_name, **params)
-        
-

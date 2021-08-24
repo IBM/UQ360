@@ -1,19 +1,11 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 
-from .feature_transformer import FeatureTransformer
-from ..hpo_search import CustomRandomSearch
-
-
+from uq360.transformers.feature_transformer import FeatureTransformer
+from uq360.utils.hpo_search import CustomRandomSearch
 
 
 class ClusteringTransformer(FeatureTransformer):
@@ -47,12 +39,9 @@ class ClusteringTransformer(FeatureTransformer):
 
         self.fit_status = False
 
-
-
     @classmethod
     def name(cls):
         return ('clustering')
-
 
     def fit(self, x, y):
         if self.base_model is None:
@@ -63,7 +52,7 @@ class ClusteringTransformer(FeatureTransformer):
         # Go ahead and predict before doing any transformations
         predictions = self.base_model.predict_proba(x)
         base_accuracies = np.where(np.argmax(predictions, axis=1) == y, 1, 0)
-        #prediction_confidences = np.max(predictions, axis=1)
+        # prediction_confidences = np.max(predictions, axis=1)
 
         # Scale data
         X = self.scaler.fit_transform(x)
@@ -85,34 +74,33 @@ class ClusteringTransformer(FeatureTransformer):
 
         # Compute some per-cluster stats
         self.cluster_total_base_accuracy = []
-        #self.cluster_total_base_confidence_average = []
-        #self.cluster_total_base_confidence_std = []
+        # self.cluster_total_base_confidence_average = []
+        # self.cluster_total_base_confidence_std = []
         self.cluster_total_class_frequencies = []
 
         self.cluster_base_accuracy = []
-        #self.cluster_base_confidence_average = []
-        #self.cluster_base_confidence_std = []
+        # self.cluster_base_confidence_average = []
+        # self.cluster_base_confidence_std = []
         self.cluster_class_frequencies = []
 
         for cl in cl_labels:
             indices = np.where(cluster_labels==cl, 1, 0)
             self.cluster_total_base_accuracy.append(np.mean(base_accuracies[indices==1]))
-            #self.cluster_total_base_confidence_average.append(np.mean(prediction_confidences[indices==1]))
-            #self.cluster_total_base_confidence_std.append(np.std(prediction_confidences[indices==1]))
+            # self.cluster_total_base_confidence_average.append(np.mean(prediction_confidences[indices==1]))
+            # self.cluster_total_base_confidence_std.append(np.std(prediction_confidences[indices==1]))
             self.cluster_total_class_frequencies.append(np.sum(indices) / float(y.shape[0]))
 
-
         self.cluster_total_base_accuracy = np.array(self.cluster_total_base_accuracy)
-        #self.cluster_total_base_confidence_average = np.array(self.cluster_total_base_confidence_average)
-        #self.cluster_total_base_confidence_std = np.array(self.cluster_total_base_confidence_std)
+        # self.cluster_total_base_confidence_average = np.array(self.cluster_total_base_confidence_average)
+        # self.cluster_total_base_confidence_std = np.array(self.cluster_total_base_confidence_std)
         self.cluster_total_class_frequencies = np.array(self.cluster_total_class_frequencies)
 
         labels, label_counts = np.unique(y, return_counts=True)
         self.class_label_counts = label_counts
         for label in labels:
             base_accuracy = []
-            #base_confidence_average = []
-            #base_confidence_std = []
+            # base_confidence_average = []
+            # base_confidence_std = []
             class_frequencies = []
 
             for cl in cl_labels:
@@ -120,39 +108,36 @@ class ClusteringTransformer(FeatureTransformer):
                 indices = np.all([y==label, cluster_labels==cl], axis=0)
                 if np.sum(np.where(indices, 1, 0)) == 0: # This cluster/label combination is empty
                     base_accuracy.append(-1)
-                    #base_confidence_average.append(-1)
-                    #base_confidence_std.append(-1)
+                    # base_confidence_average.append(-1)
+                    # base_confidence_std.append(-1)
                     class_frequencies.append(0.0)
                 else:
                     base_accuracy.append(np.mean(base_accuracies[indices]))
-                    #base_confidence_average.append(np.mean(prediction_confidences[indices]))
-                    #base_confidence_std.append(np.std(prediction_confidences[indices]))
+                    # base_confidence_average.append(np.mean(prediction_confidences[indices]))
+                    # base_confidence_std.append(np.std(prediction_confidences[indices]))
                     class_frequencies.append(np.sum(indices) / float(y.shape[0]))
 
             self.cluster_base_accuracy.append(base_accuracy)
-            #self.cluster_base_confidence_average.append(base_confidence_average)
-            #self.cluster_base_confidence_std.append(base_confidence_std)
+            # self.cluster_base_confidence_average.append(base_confidence_average)
+            # self.cluster_base_confidence_std.append(base_confidence_std)
             self.cluster_class_frequencies.append(class_frequencies)
 
 
         self.cluster_base_accuracy = np.array(self.cluster_base_accuracy)
-        #self.cluster_base_confidence_average = np.array(self.cluster_base_confidence_average)
-        #self.cluster_base_confidence_std = np.array(self.cluster_base_confidence_std)
+        # self.cluster_base_confidence_average = np.array(self.cluster_base_confidence_average)
+        # self.cluster_base_confidence_std = np.array(self.cluster_base_confidence_std)
         self.cluster_class_frequencies = np.array(self.cluster_class_frequencies)
 
         self.fit_status = True
 
-
     def set_base_model(self, model):
         self.base_model = model
-
 
     def rescale(self, X):
         x_rescaled = X * self.metric_factors
         assert x_rescaled.shape[0] == X.shape[0]
         assert x_rescaled.shape[1] == self.metric_factors.shape[0]
         return x_rescaled
-
 
     def transform(self, X, predictions):
         X = self.scaler.transform(X)
@@ -163,12 +148,12 @@ class ClusteringTransformer(FeatureTransformer):
         transformed = np.zeros((X.shape[0],5))
         for i in range(X.shape[0]):
             transformed[i, 0] = self.cluster_base_accuracy[class_labels[i], cluster_labels[i]]
-            #transformed[i, 1] = self.cluster_base_confidence_average[class_labels[i], cluster_labels[i]]
-            #transformed[i, 2] = self.cluster_base_confidence_std[class_labels[i], cluster_labels[i]]
+            # transformed[i, 1] = self.cluster_base_confidence_average[class_labels[i], cluster_labels[i]]
+            # transformed[i, 2] = self.cluster_base_confidence_std[class_labels[i], cluster_labels[i]]
             transformed[i, 1] = self.cluster_class_frequencies[class_labels[i], cluster_labels[i]] * self.class_label_counts[class_labels[i]]
             transformed[i, 2] = self.cluster_total_base_accuracy[cluster_labels[i]]
-            #transformed[i, 5] = self.cluster_total_base_confidence_average[cluster_labels[i]]
-            #transformed[i, 6] = self.cluster_total_base_confidence_std[cluster_labels[i]]
+            # transformed[i, 5] = self.cluster_total_base_confidence_average[cluster_labels[i]]
+            # transformed[i, 6] = self.cluster_total_base_confidence_std[cluster_labels[i]]
             transformed[i, 3] = self.cluster_total_class_frequencies[cluster_labels[i]]
             if cluster_labels[i] == -1:
                 transformed[i,4] = 1
@@ -176,7 +161,6 @@ class ClusteringTransformer(FeatureTransformer):
                 transformed[i,4] = 0
 
         return transformed
-
 
     def save(self, output_location=None):
         self.register_pkl_object(self.scaler, 'scaler')
@@ -192,7 +176,6 @@ class ClusteringTransformer(FeatureTransformer):
         }
         self.register_json_object(json_dump, 'cluster_info')
         self._save(output_location)
-
 
     def load(self, input_location=None):
         self._load(input_location)
@@ -221,4 +204,3 @@ class ClusteringTransformer(FeatureTransformer):
         assert type(self.metric_factors) == np.ndarray
         assert type(self.class_label_counts) == np.ndarray
         self.fit_status = True
-

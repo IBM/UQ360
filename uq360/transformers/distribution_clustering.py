@@ -1,9 +1,3 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 
 import numpy as np
@@ -24,16 +18,13 @@ class DistributionClusteringTransformer(FeatureTransformer):
         self.scaling_exponent = scaling_exponent
         self.random_seed = 42
 
-
     def set_feature_importances(self, feature_importances):
         self.feature_importances = feature_importances
         self.metric_factors = np.array([(1+x)**self.scaling_exponent for x in self.feature_importances], dtype=np.float32)
 
-
     @classmethod
     def name(cls):
         return ('distribution_clustering')
-
 
     def fit(self, x, y):
         assert self.feature_importances is not None
@@ -46,8 +37,6 @@ class DistributionClusteringTransformer(FeatureTransformer):
         assert x_rescaled.shape[0] == X.shape[0]
         assert x_rescaled.shape[1] == self.metric_factors.shape[0]
         return x_rescaled
-
-
 
     def transform(self, x, predictions):
         np.random.seed(seed=42)
@@ -85,9 +74,6 @@ class DistributionClusteringTransformer(FeatureTransformer):
         payload = np.concatenate([centroids, cluster_frequencies.reshape(-1,1)], axis=1)
         return payload
 
-
-
-
     def save(self, output_location=None):
         self.register_pkl_object(self.scaler, 'scaler')
 
@@ -98,7 +84,6 @@ class DistributionClusteringTransformer(FeatureTransformer):
         }
         self.register_json_object(json_dump, 'cluster_info')
         self._save(output_location)
-
 
     def load(self, input_location=None):
         self._load(input_location)
@@ -115,5 +100,3 @@ class DistributionClusteringTransformer(FeatureTransformer):
         assert type(self.feature_importances) == np.ndarray
         assert type(self.metric_factors) == np.ndarray
         self.fit_status = True
-
-

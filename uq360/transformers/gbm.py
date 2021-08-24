@@ -1,9 +1,3 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -12,10 +6,11 @@ import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import StratifiedKFold, train_test_split
 
-from .feature_transformer import FeatureTransformer
-from .confidence_top import ConfidenceTopTransformer
-from .confidence_delta import ConfidenceDeltaTransformer
-from ..hpo_search import CustomRandomSearch
+from uq360.transformers.feature_transformer import FeatureTransformer
+from uq360.transformers.confidence_top import ConfidenceTopTransformer
+from uq360.transformers.confidence_delta import ConfidenceDeltaTransformer
+from uq360.utils.hpo_search import CustomRandomSearch
+
 
 class GBMTransformer(FeatureTransformer):
     def __init__(self):
@@ -65,7 +60,6 @@ class GBMTransformer(FeatureTransformer):
         self.model = clf.best_estimator_
         self.fit_status = True
 
-
     def transform(self, x, predictions):
         assert self.fit_status
         preds = self.model.predict_proba(x)
@@ -74,16 +68,12 @@ class GBMTransformer(FeatureTransformer):
         result = np.concatenate([top, delta], axis=1)
         return result
 
-
-
     def save(self, output_location=None):
         self.register_pkl_object(self.model, 'model')
         self._save(output_location)
-
 
     def load(self, input_location=None):
         self._load(input_location)
         self.model = self.pkl_registry[0][0]
         assert type(self.model) == GradientBoostingClassifier
         self.fit_status = True
-

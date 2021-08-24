@@ -5,8 +5,6 @@ from uq360.utils.significance_test import SignificanceTester
 from uq360.transformers.confidence_top import ConfidenceTopTransformer
 
 
-# TODO: We could do different features based on this same idea
-# implement as subclasses
 class SignificanceFeature(BatchFeature):
     def __init__(self):
         self.set_transformer('confidence_top', ConfidenceTopTransformer())

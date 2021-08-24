@@ -1,9 +1,3 @@
-# Licensed Materials - Property of IBM
-#
-# 95992503
-#
-# (C) Copyright IBM Corp. 2019, 2020 All Rights Reserved.
-#
 
 import os
 import tempfile
@@ -15,10 +9,8 @@ import numpy as np
 from sklearn.base import TransformerMixin
 import tensorflow_hub as hub
 
-# A class for starting and stopping multiple timers
-# See PredictorDriver for a sample use
-class Timer:
 
+class Timer:
     def __init__(self):
         self.time_started = {}
         self.elapsed = {}
@@ -33,11 +25,10 @@ class Timer:
 
         self.elapsed[name] = elapsed
         self.elapsed['total'] += elapsed
-        
 
     def report(self):
-        print ('Timings:')
-        for k,v in self.elapsed.items():
+        print('Timings:')
+        for k, v in self.elapsed.items():
             print (' ', k,v)
 
         for k,v in self.time_started.items():
@@ -56,6 +47,7 @@ class UseTransformer(TransformerMixin):
         encoder = hub.load('https://tfhub.dev/google/universal-sentence-encoder/4')
         return encoder(X.ravel()).numpy()
 
+
 def new_tmp_file_or_dir(dir=False):
     tmp_path = tempfile.mkstemp()[1]
     if dir:
@@ -67,7 +59,6 @@ def new_tmp_file_or_dir(dir=False):
 
     atexit.register(delete_tmp_file)
     return tmp_path
-
 
 
 def chmod_r(path, mode):
@@ -89,7 +80,6 @@ def chmod_r(path, mode):
             try_chmod(os.path.join(root, filename), mode)
 
 
-
 def rm_rf(path):
     """
     Recursively removes a file or directory
@@ -103,8 +93,10 @@ def rm_rf(path):
     else:
         shutil.rmtree(path)
 
+
 def new_tmp_dir():
     return new_tmp_file_or_dir(dir=True)
+
 
 def short_uuid():
     import uuid
