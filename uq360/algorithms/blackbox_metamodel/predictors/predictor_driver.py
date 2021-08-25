@@ -1,5 +1,6 @@
 import traceback
 import numpy as np
+from uq360.batch_features import BlackboxFeature
 
 from uq360.batch_features.feature_extractor import FeatureExtractor
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
@@ -111,11 +112,11 @@ class PredictorDriver(object):
         y_meta = np.where(predictions == np.squeeze(y_test), 1, 0)
         self.perf_predictor.fit(x_test, test_features, y_meta)
 
-        # if self.blackbox_features:
-        #     for bb in self.blackbox_features:
-        #         self.blackbox_payloads[bb] = BlackboxFeature.instance(bb,
-        #                                                               train_labels=self.train_labels).extract_payload(
-        #             test_predicted_probabilities, y_test)
+        if self.blackbox_features:
+            for bb in self.blackbox_features:
+                self.blackbox_payloads[bb] = BlackboxFeature.instance(bb,
+                                                                      train_labels=self.train_labels).extract_payload(
+                    test_predicted_probabilities, y_test)
 
         self.x_test = x_test
         self.x_test_features = test_features
@@ -146,11 +147,11 @@ class PredictorDriver(object):
         uncertainty = 100.0 * np.mean(predictor_output['uncertainties'])
 
         # Predict with uncertainty model
-        # if self.blackbox_features:
-        #     for bb in self.blackbox_features:
-        #         feature = BlackboxFeature.instance(bb, train_labels=self.train_labels)
-        #         batch_features[bb] = feature.extract_blackbox_feature(predicted_probabilities, predictor_output,
-        #                                                               self.blackbox_payloads[bb])
+        if self.blackbox_features:
+            for bb in self.blackbox_features:
+                feature = BlackboxFeature.instance(bb, train_labels=self.train_labels)
+                batch_features[bb] = feature.extract_blackbox_feature(predicted_probabilities, predictor_output,
+                                                                      self.blackbox_payloads[bb])
 
         if self.use_whitebox:
             whitebox = self.perf_predictor.whitebox_features

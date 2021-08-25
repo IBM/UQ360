@@ -12,23 +12,35 @@ logger = logging.getLogger(__name__)
 class ShortTextPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None, encoder=None):
-        super(ShortTextPredictorWrapper).__init__(base_model, encoder)
+        super(ShortTextPredictorWrapper).__init__()
 
         self.encoder = None
         self.encoder = UseTransformer()
         self.predictor = "text_ensemble"
         calib = 'shift'
         self.driver = PredictorDriver(self.predictor,
-                                      base_model=self.client_model,
+                                      base_model=base_model,
                                       pointwise_features=None,
                                       batch_features=None,
                                       blackbox_features=None,
                                       use_whitebox=True,
                                       use_drift_classifier=True,
-                                      uncertainty_model_file=self.uncertainty_model_file,
                                       calibrator=calib)
 
     def fit(self, x_train, y_train, x_test, y_test, test_predicted_probabilities=None):
+
+        if x_train.dtype.type in [np.str_, np.object_] or x_test.dtype.type in [np.str_, np.object_]:
+            logger.info('Training/Testing data contains raw text.')
+            logger.info('Using an encoder.... %s', self.encoder)
+            logger.info('Shapes before encoding %s %s', x_train.shape, x_test.shape)
+            x_train = self.encoder.transform(X=x_train)
+            x_test = self.encoder.transform(X=x_test)
+            logger.info('Shapes after encoding %s %s', x_train.shape, x_test.shape)
+        else:
+            logger.info('Incoming data is already encoded')
+
+        logger.info("Fitting a text ensemble predictor......")
+
         self.driver.fit(x_train, y_train, x_test, y_test, test_predicted_probabilities=test_predicted_probabilities)
         self.fitted = True
 
@@ -40,15 +52,15 @@ class ShortTextPredictorWrapper(PostHocUQ):
             raise Exception("Untrained Predictor: fit() method needs to be called before predicting.")
 
         if x.dtype.type in [np.str_, np.object_]:
-            logger.info('Incoming data contains raw text.')
-            logger.info('Using an encoder.... %s', self.encoder)
-            logger.info('Shapes before encoding %s', x.shape)
+            print('Incoming data contains raw text.')
+            print('Using an encoder.... %s', self.encoder)
+            print('Shapes before encoding %s', x.shape)
             x_prod = self.encoder.transform(X=x)
-            logger.info('Shapes after encoding %s', x_prod.shape)
+            print('Shapes after encoding %s', x_prod.shape)
+            predictions = self.driver.predict(x_prod, predicted_probabilities=predicted_probabilities)
         else:
-            logger.info('Incoming data is already encoded')
-
-        predictions = self.driver.predict(x, predicted_probabilities=predicted_probabilities)
+            print('Incoming data is already encoded')
+            predictions = self.driver.predict(x, predicted_probabilities=predicted_probabilities)
 
         output = {'predicted_accuracy': predictions['accuracy'], 'uncertainty': predictions['uncertainty']}
         if 'error' in predictions:
