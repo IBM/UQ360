@@ -2,7 +2,7 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Derived feature which uses the label (integer) of the class predicted by the input/base model. """
 class PredictedClassTransformer(FeatureTransformer):
     def __init__(self):
         super(PredictedClassTransformer, self).__init__()

@@ -3,6 +3,11 @@ import numpy as np
 from sklearn.isotonic import IsotonicRegression
 from uq360.calibrators.calibrator import Calibrator
 
+'''
+Calibrator based on isotonic regression procedure. 
+This calibrator finds the best piecewise-constant, monotonic function of the confidences
+to recalibrate to represent the probability of a correct classification. 
+'''
 
 class IsotonicRegressionCalibrator(Calibrator):
     def __init__(self):
@@ -14,9 +19,6 @@ class IsotonicRegressionCalibrator(Calibrator):
         return ('isotonic_regression')
 
     def fit(self, predicted_confidences, labels):
-        # predicted_confidences are the confidences from the metamodel
-        # Labels are the labels for the metamodel (1/0)
-
         n_plus = np.sum(labels == 1)
         n_minus = np.sum(labels == 0)
         isotonic_target = np.where(labels == 0, 1.0 / (n_minus + 2.0), (n_plus + 1.0) / (n_plus + 2.0))

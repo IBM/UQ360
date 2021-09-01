@@ -5,6 +5,12 @@ import pickle
 
 from uq360.base import Base
 
+'''
+Base class for calibrators for binary classification problems. 
+Calibrators produce monotonic shifts in model confidences which preserve the order of confidence scores. 
+Given as input the confidence score for class "1" in a binary classification problem, they transform
+this score into an estimated probability that class "1" was a correct prediction. 
+'''
 
 class Calibrator(Base):
     def __init__(self):

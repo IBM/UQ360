@@ -9,7 +9,29 @@ from umap import UMAP
 
 from uq360.transformers.feature_transformer import FeatureTransformer
 
+"""
+Feature transformer which performs dimensional reduction and then uses a kernel 
+density estimate. 
 
+Fit stage: 
+First standard scale the data. 
+
+Then fit a UMAP dimensional reduction: https://umap-learn.readthedocs.io/en/latest/ with
+parameters: n_components, n_neighbors, and min_dist (by default the number of target dimensions
+is 2). 
+
+The UMAP reduction fitting has five retries. Each time the dimensional reduction fit fails, 
+the data is transformed with PCA and the smallest PCA component is dropped. 
+
+Finally, a generative model (KDE) is fit to the low-dimensional representation of the data
+for each class. 
+
+Inference: 
+If the UMAP fit was successful, at inference time the transformer returns the highest probability
+predicted by any of the class KDEs for the input sample. 
+
+If the fit was unsuccessful, at inference time this transformer returns a constant feature of -1. 
+"""
 class UmapKdeTransformer(FeatureTransformer):
     def __init__(self, n_components=6, n_neighbors=10, min_dist=0.1):
         super(UmapKdeTransformer, self).__init__()

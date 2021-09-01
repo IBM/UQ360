@@ -4,7 +4,13 @@ from uq360.batch_features.batch_feature import BatchFeature
 from uq360.transformers.random_forest import RandomForestTransformer
 from uq360.transformers.gbm import GBMTransformer
 
+"""
+Batch feature which uses a shadow-model (a model trained on the same data and labels as the input/base model). 
 
+This feature, once the transformer has been fit, is a constant. It is equal to the number of dimensions in the 
+original feature space needed to accumulate a combined feature importance of 0.9 from the shadow model (which is 
+a GBM or random forest model for which feature importances are well-defined and sum to 1). 
+"""
 class BatchNumImportant(BatchFeature):
     def __init__(self, importance_model='random_forest'):
         assert importance_model in ['random_forest', 'gbm']
@@ -32,14 +38,14 @@ class BatchNumImportant(BatchFeature):
         i = 0
         while importance < 0.9:
             importance += ordered_importances[i]
-            i+=1
+            i += 1
         self.num_important = i
 
     def fit(self, x, y):
         if self.fit_status:
             return
         else:
-            self.pointwise_transformer.fit(x,y)
+            self.pointwise_transformer.fit(x, y)
             self.set_importances()
             self.fit_status = True
 

@@ -2,7 +2,7 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Highest class confidence from the input/base model. """
 class ConfidenceTopTransformer(FeatureTransformer):
     def __init__(self):
         super(ConfidenceTopTransformer, self).__init__()

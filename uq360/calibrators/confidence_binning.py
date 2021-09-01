@@ -2,6 +2,12 @@
 import numpy as np
 from uq360.calibrators.calibrator import Calibrator
 
+'''
+Calibrator based on histogram of model confidence scores. 
+Recalibrates based on the sampling distribution from the (calibrator) training set. The (calibrator) 
+train set accuracy for each set of samples defined by a confidence histogram bin is used
+as the recalibrated confidence value at inference time for any sample falling into that bin. 
+'''
 
 class ConfidenceBinsCalibrator(Calibrator):
     def __init__(self):
@@ -12,37 +18,37 @@ class ConfidenceBinsCalibrator(Calibrator):
     def name(cls):
         return ('confidence_bins')
 
-    def get_confidence_dictionary(self, probs_metamodel, metamodel_ground_truth):
+    def get_confidence_dictionary(self, probs, ground_truth):
         conf_dict = {(a, a + 10): {'correct': 0, 'total': 0} for a in range(0, 100, 10)}
 
-        for i in range(len(probs_metamodel)):
-            pred_conf = probs_metamodel[i] * 100
+        for i in range(len(probs)):
+            predicted_confidence = probs[i] * 100
 
             for k in conf_dict.keys():
-                if pred_conf > k[0] and pred_conf <= k[1]:
+                if predicted_confidence > k[0] and predicted_confidence <= k[1]:
                     conf_dict[k]['total'] += 1
-                    if metamodel_ground_truth[i]:
+                    if ground_truth[i]:
                         conf_dict[k]['correct'] += 1
                     break
 
         return conf_dict
 
-    def fit(self, probs_metamodel, metamodel_ground_truth):
-        conf_dict = self.get_confidence_dictionary(probs_metamodel, metamodel_ground_truth)
+    def fit(self, probs, ground_truth):
+        conf_dict = self.get_confidence_dictionary(probs, ground_truth)
 
-        conf_accs = {(a, a + 10): None for a in range(0, 100, 10)}
+        conf_accuracies = {(a, a + 10): None for a in range(0, 100, 10)}
         conf_std = {(a, a + 10): None for a in range(0, 100, 10)}
         for k in conf_dict.keys():
             if conf_dict[k]['total'] != 0:
-                conf_accs[k] = conf_dict[k]['correct'] / conf_dict[k]['total']
-                conf_std[k] = (conf_accs[k] * (1 - conf_accs[k]) / conf_dict[k]['total']) ** 0.5
+                conf_accuracies[k] = conf_dict[k]['correct'] / conf_dict[k]['total']
+                conf_std[k] = (conf_accuracies[k] * (1 - conf_accuracies[k]) / conf_dict[k]['total']) ** 0.5
             else:
-                conf_accs[k] = 0
+                conf_accuracies[k] = 0
                 conf_std[k] = 0
 
         self.predictor = {}
-        for k in conf_accs.keys():
-            self.predictor[int((k[0]) / 10)] = {'mean': conf_accs[k], 'std': conf_std[k]}
+        for k in conf_accuracies.keys():
+            self.predictor[int((k[0]) / 10)] = {'mean': conf_accuracies[k], 'std': conf_std[k]}
 
         self.fit_status = True
 

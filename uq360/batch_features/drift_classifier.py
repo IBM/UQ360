@@ -9,7 +9,11 @@ from sklearn.model_selection import cross_val_predict
 
 from uq360.batch_features.histogram_utilities import compute_scaled_up, compute_hellinger, compute_cosine_similarity, compute_JS, compute_KS, compute_squared, compute_wasserstein
 
-
+'''
+Batch feature which trains a model to classify samples based on which dataset (test or production) they came from. 
+The accuracy of this model, or the ability to distinguish between samples in these two datasets, is an indication 
+of the level of drift occuring from test to production. 
+'''
 class DriftClassifier:
 
     def __init__(self, name):

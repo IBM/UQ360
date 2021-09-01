@@ -8,7 +8,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
+"""PostHocUQ model based on the "text_ensemble" performance predictor 
+(uq360.algorithms.blackbox_metamodel.predictors.core.short_text.py). """
 class ShortTextPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None, encoder=None):

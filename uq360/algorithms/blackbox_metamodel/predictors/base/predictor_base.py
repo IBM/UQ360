@@ -9,7 +9,19 @@ import numpy as np
 from uq360.base import Base
 from uq360.calibrators.calibrator import Calibrator
 
+"""
+Base class for performance predictors. 
 
+Fit stage: 
+    Performance predictors use the test set and labels of the base/input model, 
+    plus a set of derived/transformed features (see feature transformers in UQ360.transformers) in the fit step. 
+    
+Predict stage: 
+    Using the original and derived features from a pool of unlabeled production data, returns pointwise confidences 
+    and uncertainties: 
+    confidences: probability that the base/input model will correctly predict the class of that datapoint. 
+    uncertainties: performance predictor's estimate of its own prediction uncertainty
+"""
 class PerfPredictor(Base):
     def __init__(self, calibrator):
         self.random_state = 42

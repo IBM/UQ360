@@ -4,7 +4,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+'''
+Transformer which applies a standard scaling followed by a PCA decomposition to the dataset, 
+then returns only the k data components with the highest variance (ie the first k in the PCA decomposition). 
+'''
 class PCATransformer(FeatureTransformer):
     def __init__(self, k=2):
         super(PCATransformer, self).__init__()

@@ -3,6 +3,8 @@ from uq360.algorithms.blackbox_metamodel.predictors.predictor_driver import Pred
 from uq360.algorithms.posthocuq import PostHocUQ
 
 
+"""PostHocUQ model based on the "confidence" performance predictor 
+(uq360.algorithms.blackbox_metamodel.predictors.core.confidence.py). """
 class ConfidencePredictor(PostHocUQ):
 
     def __init__(self, base_model=None):

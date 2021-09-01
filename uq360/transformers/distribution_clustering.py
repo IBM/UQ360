@@ -1,12 +1,25 @@
 
-
 import numpy as np
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from uq360.transformers.feature_transformer import FeatureTransformer
 
+"""
+HDBScan clustering based feature transformer. 
 
+At fit time, this transformer just fits a standard-scaling to the training data. 
+At predict time, it uses hdbscan to cluster the production data. 
+
+
+For efficiency, the data used in the clustering is randomly downsampled to 30,000 data points. 
+
+WARNING: If this happens, the output will not have the same first axis size as the input. 
+
+The output at inference time is the centroid position in feature space of the cluster that 
+each inference point belongs to, concatenated with the proportion of total points that were
+contained in that cluster. 
+"""
 class DistributionClusteringTransformer(FeatureTransformer):
     def __init__(self, scaling_exponent=6, min_cluster_points=12):
         import hdbscan
@@ -20,7 +33,7 @@ class DistributionClusteringTransformer(FeatureTransformer):
 
     def set_feature_importances(self, feature_importances):
         self.feature_importances = feature_importances
-        self.metric_factors = np.array([(1+x)**self.scaling_exponent for x in self.feature_importances], dtype=np.float32)
+        self.metric_factors = np.array([( 1 +x )* *self.scaling_exponent for x in self.feature_importances], dtype=np.float32)
 
     @classmethod
     def name(cls):
@@ -62,16 +75,15 @@ class DistributionClusteringTransformer(FeatureTransformer):
         # Compute cluster centroids
         centroids = np.zeros((labels.shape[0], X.shape[1]))
         for ind, cl in enumerate(labels):
-            indices = np.where(cluster_labels==cl, 1, 0)
+            indices = np.where(cluster_labels == cl, 1, 0)
             assert len(indices.shape) == 1
             assert sum(indices) == counts[ind]
             for ft in range(X.shape[1]):
-                centroids[ind,ft] = np.mean(x_transformed[indices==1][:,ft])
-
+                centroids[ind, ft] = np.mean(x_transformed[indices==1][:, ft])
 
         cluster_frequencies = np.divide(counts, sum(counts))
         np.testing.assert_almost_equal(sum(cluster_frequencies), 1.0, 9)
-        payload = np.concatenate([centroids, cluster_frequencies.reshape(-1,1)], axis=1)
+        payload = np.concatenate([centroids, cluster_frequencies.reshape(-1 ,1)], axis=1)
         return payload
 
     def save(self, output_location=None):

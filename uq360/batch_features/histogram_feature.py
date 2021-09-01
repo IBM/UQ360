@@ -1,16 +1,42 @@
+
 import numpy as np
-from math import log10
 
 from uq360.batch_features import BatchFeature
-from uq360.batch_features.histogram_utilities import compute_KS, compute_scaled_up
+from uq360.batch_features.histogram_utilities import compute_KS, compute_scaled_up, compute_hellinger, \
+    compute_squared, compute_wasserstein, compute_JS, compute_cosine_similarity
 
+'''
+Base class for all histogram-based batch features. 
+These features are derived by constructing a histogram of some sample-wise values 
+from the batches of data being compared for drift, and using a probability distribution metric to 
+compute the "distance" between the two histograms. 
 
-# Base class for all histogram-based features
+The shape of the output will depend on how many statistical distances (more accurately statistical divergences) are 
+specified. The default is a set of three: 'scale_up', 'scale_up_sq', and 'KS' (Kolmogorov-Smirnov). Other available 
+options are: 'hellinger', 'squared', 'JS' (Jensen-Shannon), 'wasserstein', and 'cosine'. 
+
+See batch_features.histogram_utilities for implementations of these distance metrics. 
+'''
+
 class HistogramFeature(BatchFeature):
-    def __init__(self, bins):
+    def __init__(self, bins, metrics=None):
         super().__init__()
         self.bins = bins
         self.prod_histogram = None
+        if metrics is None:
+            self.metrics = ['scale_up', 'scale_up_sq', 'KS']  # Default set of distance metrics
+        else:
+            self.metrics = metrics
+
+        self.available_metrics = ['hellinger', 'squared', 'scale_up', 'scale_up_sq', 'KS', 'JS',
+                                  'wasserstein', 'cosine']
+        for metric in self.metrics:
+            try:
+                assert metric in self.available_metrics
+            except AssertionError:
+                print(f"WARNING: Metric: {metric} not in available metrics: {self.available_metrics}. "
+                      f"Skipping this distance metric. ")
+                self.metrics.remove(metric)
 
     # Construct a single histogram
     def extract_histogram(self, vec):
@@ -27,34 +53,44 @@ class HistogramFeature(BatchFeature):
     # Compute the distance
     def compute_distance(self, hist1, hist2):
         distances = []
-        # hellinger = compute_hellinger(hist1, hist2)
-        # distances.append(('hellinger', hellinger))
+        if 'hellinger' in self.metrics:
+            hellinger = compute_hellinger(hist1, hist2)
+            distances.append(('hellinger', hellinger))
 
-        # squared = compute_squared(hist1, hist2)
-        # distances.append(('squared', squared))
-        scale_up, scale_up_sq = compute_scaled_up(hist1, hist2)
-        distances.append(('scale_up', scale_up))
-        distances.append(('scale_up_sq', scale_up_sq))
+        if 'squared' in self.metrics:
+            squared = compute_squared(hist1, hist2)
+            distances.append(('squared', squared))
 
-        # bin_centers = [0.5*(self.histogram_edges[i]+self.histogram_edges[i+1]) for i in range(len(self.histogram_edges)-1)]
-        # wd = compute_wasserstein(bin_centers, bin_centers, 1, prob_A=hist1, prob_B=hist2)
-        # distances.append(('wasserstein', wd))
+        if 'scale_up' in self.metrics or 'scale_up_sq' in self.metrics:
+            scale_up, scale_up_sq = compute_scaled_up(hist1, hist2)
+            if 'scale_up' in self.metrics:
+                distances.append(('scale_up', scale_up))
+            if 'scale_up_sq' in self.metrics:
+                distances.append(('scale_up_sq', scale_up_sq))
 
-        ks = compute_KS(hist1, hist2)
-        distances.append(('KS', ks))
+        if 'wasserstein' in self.metrics:
+            bin_centers = [0.5*(self.histogram_edges[i]+self.histogram_edges[i+1]) for i in range(len(self.histogram_edges)-1)]
+            wd = compute_wasserstein(bin_centers, bin_centers, 1, prob_A=hist1, prob_B=hist2)
+            distances.append(('wasserstein', wd))
 
-        # js = compute_JS(hist1, hist2)
-        # distances.append(('JS', js))
+        if 'KS' in self.metrics:
+            ks = compute_KS(hist1, hist2)
+            distances.append(('KS', ks))
 
-        # cs = compute_cosine_similarity(hist1, hist2)
-        # distances.append(('cosine', cs))
+        if 'JS' in self.metrics:
+            js = compute_JS(hist1, hist2)
+            distances.append(('JS', js))
+
+        if 'cosine' in self.metrics:
+            cs = compute_cosine_similarity(hist1, hist2)
+            distances.append(('cosine', cs))
         return distances
 
 
 # Histogram Feature that produces only one histogram    
 class SingleHistogramFeature(HistogramFeature):
-    def __init__(self, bins):
-        super().__init__(bins)
+    def __init__(self, bins, metrics=None):
+        super().__init__(bins, metrics=metrics)
 
     # Extract features and create histograms
     def extract_features(self, x, predictions):
@@ -76,11 +112,16 @@ class SingleHistogramFeature(HistogramFeature):
         distances = self.compute_distance(histogram, np.array(payload['histogram']))
         return vec, distances
 
-    
-# Features that use transformers that creating multiple histograms
+'''
+Features that use transformers that create multiple histograms. These features do not create multi-dimensional 
+histograms, they just create a vector of single-dimensional histograms from a vector of input values, and compute
+coordinate-wise distances between the single-dimensional histograms. 
+'''
+
 class MultiHistogramFeature(HistogramFeature):
-    def __init__(self, bins):
-        super().__init__(bins)
+    def __init__(self, bins, metrics=None):
+        super().__init__(bins, metrics=metrics)
+
     # Extract features and create histograms
     # Expect the vector returned from the transformer to have >1 columns
     def extract_features(self, x, predictions):
@@ -89,7 +130,7 @@ class MultiHistogramFeature(HistogramFeature):
         histograms = []
         num_cols = vec.shape[1]
         for col in range(num_cols):
-            hist = self.extract_histogram(vec[:,col])
+            hist = self.extract_histogram(vec[:, col])
             histograms.append(hist)
         return vec, histograms
 

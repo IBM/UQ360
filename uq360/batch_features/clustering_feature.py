@@ -49,6 +49,7 @@ class ClusteringFeature(BatchFeature):
         return vec, distance
 
 
+"""Batchwise clustering feature where the clustering is performed using Wasserstein distance. """
 class WassersteinClustersFeature(ClusteringFeature):
     def __init__(self, scaling_exponent=6, min_cluster_points=12):
         super().__init__()

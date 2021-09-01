@@ -11,7 +11,9 @@ from uq360.transformers.confidence_top import ConfidenceTopTransformer
 from uq360.transformers.confidence_delta import ConfidenceDeltaTransformer
 from uq360.utils.hpo_search import CustomRandomSearch
 
-
+"""GBM shadow-model feature. This class trains a GBM model on the same train set as
+the input/baseline model. At inference time, the top class confidence and top - 2nd class 
+confidence are used as the derived feature. """
 class GBMTransformer(FeatureTransformer):
     def __init__(self):
         super(GBMTransformer, self).__init__()

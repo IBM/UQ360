@@ -2,6 +2,9 @@
 import numpy as np
 from uq360.calibrators.calibrator import Calibrator
 
+'''
+Calibrator based on a fitted constant shift. 
+'''
 
 class ShiftCalibrator(Calibrator):
     def __init__(self):

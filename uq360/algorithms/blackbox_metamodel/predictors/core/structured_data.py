@@ -8,18 +8,22 @@ from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import P
 from uq360.utils.gbm_whitebox_features import GBM_WhiteboxFeatureExtractor
 from uq360.utils.hpo_search import CustomRandomSearch
 
-
-class EnsemblePredictor(PerfPredictor):
+"""
+Performance predictor for structured data. It is based on a pair of meta-models, one logistic regression and one GBM. 
+This performance predictor does not have a method to quantify its own uncertainty, so the uncertainty 
+values are zero.  
+"""
+class StructuredDataPredictor(PerfPredictor):
     def __init__(self, calibrator=None):
         self.metamodel_list = []
         self.return_all_true = False
         self.x_test = None
         self.y_test = None
-        super(EnsemblePredictor, self).__init__(calibrator)
+        super(StructuredDataPredictor, self).__init__(calibrator)
 
     @classmethod
     def name(cls):
-        return ('ensemble')
+        return ('structured_data')
 
     def fit(self, x_test_unprocessed, x_test, y_test):
         # stash the unmodified x_test for later
@@ -138,6 +142,7 @@ class EnsemblePredictor(PerfPredictor):
         # Make preds an (N_samples, 2) array.
         preds = np.asarray(preds)[:, :, 1]
         preds = np.transpose(preds)
+        # Average predictions from gbm and logistic regression metamodels
         confidences = np.mean(preds, axis=1)
 
         # Create some white-box features
@@ -228,7 +233,7 @@ class EnsemblePredictor(PerfPredictor):
                     self.return_all_true = False
                 else:
                     raise Exception(
-                        "Key 'return_all_true' must be either 'true' or 'false'. Cannot load Ensemble Predictor. ")
+                        "Key 'return_all_true' must be either 'true' or 'false'. Cannot load StructuredData Predictor. ")
 
         self.fit_status = True
         self.transformers_fit_flag = True

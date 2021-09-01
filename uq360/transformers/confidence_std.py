@@ -2,7 +2,7 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Standard deviation of the confidence vector from the input/base model. """
 class ConfidenceStdTransformer(FeatureTransformer):
     def __init__(self):
         super(ConfidenceStdTransformer, self).__init__()

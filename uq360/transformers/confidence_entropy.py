@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import entropy
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Entropy of the confidence vector from the input/base model. """
 class ConfidenceEntropyTransformer(FeatureTransformer):
     def __init__(self):
         super(ConfidenceEntropyTransformer, self).__init__()

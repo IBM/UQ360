@@ -8,8 +8,6 @@ from uq360.transformers.confidence_entropy import ConfidenceEntropyTransformer
 from uq360.transformers.class_frequency import ClassFrequencyTransformer
 
 
-# This intermediate class ended up being pretty thin.
-# If it stays this thin after adding more features, we can consider removing
 class BasicPointwiseHistogramDistance(SingleHistogramFeature):
     def __init__(self, bins=10):
         super().__init__(bins)

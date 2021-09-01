@@ -4,7 +4,12 @@ from uq360.batch_features.batch_feature import BatchFeature
 from uq360.utils.significance_test import SignificanceTester
 from uq360.transformers.confidence_top import ConfidenceTopTransformer
 
+"""
+Batch feature which uses bootstrap to compute 95% confidence intervals for the average value
+of the highest class confidence over all points in the production set at inference time. 
 
+The output is the width of this confidence interval. 
+"""
 class SignificanceFeature(BatchFeature):
     def __init__(self):
         self.set_transformer('confidence_top', ConfidenceTopTransformer())

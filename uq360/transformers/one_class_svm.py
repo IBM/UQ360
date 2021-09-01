@@ -3,7 +3,10 @@ import numpy as np
 from sklearn.svm import OneClassSVM
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""One-class SVM outlier-classifier based derived feature. 
+This transformer fits an SVM decision boundary enclosing the
+full training set. This is then the decision boundary to identify 
+outliers in production data at inference time. """
 class OneClassSVMTransformer(FeatureTransformer):
     def __init__(self):
         super(OneClassSVMTransformer, self).__init__()

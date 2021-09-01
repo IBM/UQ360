@@ -3,6 +3,19 @@ from math import isnan, sqrt
 import numpy as np
 
 
+'''
+Various utilities are provided for constructing paired histograms and computing statistical distances 
+between them. 
+
+Paired histograms are constructed from paired batches of data points, and the upper and lower bounds of 
+each histogram may not be known in advance. If the second histogram being constructed extends beyond the range
+of the first histogram, the first is padded with zeros so that the bins of the two histograms align. This is
+needed to compute the statistical distance between the two. 
+
+'''
+
+
+
 def compute_histogram(vec, density=False, background_histogram=None, bin_number=100, epsilon_factor=0.01):
     vec = np.squeeze(vec)
     try:
@@ -79,7 +92,7 @@ def combine_histograms(vecA, vecB, edgesA, edgesB):
             copyB[c] = vecB[indB]
     return copyA, copyB, combined_edges
 
-
+'''Hellinger distance'''
 def compute_hellinger(a,b, normalize=True):
     assert len(a) == len(b)
     if normalize:
@@ -193,7 +206,7 @@ def compute_average_entropy(a):
     assert not isnan(entropy)
     return max(entropy, 0.000001)
 
-
+'''Wasserstein distance'''
 def compute_wasserstein(A, B, p, prob=None, prob_A=None, prob_B=None, reg=1e-2):
     import ot
     if type(A) == list:
@@ -238,7 +251,7 @@ def compute_wasserstein(A, B, p, prob=None, prob_A=None, prob_B=None, reg=1e-2):
         return G
 
 
-
+'''Kolmogorov-Smirnov distance'''
 def compute_KS(pdf1, pdf2):
     assert len(pdf1) == len(pdf2)
     lth = len(pdf1)
@@ -258,7 +271,7 @@ def compute_KS(pdf1, pdf2):
     return KS_stat
 
 
-
+'''Jenson-Shannon distance'''
 def compute_JS(hist1, hist2):
     assert len(hist1) == len(hist2)
     hist1 = np.array(hist1)

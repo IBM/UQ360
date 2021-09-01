@@ -2,7 +2,9 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+'''
+Dummy/identity transformer which passes the data array through unchanged. 
+'''
 class OriginalFeaturesTransformer(FeatureTransformer):
     def __init__(self):
         super(OriginalFeaturesTransformer, self).__init__()

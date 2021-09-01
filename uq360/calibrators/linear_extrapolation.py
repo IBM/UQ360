@@ -1,6 +1,9 @@
 import numpy as np
 from uq360.calibrators.calibrator import Calibrator
 
+'''
+Calibrator based on a fitted linear transformation of the confidence scores. 
+'''
 
 class LinearExtrapolationCalibrator(Calibrator):
     def __init__(self):

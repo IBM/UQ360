@@ -3,12 +3,14 @@ from uq360.algorithms.blackbox_metamodel.predictors.predictor_driver import Pred
 from uq360.algorithms.posthocuq import PostHocUQ
 
 
+"""PostHocUQ model based on the "structured_data" performance predictor 
+(uq360.algorithms.blackbox_metamodel.predictors.core.structured_data.py). """
 class StructuredDataPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None):
         super(StructuredDataPredictorWrapper).__init__(base_model)
         self.client_model = base_model
-        self.performance_predictor = "ensemble"
+        self.performance_predictor = "structured_data"
         self.calib = 'isotonic_regression'
         self.fitted = False
         self.driver = PredictorDriver(self.performance_predictor,

@@ -5,7 +5,10 @@ import pickle
 
 from uq360.base import Base
 
-
+'''
+Base class for feature transformers: derived features based on the feature vectors of the input dataset. 
+Given an input array of shape (N_samples, M_features), they output an array of shape (N_samples, P_derived_features). 
+'''
 class FeatureTransformer(Base):
     def __init__(self):
         self._object_registry = {}

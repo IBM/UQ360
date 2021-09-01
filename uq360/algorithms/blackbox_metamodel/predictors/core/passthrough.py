@@ -2,7 +2,11 @@
 import numpy as np
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
 
-
+"""
+Dummy performance predictor which simply passes the predicted class confidence of the base/input model as its 
+own prediction. This performance predictor does not have a method to quantify its own uncertainty, so the uncertainty 
+values are zero.  
+"""
 class PassthroughPredictor(PerfPredictor):
     def __init__(self, calibrator=None):
         self.predictor = {}

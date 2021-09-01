@@ -6,7 +6,11 @@ import pandas as pd
 from uq360.batch_features.batch_feature import BatchFeature
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+'''
+Class to perform feature extraction. Pointwise features have per-datapoint values, and can be computed for any 
+samples. Batch features are computed for paired datasets (ie a test set and an unlabeled production set). The
+batch features often take the pointwise feature values as input, for example to construct dataset level histograms. 
+'''
 class FeatureExtractor:
     def __init__(self, pointwise_features, batch_features):
         self.fit_flag = False

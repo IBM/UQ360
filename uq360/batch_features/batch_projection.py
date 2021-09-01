@@ -8,6 +8,10 @@ from uq360.transformers.random_forest import RandomForestTransformer
 from uq360.transformers.gbm import GBMTransformer
 
 
+"""
+Base class for single-histogram distance based batch-wise features where the values used to construct the histogram 
+are a 1-D projection in the original feature space. 
+"""
 class BatchProjection(SingleHistogramFeature):
     def __init__(self, bins=100):
         super().__init__(bins)
@@ -55,6 +59,7 @@ class BatchProjection(SingleHistogramFeature):
         return hist, edges
 
 
+"""Batch-projection feature where the 1-D projection is performed onto the highest PCA component of the data."""
 class BatchProjectionPCA(BatchProjection):
     def __init__(self, bins=25):
         super().__init__(bins)
@@ -86,6 +91,8 @@ class BatchProjectionPCA(BatchProjection):
         return vec, histogram, edges
 
 
+"""Batch-projection feature where the 1-D projection is performed onto feature which a shadow-model 
+(default=random forest) considers the highest-importance feature."""
 class BatchProjectionHighestImportance(BatchProjection):
     def __init__(self, importance_model='random_forest', bins=25):
         super().__init__(bins)

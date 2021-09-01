@@ -6,6 +6,8 @@ from uq360.batch_features.histogram_utilities import compute_average_entropy
 from uq360.utils.significance_test import SignificanceTester
 
 
+"""Batchwise-feature based only on the output of the performance-predictor (meta-model to predict accuracy of the 
+base/input model). """
 class BlackboxFeature(Base):
     def __init__(self, train_labels=None):
         assert train_labels is not None
@@ -60,7 +62,7 @@ class BlackboxPredictedStd(BlackboxFeature):
         return pp_std
 
 
-# confidence std predicted by performance predictor
+# confidence interval width predicted by performance predictor
 class BlackboxPredictedBootstrap(BlackboxFeature):
     def __init__(self, train_labels=None):
         super().__init__(train_labels=train_labels)

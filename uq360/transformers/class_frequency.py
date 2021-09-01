@@ -2,7 +2,7 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Fraction of the train set belonging to the predicted class. """
 class ClassFrequencyTransformer(FeatureTransformer):
     def __init__(self):
         super(ClassFrequencyTransformer, self).__init__()

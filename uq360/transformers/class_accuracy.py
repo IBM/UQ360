@@ -4,7 +4,7 @@ from sklearn.metrics import confusion_matrix
 
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Test set accuracy of the input/baseline model for samples in the predicted class. """
 class ClassAccuracyTransformer(FeatureTransformer):
     def __init__(self, model=None):
         if model is None:

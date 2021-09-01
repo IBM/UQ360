@@ -2,12 +2,18 @@
 import numpy as np
 from uq360.base import Base
 
+'''
+Base class for constructing distribution-level features derived from batches of datapoints
+rather than from single samples. 
 
+These features are engineered to detect data drift between two batches of data, usually a train or test
+set and a batch of unlabeled production data. 
+'''
 class BatchFeature(Base):
     def __init__(self):
         pass
 
-    # Initial setup fo the transformer
+    # Initial setup for the transformer
     def set_transformer(self, name, transformer):
         self.pointwise_type = name
         self.pointwise_transformer = transformer

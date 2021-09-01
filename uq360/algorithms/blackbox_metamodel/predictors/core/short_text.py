@@ -30,8 +30,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+"""
+Performance predictor for short text data. It is based on an ensemble of meta-models: 
+one mlp metamodel, one GBM metamodel, and one SVM metamodel. This performance predictor does not have a method 
+to quantify its own uncertainty, so the uncertainty values are zero.  
+"""
 class TextEnsembleV2Predictor(PerfPredictor):
-    def __init__(self, calibrator="aios-shift"):
+    def __init__(self, calibrator="shift"):
         self.metamodels_considered = ["svm", "gbm", "mlp"]
         self.metamodels = {}
         self.metamodel_calibrators = {}
@@ -193,8 +198,6 @@ class TextEnsembleV2Predictor(PerfPredictor):
                         'The base model has an accuracy of 0 percent on the test set. Return predictions of only 0 percent')
                     self.fit_status = True
                     return
-
-            meta_preds = []
 
             logger.info("Metamodels considered %s", self.metamodels_considered)
             for mm in self.metamodels_considered:

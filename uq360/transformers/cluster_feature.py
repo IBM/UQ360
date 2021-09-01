@@ -1,13 +1,32 @@
 
 import numpy as np
-import scipy.cluster as spc
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from uq360.transformers.feature_transformer import FeatureTransformer
 
+"""
+Kmeans clustering based feature transformer. 
 
+This transformer requires that the test and production data be used at fit() time. 
+At fit time, the test and production data is standard-scaled and clustered using k-means. 
+
+This clustering is performed on both the test and production data together. 
+There are two modes used for the clustering: 
+    x: clustering is performed in the original feature space
+    xc: the base/input model confidence vector is concatenated with the original features
+
+Then the centroid of each cluster is recorded, along with the number of test 
+and production points in each cluster. 
+
+The prediction for each production point is the ratio of production points / test points
+for the cluster to which it belongs. 
+
+A low value indicates that this point is well-represented in the test set, while a high-value
+indicated that it is under-represented in the test set. 
+"""
 class ClusterBasedFeature(FeatureTransformer):
-    def __init__(self):
+    def __init__(self, mode='xc'):
+        self.mode = mode # x = features only, xc = features concatenated with confidences
         super(ClusterBasedFeature, self).__init__()
 
     @classmethod
@@ -22,7 +41,6 @@ class ClusterBasedFeature(FeatureTransformer):
     def fit(self, x, y, x_test=None, x_prod=None, model=None):
         assert x_test is not None and x_prod is not None and model is not None
         self.codebook  = []
-        self.mode = 'xc'
         self.model = model
         self.preprocess = None
 
@@ -94,8 +112,8 @@ class ClusterBasedFeature(FeatureTransformer):
             x = np.hstack((x, self.get_model_c(self.model, x)))
         data = self.preprocess.transform(x)
         code = self.clusterer.predict(data)
-        w = np.array([])
+        w = []
         for i, x in enumerate(code):
-            Pr_s1x = max(self.lookup_dict[code[i]]['nx'], 0.001)/max(self.lookup_dict[code[i]]['mx'],0.001) 
-            w = np.hstack((w, self.Pr_s1/Pr_s1x))
-        return w
+            Pr_s1x = max(self.lookup_dict[code[i]]['nx'], 0.001) / max(self.lookup_dict[code[i]]['mx'], 0.001)
+            w.append(self.Pr_s1/Pr_s1x)
+        return np.array(w)

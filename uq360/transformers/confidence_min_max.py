@@ -2,7 +2,7 @@
 import numpy as np
 from uq360.transformers.feature_transformer import FeatureTransformer
 
-
+"""Ratio of the minimum and maximum class confidences from the input/base model. """
 class ConfidenceMinMaxTransformer(FeatureTransformer):
     def __init__(self):
         super(ConfidenceMinMaxTransformer, self).__init__()

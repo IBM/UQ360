@@ -3,6 +3,15 @@ import numpy as np
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
 
 
+"""
+Performance predictor based on confidence binning. The highest predicted class confidence from the base/input model is 
+recorded for each sample. These confidences are then binned in a histogram, and the average and standard deviation of 
+each bin are computed. 
+
+In the prediction step, the predictor first finds the bin in this histogram corresponding to the top confidence 
+of the base model prediction. The performance predictor confidence for this sample is then the average value recorded 
+for this bin, and the uncertainty for this sample is the associated standard deviation. 
+"""
 class ConfidencePredictor(PerfPredictor):
     def __init__(self, calibrator=None):
         self.predictor = {}
