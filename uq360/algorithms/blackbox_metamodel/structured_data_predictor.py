@@ -8,7 +8,7 @@ from uq360.algorithms.posthocuq import PostHocUQ
 class StructuredDataPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None):
-        super(StructuredDataPredictorWrapper).__init__(base_model)
+        super().__init__(base_model)
         self.client_model = base_model
         self.performance_predictor = "structured_data"
         self.calib = 'isotonic_regression'

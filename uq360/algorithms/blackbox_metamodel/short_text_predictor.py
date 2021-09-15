@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class ShortTextPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None, encoder=None):
-        super(ShortTextPredictorWrapper).__init__()
+        super().__init__(base_model)
 
         self.encoder = None
         self.encoder = UseTransformer()

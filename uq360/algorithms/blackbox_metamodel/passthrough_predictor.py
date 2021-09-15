@@ -8,7 +8,7 @@ from uq360.algorithms.posthocuq import PostHocUQ
 class PassthroughPredictor(PostHocUQ):
 
     def __init__(self, base_model=None):
-        super(PassthroughPredictor).__init__(base_model)
+        super().__init__(base_model)
         self.client_model = base_model
         self.performance_predictor = "passthrough"
         self.calib = 'isotonic_regression'

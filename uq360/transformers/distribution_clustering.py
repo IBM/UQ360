@@ -33,7 +33,7 @@ class DistributionClusteringTransformer(FeatureTransformer):
 
     def set_feature_importances(self, feature_importances):
         self.feature_importances = feature_importances
-        self.metric_factors = np.array([( 1 +x )* *self.scaling_exponent for x in self.feature_importances], dtype=np.float32)
+        self.metric_factors = np.array([(1+x)**self.scaling_exponent for x in self.feature_importances], dtype=np.float32)
 
     @classmethod
     def name(cls):

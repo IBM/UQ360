@@ -2,9 +2,8 @@
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors.kde import KernelDensity
+from sklearn.neighbors import KernelDensity
 from sklearn.preprocessing import StandardScaler
-from tqdm import tqdm
 from umap import UMAP
 
 from uq360.transformers.feature_transformer import FeatureTransformer
