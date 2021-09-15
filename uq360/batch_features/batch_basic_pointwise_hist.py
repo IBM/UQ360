@@ -64,9 +64,7 @@ class BatchConfidenceEntropy(BasicPointwiseHistogramDistance):
         bins = np.concatenate([np.linspace(0,0.1,num=11), np.linspace(0.2,3.0,num=29)])
         # Safety check in case your histogram misses. 
         too_high = np.mean([vec >= max(bins)])
-        print("percentage too high: ", too_high)
         too_low = np.mean([vec <= min(bins)])
-        print("percentage too low: ", too_low)
         if too_high > 0.5 or too_low > 0.5:
             if self.changed_histogram != 'false':
                 # Don't change prod if test wasn't changed
@@ -77,14 +75,6 @@ class BatchConfidenceEntropy(BasicPointwiseHistogramDistance):
         self.histogram_edges = bins
         hist , _ = np.histogram(vec, bins=bins)
         hist = np.divide(hist, float(len(vec)))
-        print()
-        print()
-        print("DEBUGGING ENTROPY HISTOGRAM: ")
-        print("vec = ", vec)
-        print()
-        print("hist = ", hist)
-        print()
-        print()
         return hist
 
 
