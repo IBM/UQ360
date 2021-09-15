@@ -11,8 +11,8 @@ class CustomRandomSearch(RandomizedSearchCV):
     _required_parameters = ["estimator", "param_distributions"]
 
     def __init__(self, estimator, param_distributions, progress_bar=True, callback=None, n_iter=10, scoring=None,
-                 n_jobs=None, iid='deprecated', refit=True, cv='warn', verbose=0, pre_dispatch='2*n_jobs',
-                 random_state=None, error_score='raise-deprecating', return_train_score=False, model_stage=None):
+                 n_jobs=None, refit=True, cv='warn', verbose=0, pre_dispatch='2*n_jobs',
+                 random_state=None, error_score='raise', return_train_score=False, model_stage=None):
         self.param_distributions = param_distributions
         self.n_iter = n_iter
         self.random_state = random_state
@@ -23,7 +23,7 @@ class CustomRandomSearch(RandomizedSearchCV):
             estimator=estimator, param_distributions=self.param_distributions,
             n_iter=self.n_iter, random_state=self.random_state,
             scoring=scoring,
-            n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
+            n_jobs=n_jobs, refit=refit, cv=cv, verbose=verbose,
             pre_dispatch=pre_dispatch, error_score=error_score,
             return_train_score=return_train_score)
 
