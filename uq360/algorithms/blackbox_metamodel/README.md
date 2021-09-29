@@ -12,24 +12,23 @@ which means the client model's performance on unlabeled data is 54.5.
 ## Terminology
 
 - "Predictor" is used to predict the performance of the ML model on unlabeled data
-- "Base model" / "Client model" represents the model that the user brings in.
+- "Base model" / "Client model" represents the (pre-trained) model from the user.
 - "prod data" / "unlabeled data" represents data seen by the model in real world. The model is unaware of this data during training
-- "Drift scenario" refers to the "drift/bias" in data which leads to a model that performs very different on test set and production set
+- "Drift scenario" refers to the "drift/bias" in data which leads to a model that performs differently on the test set and production set
 
 ### Predictors 
 
 #### Structured Data Predictor
-This is currently the most effective predictor in the library according to our experiments. It also allows flexible feature and calibrator configurations, and uses a meta-model which is an ensemble of a GBM and a Logistic Regression model. It returns no errorbars (constant zero errorbars) of its own.
-
+This predictor allows flexible feature and calibrator configurations, and uses a meta-model which is an ensemble of a GBM and a Logistic Regression model. It returns no errorbars (constant zero errorbars) of its own.
 
 #### Short Text Predictor
-This is very similar to the structured data predictor but it is fine tuned to handle text data. The meta model used by the predictor is an ensemble of SVM, GBM, MLP
+This is very similar to the structured data predictor but it is fine tuned to handle text data. The meta model used by the predictor is an ensemble of an SVM, GBM, and MLP. Feature vectors can be either raw text or pre-encoded vectors. If raw text is passed and no encoder is specified in the initialization, USE embeddings will be used by default. 
 
 #### Confidence Predictor
 This is a simple predictor which bins predictions of the base model based on their highest confidence value, and returns dynamic errorbars determined by the standard deviation of values in each bin.
 
 #### Passthrough Predictor
-It simply passes the predicted class confidence of the base/input model as its own prediction. This performance predictor does not have a method to quantify its own uncertainty, so the uncertainty 
+Simply passes the predicted class confidence of the base/input model as its own prediction. This performance predictor does not have a method to quantify its own uncertainty, so the uncertainty 
 values are zero.  
 
 ### Usage
@@ -69,7 +68,7 @@ prediction = p.predict(x_prod, return_predictions=True)
 
 ```
 * `StructuredDataPredictorWrapper` / `ShortTextPredictorWrapper` instantiation Arguments:
-  * model (sklearn estimators https://scikit-learn.org/stable/developers/develop.html) : Client model<sup>1</sup> (optional, but if not included then model confidence vectors must be provided to fit and predict)
+  * model (sklearn estimators https://scikit-learn.org/stable/developers/develop.html) : (Trained) Client model<sup>1</sup> (optional, but if not included then model confidence vectors must be provided to fit and predict)
   * encoder (TransformerMixin object that implements fit and transform methods): This is an optional parameter and should be set only for text data (when predictor=text_ensemble). If the predictor is "text_ensemble" and if encoder is not set, the default encoding used will be USE Encoding.
 
 * `fit()` arguments:
