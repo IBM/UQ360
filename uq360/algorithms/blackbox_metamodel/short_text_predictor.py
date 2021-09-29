@@ -8,11 +8,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-"""PostHocUQ model based on the "text_ensemble" performance predictor 
-(uq360.algorithms.blackbox_metamodel.predictors.core.short_text.py). """
+
 class ShortTextPredictorWrapper(PostHocUQ):
+    """PostHocUQ model based on the "text_ensemble" performance predictor
+            (uq360.algorithms.blackbox_metamodel.predictors.core.short_text.py). """
 
     def __init__(self, base_model=None, encoder=None):
+        """ Returns an instance of a short text predictor
+        :param base_model: scikit learn estimator instance which has the capability of returning confidence (predict_proba). base_model can also be None
+        :return: predictor instance
+        """
         super().__init__(base_model)
 
         self.encoder = None
@@ -29,7 +34,16 @@ class ShortTextPredictorWrapper(PostHocUQ):
                                       calibrator=calib)
 
     def fit(self, x_train, y_train, x_test, y_test, test_predicted_probabilities=None):
+        """
+               Fit base and meta models.
 
+               :param x_train: Features vectors of the training data.
+               :param y_train: Labels of the training data
+               :param x_test: Features vectors of the test data.
+               :param y_test: Labels of the test data
+               :param test_predicted_probabilities: predicted probabilities on test data should be passed if the predictor is not instantiated with a base model
+               :return: self
+        """
         if x_train.dtype.type in [np.str_, np.object_] or x_test.dtype.type in [np.str_, np.object_]:
             logger.info('Training/Testing data contains raw text.')
             logger.info('Using an encoder.... %s', self.encoder)
@@ -49,6 +63,16 @@ class ShortTextPredictorWrapper(PostHocUQ):
         raise NotImplementedError
 
     def predict(self, x, return_predictions=False, predicted_probabilities=None):
+        """
+        Generate a base prediction for incoming data x
+
+        :param x: array-like of shape (n_samples, n_features).
+                Features vectors of the test points.
+        :param return_predictions: data point wise prediction will be returned when this flag is True
+        :param predicted_probabilities: when the predictor is instantiated without a base model, predicted_probabilities on x from the pre-trained model should be passed to predict
+        :return: dictionary: A dict that holds predicted_accuracy
+
+        """
         if not self.fitted:
             raise Exception("Untrained Predictor: fit() method needs to be called before predicting.")
 

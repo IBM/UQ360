@@ -1,2 +1,7 @@
 from .blackbox_metamodel_regression import BlackboxMetamodelRegression
 from .blackbox_metamodel_classification import BlackboxMetamodelClassification
+from .confidence_predictor import ConfidencePredictorWrapper
+from .passthrough_predictor import PassthroughPredictorWrapper
+from .short_text_predictor import ShortTextPredictorWrapper
+from .structured_data_predictor import StructuredDataPredictorWrapper
+

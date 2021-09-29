@@ -37,3 +37,22 @@ UCC Recalibration
 
 .. autoclass:: uq360.algorithms.ucc_recalibration.UCCRecalibration
    :members:
+
+
+Structured Data Predictor
+-----------------
+
+.. autoclass:: uq360.algorithms.blackbox_metamodel.structured_data_predictor.StructuredDataPredictorWrapper
+   :members:
+
+Short Text Predictor
+-----------------
+
+.. autoclass:: uq360.algorithms.blackbox_metamodel.short_text_predictor.ShortTextPredictorWrapper
+   :members:
+
+Confidence Predictor
+-----------------
+
+.. autoclass:: uq360.algorithms.blackbox_metamodel.confidence_predictor.ConfidencePredictorWrapper
+   :members:

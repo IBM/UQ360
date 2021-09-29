@@ -5,7 +5,7 @@ from uq360.algorithms.posthocuq import PostHocUQ
 
 """PostHocUQ model based on the "passthrough" performance predictor 
 (uq360.algorithms.blackbox_metamodel.predictors.core.passthrough.py). """
-class PassthroughPredictor(PostHocUQ):
+class PassthroughPredictorWrapper(PostHocUQ):
 
     def __init__(self, base_model=None):
         super().__init__(base_model)

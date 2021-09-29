@@ -3,11 +3,17 @@ from uq360.algorithms.blackbox_metamodel.predictors.predictor_driver import Pred
 from uq360.algorithms.posthocuq import PostHocUQ
 
 
-"""PostHocUQ model based on the "structured_data" performance predictor 
-(uq360.algorithms.blackbox_metamodel.predictors.core.structured_data.py). """
 class StructuredDataPredictorWrapper(PostHocUQ):
-
+    """
+    PostHocUQ model based on the "structured_data" performance predictor
+            (uq360.algorithms.blackbox_metamodel.predictors.core.structured_data.py).
+    """
     def __init__(self, base_model=None):
+        """ Returns an instance of a structured data predictor
+
+        :param base_model: scikit learn estimator instance which has the capability of returning confidence (predict_proba). base_model can also be None
+        :return: predictor instance
+        """
         super().__init__(base_model)
         self.client_model = base_model
         self.performance_predictor = "structured_data"
@@ -23,6 +29,16 @@ class StructuredDataPredictorWrapper(PostHocUQ):
                                       calibrator=self.calib)
 
     def fit(self, x_train, y_train, x_test, y_test, test_predicted_probabilities=None):
+        """
+                       Fit base and meta models.
+
+                       :param x_train: Features vectors of the training data.
+                       :param y_train: Labels of the training data
+                       :param x_test: Features vectors of the test data.
+                       :param y_test: Labels of the test data
+                       :param test_predicted_probabilities: predicted probabilities on test data should be passed if the predictor is not instantiated with a base model
+                       :return: self
+                """
         self.driver.fit(x_train, y_train, x_test, y_test, test_predicted_probabilities=test_predicted_probabilities)
         self.fitted = True
 
@@ -30,6 +46,16 @@ class StructuredDataPredictorWrapper(PostHocUQ):
         raise NotImplementedError
 
     def predict(self, x, return_predictions=False, predicted_probabilities=None):
+        """
+                Generate a base prediction for incoming data x
+
+                :param x: array-like of shape (n_samples, n_features).
+                        Features vectors of the test points.
+                :param return_predictions: data point wise prediction will be returned when this flag is True
+                :param predicted_probabilities: when the predictor is instantiated without a base model, predicted_probabilities on x from the pre-trained model should be passed to predict
+                :return: dictionary: A dict that holds predicted_accuracy
+
+                """
         if not self.fitted:
             raise Exception("Untrained Predictor: fit() method needs to be called before predicting.")
 
