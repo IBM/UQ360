@@ -15,7 +15,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
 from uq360.utils.hpo_search import CustomRandomSearch
-from uq360.calibrators.calibrator import Calibrator
+from uq360.utils.calibrators.calibrator import Calibrator
 import logging
 # import numpy as np
 # from sklearn.model_selection import StratifiedKFold, train_test_split
@@ -35,7 +35,7 @@ Performance predictor for short text data. It is based on an ensemble of meta-mo
 one mlp metamodel, one GBM metamodel, and one SVM metamodel. This performance predictor does not have a method 
 to quantify its own uncertainty, so the uncertainty values are zero.  
 """
-class TextEnsembleV2Predictor(PerfPredictor):
+class TextEnsemblePredictor(PerfPredictor):
     def __init__(self, calibrator="shift"):
         self.metamodels_considered = ["svm", "gbm", "mlp"]
         self.metamodels = {}
@@ -257,7 +257,7 @@ class TextEnsembleV2Predictor(PerfPredictor):
 # from sklearn.svm import SVC
 # from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
 # from uq360.utils.hpo_search import CustomRandomSearch
-# from uq360.calibrators.calibrator import Calibrator
+# from uq360.utils.calibrators.calibrator import Calibrator
 # import logging
 #
 # logger = logging.getLogger(__name__)

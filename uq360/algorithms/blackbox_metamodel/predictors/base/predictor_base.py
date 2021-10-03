@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 
 from uq360.base import Base
-from uq360.calibrators.calibrator import Calibrator
+from uq360.utils.calibrators.calibrator import Calibrator
 
 """
 Base class for performance predictors. 

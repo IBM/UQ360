@@ -5,18 +5,19 @@ import numpy as np
 from scipy.stats import norm
 
 
-"""
-Class for non-parametric significance testing. It has two main functions: 
 
-hypothesis_test: Assumes two vectors of paired observations (ie each point in measurement_1 is paired with the point 
-with the same index in measurement_2, for example measurements of the length of the same set of objects using two 
-different rulers). Performs a permutation test to determine if one set of measurements is statistically different 
-(higher, lower, or either one, depending on the 'tailed' argument) from the other, and computes a p-value. 
-
-confidence_interval: Uses bootstrapping to compute a confidence interval (controlled by 'alpha' argument, default is 
-95% confidence interval) for a list of (1-dimensional) measurements. 
-"""
 class SignificanceTester:
+    """
+    Class for non-parametric significance testing. It has two main functions:
+
+    hypothesis_test: Assumes two vectors of paired observations (ie each point in measurement_1 is paired with the point
+    with the same index in measurement_2, for example measurements of the length of the same set of objects using two
+    different rulers). Performs a permutation test to determine if one set of measurements is statistically different
+    (higher, lower, or either one, depending on the 'tailed' argument) from the other, and computes a p-value.
+
+    confidence_interval: Uses bootstrapping to compute a confidence interval (controlled by 'alpha' argument, default is
+    95% confidence interval) for a list of (1-dimensional) measurements.
+    """
     def __init__(self, metric):
         self.metric = self.get_metric_function(metric)
 

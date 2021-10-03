@@ -1,10 +1,10 @@
 import traceback
 import numpy as np
-from uq360.batch_features import BlackboxFeature
+from uq360.utils.batch_features.blackbox_feature import BlackboxFeature
 
-from uq360.batch_features.feature_extractor import FeatureExtractor
+from uq360.utils.batch_features.feature_extractor import FeatureExtractor
 from uq360.algorithms.blackbox_metamodel.predictors.base.predictor_base import PerfPredictor
-from uq360.batch_features.drift_classifier import DriftClassifier
+from uq360.utils.batch_features.drift_classifier import DriftClassifier
 
 from uq360.utils.utils import Timer
 
