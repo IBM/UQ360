@@ -65,10 +65,9 @@ class TestShortTextClassification(TestCase):
 
         p1.fit(x_train_new, y_train_new, x_test_new, y_test_new)
 
-        out = p1.predict(prod_test_data)
-        print(out, acc)
+        y_mean, y_pred, y_score = p1.predict(prod_test_data)
 
-        delta = abs(out["predicted_accuracy"] - acc * 100)
+        delta = abs(y_mean - acc * 100)
         self.assertTrue(delta <= 5)
 
     def train_model(self, x, y):

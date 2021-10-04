@@ -30,11 +30,11 @@ class TestStructuredDataClassification(TestCase):
         p.fit(x_train, y_train, x_test, y_test)
 
         # predict the model's accuracy on production/unlabeled data
-        prediction = p.predict(x_prod)
+        y_mean, y_pred, y_score = p.predict(x_prod)
         print("Accuracy on prod data", acc_on_prod * 100)
-        print("Predictor's prediction", prediction)
+        print("Predictor's prediction", y_mean)
 
-        delta = abs(prediction["predicted_accuracy"] - acc_on_prod * 100)
+        delta = abs(y_mean - acc_on_prod * 100)
         self.assertTrue(delta <= 2)
 
     def get_banking_data(self):

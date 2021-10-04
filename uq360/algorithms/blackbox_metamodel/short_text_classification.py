@@ -1,3 +1,4 @@
+from collections import namedtuple
 
 import numpy as np
 
@@ -10,8 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class ShortTextClassificationWrapper(PostHocUQ):
-    """PostHocUQ model based on the "text_ensemble" performance predictor
-            (uq360.algorithms.blackbox_metamodel.predictors.core.short_text.py). """
+    """
+    This is very similar to the structured data predictor but it is fine tuned to handle text data. The meta model used by the predictor is an ensemble of an SVM, GBM, and MLP. Feature vectors can be either raw text or pre-encoded vectors. If raw text is passed and no encoder is specified in the initialization, USE embeddings will be used by default.
+    PostHocUQ model based on the "text_ensemble" performance predictor (uq360.algorithms.blackbox_metamodel.predictors.core.short_text.py).
+    """
 
     def __init__(self, base_model=None, encoder=None):
         """ Returns an instance of a short text predictor
@@ -62,7 +65,7 @@ class ShortTextClassificationWrapper(PostHocUQ):
     def _process_pretrained_model(self, x, y_hat):
         raise NotImplementedError
 
-    def predict(self, x, return_predictions=False, predicted_probabilities=None):
+    def predict(self, x, return_predictions=True, predicted_probabilities=None):
         """
         Generate a base prediction for incoming data x
 
@@ -70,7 +73,14 @@ class ShortTextClassificationWrapper(PostHocUQ):
                 Features vectors of the test points.
         :param return_predictions: data point wise prediction will be returned when this flag is True
         :param predicted_probabilities: when the predictor is instantiated without a base model, predicted_probabilities on x from the pre-trained model should be passed to predict
-        :return: dictionary: A dict that holds predicted_accuracy
+        :return: namedtuple: A namedtuple that holds
+
+        y_mean: ndarray of shape (n_samples, [n_output_dims])
+            Mean of predictive distribution of the test points.
+        y_pred: ndarray of shape (n_samples,)
+        Predicted labels of the test points.
+        y_score: ndarray of shape (n_samples,)
+            Confidence score the test points.
 
         """
         if not self.fitted:
@@ -94,4 +104,8 @@ class ShortTextClassificationWrapper(PostHocUQ):
         if return_predictions:
             output['predictions_per_datapoint'] = predictions['pointwise_confidences']
 
-        return output
+
+        Result = namedtuple('res',['y_mean', 'y_pred', 'y_score'])
+        res = Result(predictions['accuracy'], [], [predictions['pointwise_confidences']])
+
+        return res

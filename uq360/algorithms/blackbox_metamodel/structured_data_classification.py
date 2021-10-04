@@ -1,3 +1,4 @@
+from collections import namedtuple
 
 from uq360.algorithms.blackbox_metamodel.predictors.predictor_driver import PredictorDriver
 from uq360.algorithms.posthocuq import PostHocUQ
@@ -5,6 +6,7 @@ from uq360.algorithms.posthocuq import PostHocUQ
 
 class StructuredDataClassificationWrapper(PostHocUQ):
     """
+    This predictor allows flexible feature and calibrator configurations, and uses a meta-model which is an ensemble of a GBM and a Logistic Regression model. It returns no errorbars (constant zero errorbars) of its own.
     PostHocUQ model based on the "structured_data" performance predictor
             (uq360.algorithms.blackbox_metamodel.predictors.core.structured_data.py).
     """
@@ -45,17 +47,24 @@ class StructuredDataClassificationWrapper(PostHocUQ):
     def _process_pretrained_model(self, x, y_hat):
         raise NotImplementedError
 
-    def predict(self, x, return_predictions=False, predicted_probabilities=None):
+    def predict(self, x, return_predictions=True, predicted_probabilities=None):
         """
-                Generate a base prediction for incoming data x
+                   Generate a base prediction for incoming data x
 
-                :param x: array-like of shape (n_samples, n_features).
-                        Features vectors of the test points.
-                :param return_predictions: data point wise prediction will be returned when this flag is True
-                :param predicted_probabilities: when the predictor is instantiated without a base model, predicted_probabilities on x from the pre-trained model should be passed to predict
-                :return: dictionary: A dict that holds predicted_accuracy
+        :param x: array-like of shape (n_samples, n_features).
+                Features vectors of the test points.
+        :param return_predictions: data point wise prediction will be returned when this flag is True
+        :param predicted_probabilities: when the predictor is instantiated without a base model, predicted_probabilities on x from the pre-trained model should be passed to predict
+        :return: namedtuple: A namedtuple that holds
 
-                """
+        y_mean: ndarray of shape (n_samples, [n_output_dims])
+            Mean of predictive distribution of the test points.
+        y_pred: ndarray of shape (n_samples,)
+        Predicted labels of the test points.
+        y_score: ndarray of shape (n_samples,)
+            Confidence score the test points.
+
+        """
         if not self.fitted:
             raise Exception("Untrained Predictor: fit() method needs to be called before predicting.")
 
@@ -68,4 +77,8 @@ class StructuredDataClassificationWrapper(PostHocUQ):
         if return_predictions:
             output['predictions_per_datapoint'] = predictions['pointwise_confidences']
 
-        return output
+
+        Result = namedtuple('res',['y_mean', 'y_pred', 'y_score'])
+        res = Result(predictions['accuracy'], [], [predictions['pointwise_confidences']])
+
+        return res
