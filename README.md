@@ -58,6 +58,8 @@ The prediction interval coverage probability score (PICP) score is used here
 as the metric to select the model through cross-validation.
 
 ```python
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from uq360.utils.misc import make_sklearn_compatible_scorer
 from uq360.algorithms.quantile_regression import QuantileRegression
@@ -74,7 +76,10 @@ for num_estimators in [1, 2, 5, 10, 20, 30, 40, 50]:
     config = base_config.copy()
     config["n_estimators"] = num_estimators
     configs["config"].append(config)
-    
+
+X, y = make_regression(random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
 uq_model = GridSearchCV(
     QuantileRegression(config=base_config), configs, scoring=sklearn_picp)
 uq_model.fit(X_train, y_train)
