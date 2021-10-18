@@ -4,7 +4,6 @@ import numpy as np
 import torch
 
 from uq360.algorithms.variational_bayesian_neural_networks.bnn import BnnRegression, BnnClassification
-from uq360.metrics.classification_metrics import entropy_based_uncertainty_decomposition
 from uq360.models.bayesian_neural_networks.layer_utils import InvGammaHalfCauchyLayer
 from uq360.models.bayesian_neural_networks.layers import HorseshoeLayer
 
@@ -34,6 +33,8 @@ class TestHC(unittest.TestCase):
     def test_uncertainty_classification(self):
         from sklearn.datasets import make_classification
         from sklearn.model_selection import train_test_split
+        from uq360.metrics.classification_metrics import entropy_based_uncertainty_decomposition, \
+            compute_classification_metrics
         n_samples = 200
         n_features = 5
         n_classes = 4
@@ -45,6 +46,16 @@ class TestHC(unittest.TestCase):
         uq_bnn = BnnClassification(config=config)
         uq_bnn.fit(X_train, y_train)
         y_pred, y_prob, y_prob_var, y_prob_samples = uq_bnn.predict(X=X_test, mc_samples=10)
+        res = compute_classification_metrics(y_true=y_test, y_prob=y_prob, option='all')
+        self.assertCountEqual(res.keys(), ['ece', 'aurrrc', 'auroc', 'nll', 'brier', 'accuracy'])
+
+        res = compute_classification_metrics(y_true=y_test, y_prob=y_prob, option='ece')
+        assert "ece" in res
+
+        res = compute_classification_metrics(y_true=y_test, y_prob=y_prob,
+                                       option=['aurrrc', 'auroc', 'nll', 'brier', 'accuracy'])
+        self.assertCountEqual(res.keys(), ['aurrrc', 'auroc', 'nll', 'brier', 'accuracy'])
+
         total_uq, aleatoric_uq, epistemic_uq = entropy_based_uncertainty_decomposition(y_prob_samples)
         assert total_uq.shape[0] == X_test.shape[0]
         assert len(total_uq.shape) == 1
@@ -52,6 +63,8 @@ class TestHC(unittest.TestCase):
 
     def test_uncertainty_regression(self):
         from uq360.utils.generate_1D_regression_data import make_data_sine
+        from uq360.metrics.regression_metrics import compute_regression_metrics
+
         viz = False
         x_train, y_train, x_val, y_val, train_stats = make_data_sine(0, data_count=500) # 20% for training ; 80 % for testing
 
@@ -60,6 +73,13 @@ class TestHC(unittest.TestCase):
         uq_bnn = BnnRegression(config=config)
         uq_bnn.fit(x_train, y_train)
         y, y_lb, y_ub, y_epi_lb, y_epi_ub = uq_bnn.predict(x_val)
+
+        res = compute_regression_metrics(y_true=y_val.numpy(), y_mean=y, y_lower=y_lb, y_upper=y_ub)
+        self.assertCountEqual(res.keys(), ["rmse", "nll", "auucc_gain", "picp", "mpiw", "r2"])
+        res = compute_regression_metrics(y_true=y_val.numpy(), y_mean=y, y_lower=y_lb, y_upper=y_ub, option='picp')
+        assert 'picp' in res
+        res = compute_regression_metrics(y_true=y_val.numpy(), y_mean=y, y_lower=y_lb, y_upper=y_ub, option=['mpiw', 'rmse'])
+        self.assertCountEqual(res.keys(), ['mpiw', 'rmse'])
 
         if viz:
             idx = np.argsort(x_val.numpy().ravel())

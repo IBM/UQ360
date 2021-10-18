@@ -2,20 +2,20 @@ from setuptools import setup, find_packages
 
 setup(
     name='uq360',
-    version='0.1.1',
+    version='0.2',
     url='https://github.com/IBM/UQ360',
     license='Apache License 2.0',
     author='uq360 developers',
     author_email='uq360@us.ibm.com',
     packages=find_packages(),
-    description='IBM Uncertainty Quantification 360',
+    description='Uncertainty Quantification 360',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     install_requires=[
         'numpy>=1.16.5',
         'scipy>=1.2.0',
         'pandas>=0.24.0',
-        'scikit-learn>=0.22',
+        'scikit-learn>=0.22,<1.0',
         'matplotlib>=3.2',
         'autograd>=1.3',
         'torch>=1.6.0',
