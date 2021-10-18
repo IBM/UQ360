@@ -3,20 +3,84 @@
 [![Build Status](https://travis-ci.com/IBM/UQ360.svg?branch=main)](https://travis-ci.com/github/IBM/UQ360)
 [![Documentation Status](https://readthedocs.org/projects/uq360/badge/?version=latest)](https://uq360.readthedocs.io/en/latest/?badge=latest)
 
-The Uncertainty Quantification 360 (UQ360) toolkit is an open-source Python package that provides a diverse set of algorithms to quantify uncertainty, as well as capabilities to measure and improve UQ to streamline the development process. We provide a taxonomy and guidance for choosing these capabilities based on the user's needs. Further, UQ360 makes the communication method of UQ an integral part of development choices in an AI lifecycle. Developers can make a user-centered choice by following the psychology-based guidance on communicating UQ estimates, from concise descriptions to detailed visualizations.
+The Uncertainty Quantification 360 (UQ360) is an open-source toolkit with a Python package to provide data science 
+practitioners and developers access to state-of-the-art algorithms, to streamline the process of estimating, evaluating,
+improving, and communicating uncertainty of machine learning models as common practices for AI transparency.
+The [UQ360 interactive experience](http://uq360.mybluemix.net/) provides a gentle introduction to the concepts and 
+capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper,
+data scientist-oriented introduction. The [complete API](https://uq360.readthedocs.io/) is also available.
 
-The [UQ360 interactive experience](http://uq360.mybluemix.net/) provides a gentle introduction to the concepts and capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper, data scientist-oriented introduction. The complete API is also available.
+We have developed the package with extensibility in mind. This library is still in development. We encourage the 
+contribution of your uncertianty estimation algorithms, metrics and applications. 
+To get started as a contributor, please join the #uq360-users or #uq360-developers channel of 
+the [AIF360 Community on Slack](https://aif360.slack.com) by requesting an 
+invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g6tgJQ~7tIAT~S294TQ).
 
-We have developed the package with extensibility in mind. This library is still in development. We encourage the contribution of your uncertianty estimation algorithms, metrics and applications. 
-To get started as a contributor, please join the #uq360-users or #uq360-developers channel of the [AIF360 Community on Slack](https://aif360.slack.com) by requesting an invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g6tgJQ~7tIAT~S294TQ).
+![alt text](https://uq360.mybluemix.net/imgs/flowchart.png "UQ Pipeline")
 
-# Supported Uncertainty Evaluation Metrics
+# Resources
 
-The toolbox provides several standard calibration metrics for classification and regression tasks. This includes Expected Calibration Error ([Naeini et al., 2015](https://ojs.aaai.org/index.php/AAAI/article/view/9602)), Brier Score ([Brier,  1950](https://doi.org/10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2)), etc for classification models. Regression metrics include Prediction Interval Coverage Probability (PICP) [Chatfield, 1993](https://www.jstor.org/stable/1391361?seq=1) and Mean Prediction Interval Width (MPIW) ([Shrestha and Solomatine, 2006](https://pubmed.ncbi.nlm.nih.gov/16530384/)) among others. The toolbox also provides a novel operation-point agnostic approaches for the assessment of prediction uncertainty estimates called the Uncertainty Characteristic Curve (UCC) ([Navratil et al., 2021](https://arxiv.org/abs/2106.00858)). Several metrics and diagnosis tools such as reliability diagram ([DeGroot and Fienberg, 1983](https://www.jstor.org/stable/2987588?seq=1)) and risk-vs-rejection rate curves ([El-Yaniv et al., 2010](https://www.jmlr.org/papers/volume11/el-yaniv10a/el-yaniv10a.pdf)) are provides which also support analysis by sub-groups in the population to study fairness implications of acting on given uncertainty estimates.
+- [Introduction](https://uq360.mybluemix.net/overview) to Uncertainty Quantification 360.
+- [Demo](https://uq360.mybluemix.net/demo/0) House Price Prediction Model.
+- List of [Algorithms](https://uq360.readthedocs.io/en/latest/algorithms.html) supported.
+- List of [Metrics](https://uq360.readthedocs.io/en/latest/metrics.html) supported.
+- [Guidance](https://uq360.mybluemix.net/resources/guidance) on Choosing UQ Algorithms and Metrics.
+- [Guidance](https://uq360.mybluemix.net/resources/communication) on Communicating Uncertainty.
+- [Glossary](https://uq360.mybluemix.net/resources/glossary) of UQ Terms.
+- Read our [papers](https://uq360.mybluemix.net/resources/papers).
+- Complete list of [tutorials](https://github.com/IBM/UQ360/tree/main/examples).
+- Join the Slack [Community](https://uq360.mybluemix.net/community).
 
-# Supported Uncertainty Estimation Algorithms
+# Example Use-cases
 
-UQ algorithms can be broadly classified as intrinsic or extrinsic depending on how the uncertainties are obtained from the AI models. Intrinsic methods encompass models that inherently provides an uncertainty estimate along with its predictions. The toolkit includes algorithms such as variational Bayesian neural  networks  (BNNs)  ([Blundell et  al., 2015](http://proceedings.mlr.press/v37/blundell15.html)),  Gaussian  processes  ([Rasmussen  and  Williams,2006](https://mitpress.mit.edu/books/gaussian-processes-machine-learning)), quantile regression ([Koenker and Bassett, 1978](https://people.eecs.berkeley.edu/~jordan/sail/readings/koenker-bassett.pdf)) and hetero/homo-scedastic neural networks ([Wakefield, 2013](https://link.springer.com/book/10.1007/978-1-4419-0925-1)) which are models that fall in this category. The toolkit also includes Horseshoe BNNs ([Ghosh et al., 2019](https://www.jmlr.org/papers/v20/19-236.html)) that use sparsity promoting priors and can lead to better-calibrated uncertainties, especially in the small data regime. An Infinitesimal Jackknife (IJ) based algorithm ([Ghosh et al., 2020)](https://papers.nips.cc/paper/2020/hash/636efd4f9aeb5781e9ea815cdd633e52-Abstract.html)), provided in the toolkit, is a perturbation-based approach that perform uncertainty quantification by estimating model parameters under different perturbations of the original data. Crucially, here the estimation only requires the model to be trained once on the unperturbed dataset. For models that do not have an inherent notion of uncertainty built into them, extrinsic methods are employed to extract uncertainties post-hoc. The toolkit provides meta-models ([Chen et al., 2019](http://proceedings.mlr.press/v89/chen19c.html)) that can be been used to successfully generate reliable confidence measures (in classification), prediction intervals (in regression), and to predict performance metrics such as accuracy on unseen and unlabeled data. For pre-trained models that captures uncertainties to some degree, the toolbox provides extrinsic algorithms that can improve the uncertainty estimation quality. This includes isotonic regression ([Zadrozny and Elkan, 2001](https://cseweb.ucsd.edu/~elkan/calibrated.pdf)), Platt-scaling ([Platt, 1999](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.41.1639&g)),  auxiliary interval predictors ([Thiagarajan et al., 2020](https://ojs.aaai.org//index.php/AAAI/article/view/6062)), and UCC-Recalibration ([Navratil et al., 2021](https://arxiv.org/abs/2106.00858)). The toolkit also provides actively learned models, which iteratively build an efficient dataset based on a given UQ model ([Pestourie et al., 2020](https://www.nature.com/articles/s41524-020-00431-2)). 
+### Meta-models
+Use of meta-models to augment sklearn's gradient boosted regressor with prediction interval.
+
+```python
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+
+from uq360.algorithms.blackbox_metamodel import BlackboxMetamodelRegression
+
+X, y = make_regression(random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+gbr_reg = GradientBoostingRegressor(random_state=0)
+
+uq_model = BlackboxMetamodelRegression(base_model=gbr_reg)
+uq_model.fit(X_train, y_train)
+
+y_hat, y_hat_lb, y_hat_ub = uq_model.predict(X_test)
+```
+
+### UQ360 metrics for model selection
+The prediction interval coverage probability score (PICP) score is used here 
+as the metric to select the model through cross-validation.
+
+```python
+from sklearn.model_selection import GridSearchCV
+from uq360.utils.misc import make_sklearn_compatible_scorer
+from uq360.algorithms.quantile_regression import QuantileRegression
+
+sklearn_picp = make_sklearn_compatible_scorer(
+    task_type="regression",
+    metric="picp", greater_is_better=True)
+
+base_config = {"alpha":0.95, "n_estimators":20, "max_depth": 3, 
+               "learning_rate": 0.01, "min_samples_leaf": 10,
+               "min_samples_split": 10}
+configs  = {"config": []}
+for num_estimators in [1, 2, 5, 10, 20, 30, 40, 50]:
+    config = base_config.copy()
+    config["n_estimators"] = num_estimators
+    configs["config"].append(config)
+    
+uq_model = GridSearchCV(
+    QuantileRegression(config=base_config), configs, scoring=sklearn_picp)
+uq_model.fit(X_train, y_train)
+
+y_hat, y_hat_lb, y_hat_ub = uq_model.predict(X_test)
+```
 
 ## Setup
 
