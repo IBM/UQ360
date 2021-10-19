@@ -9,7 +9,7 @@ from sklearn.exceptions import NotFittedError
 from uq360.algorithms.posthocuq import PostHocUQ
 
 
-class BlackboxMetamodelClassification(PostHocUQ):
+class MetamodelClassification(PostHocUQ):
     """ Extracts confidence scores from black-box classification models using a meta-model [4]_ .
 
     References:
@@ -70,7 +70,7 @@ class BlackboxMetamodelClassification(PostHocUQ):
         :param meta_config: None or a params dict to be passed to 'meta_model' at instantiation
         :param random_seed: seed used in the various pipeline steps
         """
-        super(BlackboxMetamodelClassification).__init__()
+        super(MetamodelClassification).__init__()
         self.random_seed = random_seed
         self.callable_keys = ['predict', 'fit']  # required methods - must be present in models passed in
         self.base_model_default = 'gbm'
