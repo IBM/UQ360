@@ -1,5 +1,4 @@
 from builtins import range
-
 import autograd.numpy as np
 
 

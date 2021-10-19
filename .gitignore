@@ -109,3 +109,7 @@ venv.bak/
 **/**.DS_Store
 
 uq360/data/*/*.csv
+
+*.csv
+.DS_Store
+
