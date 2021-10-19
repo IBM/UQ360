@@ -34,28 +34,37 @@ invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g
 # Example Use-cases
 
 ### Meta-models
-Use of meta-models to augment sklearn's gradient boosted regressor with prediction interval.
+Use of meta-models to augment sklearn's gradient boosted regressor with prediction interval. See detailed example 
+[here](https://github.com/IBM/UQ360/blob/main/examples/blackbox_metamodel/demo_blackbox_metamodel_regression.ipynb).
 
 ```python
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.datasets import make_regression
 from sklearn.model_selection import train_test_split
 
-from uq360.algorithms.blackbox_metamodel import BlackboxMetamodelRegression
+from uq360.algorithms.blackbox_metamodel import MetamodelRegression
 
+# Create train, calibration and test splits.
 X, y = make_regression(random_state=0)
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+X_train, X_calibration, y_train, y_calibration = train_test_split(X_train, y_train, random_state=0)
+
+# Train the base model that provides the mean estimates.
 gbr_reg = GradientBoostingRegressor(random_state=0)
+gbr_reg.fit(X_train, y_train)
 
-uq_model = BlackboxMetamodelRegression(base_model=gbr_reg)
-uq_model.fit(X_train, y_train)
+# Train the meta-model that can augment the mean prediction with prediction intervals.
+uq_model = MetamodelRegression(base_model=gbr_reg)
+uq_model.fit(X_calibration, y_calibration, base_is_prefitted=True)
 
+# Obtain mean estimates and prediction interval on the test data.
 y_hat, y_hat_lb, y_hat_ub = uq_model.predict(X_test)
 ```
 
 ### UQ360 metrics for model selection
 The prediction interval coverage probability score (PICP) score is used here 
-as the metric to select the model through cross-validation.
+as the metric to select the model through cross-validation. See detailed example 
+[here](https://github.com/IBM/UQ360/blob/main/examples/autoai/demo_autoai.ipynb).
 
 ```python
 from sklearn.datasets import make_regression
@@ -64,10 +73,12 @@ from sklearn.model_selection import GridSearchCV
 from uq360.utils.misc import make_sklearn_compatible_scorer
 from uq360.algorithms.quantile_regression import QuantileRegression
 
+# Create a sklearn scorer using UQ360 PICP metric.
 sklearn_picp = make_sklearn_compatible_scorer(
     task_type="regression",
     metric="picp", greater_is_better=True)
 
+# Hyper-parameters configuration using GridSearchCV.
 base_config = {"alpha":0.95, "n_estimators":20, "max_depth": 3, 
                "learning_rate": 0.01, "min_samples_leaf": 10,
                "min_samples_split": 10}
@@ -77,13 +88,18 @@ for num_estimators in [1, 2, 5, 10, 20, 30, 40, 50]:
     config["n_estimators"] = num_estimators
     configs["config"].append(config)
 
+# Create train test split.
 X, y = make_regression(random_state=0)
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
+# Initialize QuantileRegression UQ360 model and wrap it in GridSearchCV with PICP as the scoring function.
 uq_model = GridSearchCV(
     QuantileRegression(config=base_config), configs, scoring=sklearn_picp)
+
+# Fit the model on the training set.
 uq_model.fit(X_train, y_train)
 
+# Obtain the prediction intervals for the test set.
 y_hat, y_hat_lb, y_hat_ub = uq_model.predict(X_test)
 ```
 
