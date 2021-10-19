@@ -11,7 +11,7 @@ capabilities by walking through an example use case. The [tutorials and example 
 data scientist-oriented introduction. The [complete API](https://uq360.readthedocs.io/) is also available.
 
 We have developed the package with extensibility in mind. This library is still in development. We encourage the 
-contribution of your uncertianty estimation algorithms, metrics and applications. 
+contribution of your uncertainty estimation algorithms, metrics and applications. 
 To get started as a contributor, please join the #uq360-users or #uq360-developers channel of 
 the [AIF360 Community on Slack](https://aif360.slack.com) by requesting an 
 invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g6tgJQ~7tIAT~S294TQ).
