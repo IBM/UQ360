@@ -56,13 +56,16 @@ class TestStructuredDataClassification(TestCase):
         r = requests.get(url, allow_redirects=True)
 
         filename = os.path.join(os.getcwd(),'uq360/data/banking_data/bank-additional.zip')
+        assert os.path.exists(filename)
 
         open(filename, 'wb').write(r.content)
         banking_dir = filename.rsplit("/", 1)[0]
         with zipfile.ZipFile(filename, 'r') as zip_ref:
             zip_ref.extract("bank-additional/bank-additional-full.csv", banking_dir)
 
-        csv_file = os.path.join(banking_dir, "bank-additional", "bank-additional.csv")
+        csv_file = os.path.join(banking_dir, "bank-additional", "bank-additional-full.csv")
+        assert os.path.exists(csv_file)
+
         df = pd.read_csv(csv_file, sep=separator, na_values=["unknown"], engine='python')
 
         df = df[:5000]
