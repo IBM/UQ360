@@ -51,7 +51,7 @@ def multiclass_brier_score(y_true, y_prob):
     assert len(y_prob.shape) > 1, "y_prob should be array-like of shape (n_samples, n_classes)"
 
     y_target = np.zeros_like(y_prob)
-    y_target[:, y_true] = 1.0
+    y_target[np.arange(y_true.size), y_true] = 1.0
     return np.mean(np.sum((y_target - y_prob) ** 2, axis=1))
 
 
@@ -219,15 +219,17 @@ def compute_classification_metrics(y_true, y_prob, option='all'):
             option_list = ["aurrrc", "ece", "auroc", "nll", "brier", "accuracy"]
         else:
             option_list = [option]
+    else:
+        option_list = option
 
     if "aurrrc" in option_list:
         results["aurrrc"] = area_under_risk_rejection_rate_curve(y_true=y_true, y_prob=y_prob)
     if "ece" in option_list:
         results["ece"] = expected_calibration_error(y_true=y_true, y_prob=y_prob)
     if "auroc" in option_list:
-        results["auroc"], _ = roc_auc_score(y_true=y_true, y_score=y_prob)
+        results["auroc"] = roc_auc_score(y_true=y_true, y_score=y_prob, multi_class='ovr')
     if "nll" in option_list:
-        results["nll"] = log_loss(y_true=y_true, y_pred=np.argmax(y_prob, axis=1))
+        results["nll"] = log_loss(y_true=y_true, y_pred=y_prob)
     if "brier" in option_list:
         results["brier"] = multiclass_brier_score(y_true=y_true, y_prob=y_prob)
     if "accuracy" in option_list:

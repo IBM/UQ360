@@ -105,6 +105,8 @@ def compute_regression_metrics(y_true, y_mean, y_lower, y_upper, option="all", n
             option_list = ["rmse", "nll", "auucc_gain", "picp", "mpiw", "r2"]
         else:
             option_list = [option]
+    else:
+        option_list = option
 
     if "rmse" in option_list:
         results["rmse"] = mean_squared_error(y_true, y_mean, squared=False)

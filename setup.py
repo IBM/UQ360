@@ -15,14 +15,15 @@ for line in re.split('\n', requirements):
 
 setup(
     name='uq360',
-    version='0.1.1',
+    version='0.2',
     url='https://github.com/IBM/UQ360',
     license='Apache License 2.0',
     author='uq360 developers',
     author_email='uq360@us.ibm.com',
     packages=find_packages(),
-    description='IBM Uncertainty Quantification 360',
+    description='Uncertainty Quantification 360',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     install_requires=install_requires
+
 )
