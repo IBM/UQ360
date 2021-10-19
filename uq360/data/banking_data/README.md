@@ -18,5 +18,17 @@ The paper introducing this dataset is:
 
 ## Download instructions
 
-In order to use the Bank Marketing dataset with UQ360, please follow the following directions to download the datafiles and convert into csv files. 
+In order to use the Bank Marketing dataset with UQ360, please follow the following directions to download the datafiles and convert into csv files.
 
+Download the bank-additional.zip under uq360/data/banking_data/
+
+Now, uncompress the files into the same directory. The final directory structure should look like the below
+
+UQ360
+-uq360
+--data
+---banking_data
+----bank-additional
+-----banking-additional.csv
+-----banking-additional-full.csv
+----bank-additional.zip

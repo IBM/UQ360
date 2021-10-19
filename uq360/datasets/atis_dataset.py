@@ -2,6 +2,7 @@ import csv
 import os
 
 import numpy as np
+import sys
 
 
 def default_preprocessing(data):
@@ -57,7 +58,6 @@ class AtisDataset():
                os.path.abspath(__file__), '../data', 'atis_text_data'))))
             print("See :file:`uq360/data/atis_text_data/README.md` for more details on the dataset and instructions "
                   "on downloading/processing the data.")
-            import sys
             sys.exit(1)
 
         if custom_preprocessing:

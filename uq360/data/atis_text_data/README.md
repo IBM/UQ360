@@ -16,4 +16,4 @@ In order to use the Atis datasets with UQ360, please follow the following direct
 - Download the data hosted on kaggle.com, <https://www.kaggle.com/hassanamin/atis-airlinetravelinformationsystem/version/1>
 - Unzip the compressed file archive.zip
 - Place the resulting atis_intents.csv in this directory. 
-- Use the data loading class uq360.datasets.atis_dataset.py
+- Use the data loading class uq360.datasets.atis_dataset.py 

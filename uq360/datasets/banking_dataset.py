@@ -1,5 +1,6 @@
 import os
 import zipfile
+import sys
 
 import numpy as np
 import pandas as pd
@@ -83,7 +84,6 @@ class BankMarketingDataset():
                os.path.abspath(__file__), '../data', 'banking_data'))))
             print("See :file:`uq360/data/banking_data/README.md` for more details on the dataset and instructions "
                   "on downloading/processing the data.")
-            import sys
             sys.exit(1)
 
         if custom_preprocessing:

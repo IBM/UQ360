@@ -2,12 +2,14 @@ import os
 import unittest
 from unittest import TestCase
 
+import requests
+import zipfile
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
-
+from sklearn.linear_model import LogisticRegression
 from tests.test_utils import create_train_test_prod_split
 from uq360.algorithms.blackbox_metamodel.structured_data_classification import StructuredDataClassificationWrapper
 
@@ -35,11 +37,10 @@ class TestStructuredDataClassification(TestCase):
         print("Predictor's prediction", y_mean)
 
         delta = abs(y_mean - acc_on_prod * 100)
-        self.assertTrue(delta <= 2)
+        self.assertTrue(delta <= 3)
 
     def get_banking_data(self):
-        local_file = os.path.abspath(
-            os.path.join(os.getcwd(), "data", "structured_data", "banking", "bank-additional-full.csv.gz"))
+
         columns = {
             "ordered_categorical_columns": ["education"],
             "categorical_columns": ["job", "marital", "housing", "loan", "contact", "poutcome"],
@@ -51,7 +52,18 @@ class TestStructuredDataClassification(TestCase):
         file = {"filename": "bank-additional-full.csv", "separator": ";", "extension": ".csv"}
         separator = file.get('separator', ',')
 
-        df = pd.read_csv(local_file, sep=separator, na_values=["unknown"], engine='python', compression="gzip")
+        url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank-additional.zip'
+        r = requests.get(url, allow_redirects=True)
+
+        filename = os.path.join(os.getcwd(),'uq360/data/banking_data/bank-additional.zip')
+
+        open(filename, 'wb').write(r.content)
+        banking_dir = filename.rsplit("/", 1)[0]
+        with zipfile.ZipFile(filename, 'r') as zip_ref:
+            zip_ref.extract("bank-additional/bank-additional-full.csv", banking_dir)
+
+        csv_file = os.path.join(banking_dir, "bank-additional", "bank-additional.csv")
+        df = pd.read_csv(csv_file, sep=separator, na_values=["unknown"], engine='python')
 
         df = df[:5000]
         df = df.drop(columns.get('ignore_columns', []), axis=1)
