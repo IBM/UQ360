@@ -39,7 +39,7 @@ class LogisticRegression:
         res = scipy.optimize.minimize(fun=training_loss_fun,
                                       jac=training_gradient_fun,
                                       x0=init_params,
-                                      tol=1e-10,
+                                      tol=1e-6,
                                       options={'disp': verbose})
         opt_params = res.x
         if verbose:
@@ -63,7 +63,7 @@ class LogisticRegression:
 
     @staticmethod
     def synthetic_lr_data(N=10000, D=10):
-        x = 1. * npr.randn(N, D)
+        x = 2. * npr.randn(N, D)
         x_test = 1. * npr.randn(int(0.3 * N), D)
         w = npr.randn(D, 1)
         y = sigmoid((x @ w)).ravel()
