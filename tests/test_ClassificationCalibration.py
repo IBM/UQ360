@@ -1,20 +1,14 @@
-import os
-import unittest
-from unittest import TestCase
-
-from tests.test_utils import create_train_test_prod_split, split
-from uq360.algorithms.classification_calibration import ClassificationCalibration
-import numpy as np
-import pandas as pd
-import tensorflow as tf
 import logging
+
 from sklearn.metrics import brier_score_loss
 from sklearn.utils._testing import (
-    assert_array_almost_equal,
-    assert_almost_equal,
     assert_array_equal,
-    ignore_warnings,
 )
+import tensorflow as tf
+from tests.test_utils import create_train_test_prod_split, split
+import unittest
+from unittest import TestCase
+from uq360.algorithms.classification_calibration import ClassificationCalibration
 tf.get_logger().setLevel(logging.ERROR)
 
 
@@ -46,9 +40,6 @@ class TestCalibratedClassifier(TestCase):
             calib_model_probs.fit(self.model.predict_proba(self.x_test), self.y_test)
             res_probs = calib_model_probs.predict(self.model.predict_proba(self.x_prod))
             # Compare results with uncalibrated classifier
-            print("Unaclibrate ",y_proba.shape)
-            print("calibrated ",res_probs.y_prob.shape)
-
             assert_array_equal(y_pred, res_probs.y_pred)
             assert brier_score_loss(self.y_prod, y_proba[:,0]) >= brier_score_loss(
                 self.y_prod, res_probs.y_prob[:,0])
@@ -63,7 +54,7 @@ class TestCalibratedClassifier(TestCase):
             calib_model_feat.fit(self.x_test, self.y_test)
             res_feat = calib_model_feat.predict(self.x_prod)
 
-
+            # Compare results with uncalibrated classifier
             assert_array_equal(y_pred, res_feat.y_pred)
             assert brier_score_loss(self.y_prod, y_proba[:,0]) >= brier_score_loss(
                 self.y_prod, res_feat.y_prob[:,0])
@@ -81,7 +72,7 @@ class TestCalibratedClassifier(TestCase):
         returns pre-trained model object
         """
         from sklearn.neural_network import MLPClassifier
-        model = MLPClassifier()
+        model = MLPClassifier(random_state = 42)
         model.fit(x, y)
         return model
 
