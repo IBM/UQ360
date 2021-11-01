@@ -4,12 +4,10 @@ from sklearn.metrics import brier_score_loss
 from sklearn.utils._testing import (
     assert_array_equal,
 )
-import tensorflow as tf
 from tests.test_utils import create_train_test_prod_split, split
 import unittest
 from unittest import TestCase
 from uq360.algorithms.classification_calibration import ClassificationCalibration
-tf.get_logger().setLevel(logging.ERROR)
 
 
 class TestCalibratedClassifier(TestCase):
@@ -79,3 +77,4 @@ class TestCalibratedClassifier(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    
