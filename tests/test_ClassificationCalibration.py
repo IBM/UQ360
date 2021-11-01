@@ -32,15 +32,15 @@ class TestCalibratedClassifier(TestCase):
         # Check if calibrated classifier runs with probs method
         calib_model_probs = ClassificationCalibration(self.num_classes, 
                 fit_mode = 'probs')
-
-        calib_model_probs.fit(self.x_test, self.y_test)
-        res_probs = calib_model_probs.predict(self.x_prod)
+        # Fitting probs mode using probability scores
+        calib_model_probs.fit(self.model.predict_proba(self.x_test), self.y_test)
+        res_probs = calib_model_probs.predict(self.model.predict_proba(self.x_test))
 
         # check if features fit_mode runs model run
 
         ## Gives an error right now
         calib_model_feat = ClassificationCalibration(self.num_classes, fit_mode = 'features',
-                base_model_prediction_func = self._wrapper_for_fit)
+                base_model_prediction_func = self.model.predict_proba)
 
         calib_model_feat.fit(self.x_test, self.y_test)
         res_feat = calib_model_feat.predict(self.x_prod)
@@ -63,10 +63,6 @@ class TestCalibratedClassifier(TestCase):
         model = MLPClassifier()
         model.fit(x, y)
         return model
-
-    def _wrapper_for_fit(self):
-        return self.model.predict_proba
-
 
 
 if __name__ == '__main__':
