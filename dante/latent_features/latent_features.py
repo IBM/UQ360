@@ -39,6 +39,9 @@ class LatentFeatures():
         
         if self.post_processing_fn:
             activations = [
-                self.post_processing_fn(layer_act) for layer_act in activations]
+                self.post_processing_fn(layer_act)
+                for layer_act in activations]
+            
+        activations = [a.to(self.out_device) for a in activations]
 
-        return activations.to(self.out_device)
+        return activations
