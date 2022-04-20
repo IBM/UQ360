@@ -1,8 +1,6 @@
-from faulthandler import disable
 import logging
 import os
 from functools import reduce
-from multiprocessing.sharedctypes import Value
 from typing import Callable, Union, list, tuple
 
 import numpy as np
@@ -40,7 +38,7 @@ class ModelFeatureExtractor():
     def batch_to_model_input(self, batch):
         x, _ = batch
 
-        return x
+        return x.cuda()
 
     def run(self):
 
