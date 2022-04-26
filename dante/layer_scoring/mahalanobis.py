@@ -36,7 +36,7 @@ class Mahalanobis():
             X_centered = X - mean
             scores = np.matmul(X_centered, self.precision)
             scores = np.matmul(scores, X_centered.T)
-            scores = scores.diag()
+            scores = np.diag(scores)
             all_scores.append(-scores)
 
         all_scores = np.stack(all_scores).T
