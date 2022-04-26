@@ -63,7 +63,10 @@ class ModelFeatureExtractor():
         # If model_name is given, create subfolder
         if self.model_name is not None:
             out_dir = os.path.join(self.out_dir, self.model_name)
-            os.mkdir(out_dir)
+
+            if not os.path.exists(out_dir):
+                os.mkdir(out_dir)
+                
             model_name = self.model_name + '_'
         else:
             model_name = ''
