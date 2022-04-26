@@ -162,7 +162,7 @@ class PrepareTitan():
                 device=self.device,
                 drug_affinity_dtype=torch.float,
                 backend='eager',
-                iterate_dataset=False
+                iterate_dataset=True
             )
 
             self.logger.info(
