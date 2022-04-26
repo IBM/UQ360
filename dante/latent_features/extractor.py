@@ -17,30 +17,48 @@ class ModelFeatureExtractor():
     def __init__(
         self,
         model: Callable,
-        dataloaders: Tuple[DataLoader, str],
-        layers: Union[List[List[str]], List[Tuple[List[str], str]]],
-        model_name: str,
+        dataloader: Tuple[DataLoader, str],
+        submodules_list: List[str],
+        layer_name: str = None,
+        model_name: str = None,
         out_dir: str = './output',
         loggin_level: str = 'DEBUG', 
-        disable_tqdm = False):
+        disable_tqdm = False,
+        allow_overwrite: bool = False):
+        """_summary_
+
+        Args:
+            model (Callable): Pytorch model
+            dataloader (Tuple[DataLoader, str]): Tuple (dataloader, name)
+            submodules_list (List[str]): Submodule list to reach the desired 
+                layer. Call model to get the needed submodules.
+            layer_name (str, optional): Given layer name. Defaults to None.
+            model_name (str, optional): Given module name. Defaults to None.
+            out_dir (str, optional): Output path. Defaults to './output'.
+            loggin_level (str, optional): Logger level. Defaults to 'DEBUG'.
+            disable_tqdm (bool, optional): Disable tqdm. Defaults to False.
+            allow_overwrite (bool, optional): Overwrite existing file. Defaults to False.
+        """
     
         # Set loggin level
         self.logger = logging.getLogger('feature_extract')
         self.logger.setLevel(loggin_level)
 
         self.model = model
-        self.dataloaders = dataloaders
-        self.layers = layers
+        self.dataloader = dataloader
+        self.submodules_list = submodules_list
         self.model_name = model_name
+        self.layer_name = layer_name
         self.out_dir = out_dir
         self.disable_tqdm = disable_tqdm
+        self.allow_overwrite = allow_overwrite
 
     def batch_to_model_input(self, batch):
         x, _ = batch
 
         return x.cuda()
 
-    def run(self):
+    def run(self) -> Tensor:
 
         # If model_name is given, create subfolder
         if self.model_name is not None:
@@ -50,32 +68,29 @@ class ModelFeatureExtractor():
         else:
             model_name = ''
 
-        if type(self.layers[0]) is list:
-            layers = [
-                self.get_submodule(submodules_list, get_name=True) for
-                submodules_list in self.layers
-            ]
-        elif type(self.layers[0]) is tuple:
-            layers = [
-                (self.get_submodule(submodules_list, get_name=False), l_name)
-                for submodules_list, l_name in self.layers
-            ]
-        else:
-            raise ValueError('layer argument format not supported.')
+        layer, layer_name = self.get_submodule(self.submodules_list, get_name=True)
+
+        # Use given layer_name if available
+        layer_name = self.layer_name if self.layer_name else layer_name
             
         # Extract latent and confidence
-        for dl, dl_name in self.dataloaders:
+        dl, dl_name = self.dataloader
 
-            for layer, layer_name in layers:
+        fname = f"{model_name}latent_{dl_name}_{self.layer_name}.pt"
+        fpath = os.path.join(out_dir, fname)
 
-                latent_features = self._extract_latent_features(dl, layer)
+        # Load activations if available
+        if os.path.isfile(fpath) and not self.allow_overwrite:
+            return torch.load(fpath)
+
+        latent_features = self._extract_latent_features(dl, layer)
                 
-                fname = f"{model_name}latent_{dl_name}_{layer_name}.pt"
-                torch.save(
-                    latent_features,
-                    os.path.join(out_dir, fname))
-                
-                self.logger.info(f"DONE: latent {dl_name}, dense layer {layer_name}")
+        fname = f"{model_name}latent_{dl_name}_{layer_name}.pt"
+        torch.save(
+            latent_features,
+            fpath)
+
+        return latent_features
 
 
     def _extract_latent_features(self, data_loader, layer):
@@ -105,6 +120,6 @@ class ModelFeatureExtractor():
         )
 
         if get_name:
-            return module, '_'.join(submodules_list)
+            return module, '-'.join(submodules_list)
         else: 
             return module
