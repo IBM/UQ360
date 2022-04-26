@@ -3,7 +3,7 @@ Dante - **D**eep le**A**rning u**N**cer**T**ainty **E**stimation
 
 # Installation
 
-Create a virtual environment and install dependencies
+Create a virtual environment
 
 ```
 python -m venv --system-site-packages venv
