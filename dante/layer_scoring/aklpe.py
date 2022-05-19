@@ -5,6 +5,8 @@ import numpy as np
 
 from sklearn.model_selection import ShuffleSplit
 
+from tqdm.auto import tqdm
+
 class Aklpe():
     """Implementation of Averaged K nearest neighbors Localized P-value 
     Estimation (aK_LPE) [1].
@@ -87,7 +89,7 @@ class Aklpe():
         nearest_neighbors):
 
         scores = []
-        for start_idx in range(0, len(X), self.batch_size):
+        for start_idx in tqdm(range(0, len(X), self.batch_size), desc='g_stat'):
 
             batch = X[start_idx:start_idx+self.batch_size]
 
@@ -105,7 +107,7 @@ class Aklpe():
 
         self.neigh_graphs = []
 
-        for s1, s2 in self.split_generator.split(X): 
+        for s1, s2 in tqdm(self.split_generator.split(X), desc="Fit_nn"): 
 
             s1_nn = self.nearest_neighbors(**self.nearest_neighbors_kwargs).fit(X[s1])
             s2_nn = self.nearest_neighbors(**self.nearest_neighbors_kwargs).fit(X[s2])
