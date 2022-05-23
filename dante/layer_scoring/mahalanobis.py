@@ -5,30 +5,25 @@ import numpy as np
 from ..preprocessing.group_scaler import GroupScaler
 from sklearn.covariance import EmpiricalCovariance
 
-class Mahalanobis():
+
+class Mahalanobis:
     """Implementation of Mahalanobis Adversarial/Out-of-distribution detector [1].
 
-    [1] "A Simple Unified Framework for Detecting Out-of-Distribution Samples and 
-    Adversarial Attacks", K. Lee et al., NIPS 2018. 
+    [1] "A Simple Unified Framework for Detecting Out-of-Distribution Samples and
+    Adversarial Attacks", K. Lee et al., NIPS 2018.
     """
 
-    def fit(
-        self,
-        X: np.ndarray,
-        y: np.ndarray):
+    def fit(self, X: np.ndarray, y: np.ndarray):
 
         self.scaler = GroupScaler()
 
         X = self.scaler.fit_transform(X, y)
-        
+
         self._set_covariance(X)
 
         return self
-        
-    def score(
-        self, 
-        X, 
-        y=None) -> np.ndarray:
+
+    def score(self, X, y=None) -> np.ndarray:
 
         all_scores = []
         class_means = self.scaler.class_means.values()
@@ -43,16 +38,16 @@ class Mahalanobis():
 
         return np.max(all_scores, axis=1)
 
-    def _set_covariance(self, X, lib='sklearn', bias=True, rowobs=True):
+    def _set_covariance(self, X, lib="sklearn", bias=True, rowobs=True):
 
-        if lib == 'sklearn':
+        if lib == "sklearn":
 
             cov = EmpiricalCovariance().fit(X)
 
             self.covariance = cov.covariance_
             self.precision = cov.precision_
-        
-        elif lib == 'torch':
+
+        elif lib == "torch":
 
             if rowobs:
                 X = X.t()
@@ -62,15 +57,10 @@ class Mahalanobis():
             cov = X.cov()
 
             if bias:
-                cov = cov*(N-1)/N
+                cov = cov * (N - 1) / N
 
             self.covariance = cov
             self.precision = torch.linalg.pinv(cov, hermitian=True)
-        
+
         else:
             raise NotImplementedError()
-
-
-
-
-
