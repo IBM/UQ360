@@ -1,12 +1,11 @@
 import numpy as np
 
-class GroupScaler:
 
+class GroupScaler:
     def fit(self, X, y):
 
         self.class_means = {
-            loop_y: np.mean(X[loop_y == y], axis=0) 
-            for loop_y in set(list(y))
+            loop_y: np.mean(X[loop_y == y], axis=0) for loop_y in set(list(y))
         }
 
         return self
@@ -23,7 +22,7 @@ class GroupScaler:
 
             X_norm.extend(temp_X)
             old_idxs.extend(mask_idxs)
-        
+
         old_idxs = np.concatenate(old_idxs)
         X_norm = np.concatenate(X_norm)[old_idxs.argsort()]
 

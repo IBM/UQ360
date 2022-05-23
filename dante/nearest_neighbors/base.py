@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-class BaseNearestNeighbors(ABC):
 
+class BaseNearestNeighbors(ABC):
     @abstractmethod
     def fit():
         pass

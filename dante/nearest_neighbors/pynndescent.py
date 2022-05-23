@@ -1,11 +1,14 @@
 import pynndescent
 
-class NearestNeighbors():
 
+class NearestNeighbors:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-        
-    def fit(self, X, ):
+
+    def fit(
+        self,
+        X,
+    ):
         self.index = pynndescent.NNDescent(X, **self.kwargs)
         self.index.prepare()
 
