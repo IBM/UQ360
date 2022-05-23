@@ -24,7 +24,7 @@ class GroupScaler:
             old_idxs.extend(mask_idxs)
 
         old_idxs = np.concatenate(old_idxs)
-        X_norm = np.concatenate(X_norm)[old_idxs.argsort()]
+        X_norm = np.stack(X_norm)[old_idxs.argsort()]
 
         return X_norm
 

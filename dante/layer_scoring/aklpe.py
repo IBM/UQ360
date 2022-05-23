@@ -74,7 +74,7 @@ class Aklpe:
     def _compute_g_statistic(self, X, nearest_neighbors):
 
         scores = []
-        for start_idx in range(0, len(X), self.batch_size):
+        for start_idx in tqdm(range(0, len(X), self.batch_size), desc='g_stat'):
 
             batch = X[start_idx : start_idx + self.batch_size]
 
