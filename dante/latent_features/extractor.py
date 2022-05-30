@@ -1,7 +1,7 @@
 import logging
 import os
 from functools import reduce
-from typing import Callable, Union, Tuple, List
+from typing import Callable, List, Tuple, Union
 
 import numpy as np
 import torch
@@ -79,7 +79,7 @@ class ModelFeatureExtractor:
         # Extract latent and confidence
         dl, dl_name = self.dataloader
 
-        fname = f"{model_name}latent_{dl_name}_{self.layer_name}.pt"
+        fname = f"{model_name}latent_{dl_name}_{layer_name}.pt"
         fpath = os.path.join(out_dir, fname)
 
         # Load activations if available
@@ -88,10 +88,7 @@ class ModelFeatureExtractor:
 
         latent_features = self._extract_latent_features(dl, layer)
 
-        fname = f"{model_name}latent_{dl_name}_{layer_name}.pt"
-        # torch.save(
-        #     latent_features,
-        #     fpath)
+        torch.save(latent_features, fpath)
 
         return latent_features
 
