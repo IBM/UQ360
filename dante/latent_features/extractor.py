@@ -88,6 +88,10 @@ class ModelFeatureExtractor:
 
         latent_features = self._extract_latent_features(dl, layer)
 
+        print(latent_features.shape)
+
+        return
+
         torch.save(latent_features, fpath)
 
         return latent_features
