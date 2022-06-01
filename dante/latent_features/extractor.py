@@ -90,8 +90,6 @@ class ModelFeatureExtractor:
 
         print(latent_features.shape)
 
-        return
-
         torch.save(latent_features, fpath)
 
         return latent_features
