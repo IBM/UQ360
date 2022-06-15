@@ -17,7 +17,7 @@ class Knn:
 
     def score(self, X, k, method="knn"):
 
-        dist, idxs = self.nearest_neighbors.kneighbors(X, k)
+        dist, idxs = self.index.kneighbors(X, k)
 
         if method == "knn":
             return np.max(dist, axis=1)
