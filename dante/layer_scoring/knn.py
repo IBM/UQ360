@@ -13,7 +13,7 @@ class Knn:
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
 
     def fit(self, X):
-        self.index = self.nearest_neighbors.fit(X, **self.nearest_neighbors_kwargs)
+        self.index = self.nearest_neighbors().fit(X, **self.nearest_neighbors_kwargs)
 
     def score(self, X, k, method="knn"):
 
