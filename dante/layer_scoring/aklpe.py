@@ -84,8 +84,8 @@ class Aklpe:
 
         for s1, s2 in self.split_generator.split(X):
 
-            s1_nn = self.nearest_neighbors(**self.nearest_neighbors_kwargs).fit(X[s1])
-            s2_nn = self.nearest_neighbors(**self.nearest_neighbors_kwargs).fit(X[s2])
+            s1_nn = self.nearest_neighbors().fit(X[s1], **self.nearest_neighbors_kwargs)
+            s2_nn = self.nearest_neighbors().fit(X[s2], **self.nearest_neighbors_kwargs)
 
             self.neigh_graphs.append((s1_nn, s2_nn))
 
