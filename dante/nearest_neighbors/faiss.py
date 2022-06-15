@@ -2,13 +2,10 @@ import faiss
 
 
 class NearestNeighbors:
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
-
-    def fit(self, X, use_gpu=False):
+    def fit(self, X, use_gpu=False, **kwargs):
 
         n_features = X.shape[1]
-        self.index = faiss.IndexFlatL2(n_features)
+        self.index = faiss.IndexFlatL2(n_features, **kwargs)
         self.index.add(X)
 
         if use_gpu:
