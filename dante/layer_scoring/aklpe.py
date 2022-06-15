@@ -58,13 +58,10 @@ class Aklpe:
         upper_k = self.n_neighbors + self.n_neighbors // 2
 
         dist, idxs = nearest_neighbors.kneighbors(X, upper_k)
-        print(dist.shape)
         g_stat = np.sort(dist, axis=1)[:, lower_k:]
-        print(g_stat.shape)
         g_stat = np.mean(g_stat, axis=1)
-        print(g_stat.shape)
 
-        return dist
+        return g_stat
 
     def _compute_g_statistic(self, X, nearest_neighbors):
 
