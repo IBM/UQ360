@@ -78,7 +78,7 @@ class Aklpe():
         for _ in range(self.n_bootstraps):
 
             nn_graph = self.nearest_neighbors().fit(
-                np.random.shuffle(X)[: len(X) // 2], **self.nearest_neighbors_kwargs
+                np.random.choice(X, len(X) // 2), **self.nearest_neighbors_kwargs
             )
 
             nn_graphs.append(nn_graph)
