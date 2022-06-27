@@ -75,7 +75,7 @@ class Aklpe():
     def _fit_test_nn(self, X):
 
         nn_graphs = []
-        for _ in self.n_bootstraps:
+        for _ in range(self.n_bootstraps):
 
             nn_graph = self.nearest_neighbors().fit(
                 np.random.shuffle(X)[: len(X) // 2], **self.nearest_neighbors_kwargs
