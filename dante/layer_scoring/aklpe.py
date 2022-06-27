@@ -25,14 +25,11 @@ class Aklpe():
         self.n_bootstraps = n_bootstraps
         self.n_neighbors = n_neighbors
         self.batch_size = batch_size
-
-        self.split_generator = ShuffleSplit(
-            n_splits=self.n_bootstraps, test_size=0.5, random_state=random_state
-        )
+        self.random_state = random_state
 
     def fit(self, X: np.ndarray, y=None):
 
-        self.null_distribution = self._fit_nearest_neighbors_bootstrap(X)
+        self.null_distribution = self._compute_null_distribution(X)
 
         self._fit_test_nn(X)
 
@@ -41,7 +38,7 @@ class Aklpe():
     def score(self, X: np.ndarray, y=None):
 
         # Compute g_scores
-        test_g_stats = self._bootstrap(X)
+        test_g_stats = self._test_bootstrap(X)
 
         # Compute empirical p-values
         ranking = test_g_stats[:, np.newaxis] <= self.null_distribution
@@ -90,14 +87,20 @@ class Aklpe():
 
     def _compute_null_distribution(self, X):
 
-        g_stats = []
-        for s1, s2 in self.split_generator.split(X):
+        split_generator = ShuffleSplit(
+            n_splits=self.n_bootstraps, test_size=0.5, random_state=self.random_state
+        )
 
+        g_stats = []
+        for s1, s2 in split_generator.split(X):
+
+            # Fit nn graphs on len(X) // 2 instances
             s1_nn = self.nearest_neighbors().fit(X[s1], **self.nearest_neighbors_kwargs)
             s2_nn = self.nearest_neighbors().fit(X[s2], **self.nearest_neighbors_kwargs)
 
-            s1_g_stats = self._compute_g_statistic(X[s1], s1_nn)
-            s2_g_stats = self._compute_g_statistic(X[s2], s2_nn)
+            # Compute g_stats on the other split
+            s1_g_stats = self._compute_g_statistic(X[s1], s2_nn)
+            s2_g_stats = self._compute_g_statistic(X[s2], s1_nn)
 
             del s1_nn
             del s2_nn
