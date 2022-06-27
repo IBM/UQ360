@@ -33,11 +33,9 @@ class Aklpe:
 
     def fit(self, X: np.ndarray, y=None):
 
-        # Fit nn graphs foreach bootstrapped splitting
-        self._fit_nearest_neighbors_bootstrap(X)
+        self.null_distribution = self._fit_nearest_neighbors_bootstrap(X)
 
-        # Compute g_scores null distributions
-        self.null_distribution = self._bootstrap(X)
+        self._fit_test_nn(X)
 
         return self
 
@@ -78,26 +76,32 @@ class Aklpe:
 
         return scores
 
-    def _fit_nearest_neighbors_bootstrap(self, X):
+    def _fit_test_nn(self, X):
 
-        self.neigh_graphs = []
+        nn_graphs = []
+        for _ in self.n_bootstraps:
 
+            nn_graph = self.nearest_neighbors().fit(
+                np.random.shuffle(X)[: len(X) // 2], **self.nearest_neighbors_kwargs
+            )
+
+            nn_graphs.append(nn_graph)
+
+        self.nn_graphs = nn_graphs
+
+    def _compute_null_distribution(self, X):
+
+        g_stats = []
         for s1, s2 in self.split_generator.split(X):
 
             s1_nn = self.nearest_neighbors().fit(X[s1], **self.nearest_neighbors_kwargs)
             s2_nn = self.nearest_neighbors().fit(X[s2], **self.nearest_neighbors_kwargs)
 
-            self.neigh_graphs.append((s1_nn, s2_nn))
-
-    def _bootstrap(self, X):
-
-        g_stats = []
-        for idx, (s1, s2) in enumerate(self.split_generator.split(X)):
-
-            s1_nn, s2_nn = self.neigh_graphs[idx]
-
             s1_g_stats = self._compute_g_statistic(X[s1], s1_nn)
             s2_g_stats = self._compute_g_statistic(X[s2], s2_nn)
+
+            del s1_nn
+            del s2_nn
 
             split_g_stats = np.concatenate([s1_g_stats, s2_g_stats])
             idxs = np.concatenate([s1, s2])
@@ -105,6 +109,19 @@ class Aklpe:
             split_g_stats = split_g_stats[np.argsort(idxs)]
 
             g_stats.append(split_g_stats)
+
+        g_stats = np.stack(g_stats).T
+
+        return g_stats.mean(axis=1)
+
+    def _test_bootstrap(self, X):
+
+        g_stats = []
+        for nn_graph in self.nn_graphs:
+
+            g_stat = self._compute_g_statistic(X, nn_graph)
+
+            g_stats.append(g_stat)
 
         g_stats = np.stack(g_stats).T
 
