@@ -15,6 +15,8 @@ class Knn:
     def fit(self, X):
         self.index = self.nearest_neighbors().fit(X, **self.nearest_neighbors_kwargs)
 
+        return self
+
     def score(self, X, k, method="knn"):
 
         dist, idxs = self.index.kneighbors(X, k)
