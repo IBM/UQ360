@@ -75,14 +75,16 @@ class Aklpe():
     def _fit_test_nn(self, X):
 
         nn_graphs = []
+        self.rand_subs = []
         for _ in range(self.n_bootstraps):
 
-            rand_sub = np.random.randint(len(X), size=(len(X) // 2, ))
+            rand_sub = np.random.randint(len(X), size=(len(X) // 2,))
             nn_graph = self.nearest_neighbors().fit(
                 X[rand_sub], **self.nearest_neighbors_kwargs
             )
 
             nn_graphs.append(nn_graph)
+            self.rand_subs.append(rand_sub)
 
         self.nn_graphs = nn_graphs
 
