@@ -1,11 +1,5 @@
-from abc import ABC, abstractmethod
+from ..feature_transformer import FeatureTransformer
 
 
-class BaseNearestNeighbors(ABC):
-    @abstractmethod
-    def fit(self, X, **kwargs):
-        pass
-
-    @abstractmethod
-    def transform(self, X, n_neighbors):
-        pass
+class BaseNearestNeighbors(FeatureTransformer):
+    pass
