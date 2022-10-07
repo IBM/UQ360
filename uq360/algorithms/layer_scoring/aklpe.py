@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.model_selection import ShuffleSplit
 
-from ..nearest_neighbors.base import BaseNearestNeighbors
+from uq360.utils.nearest_neighbors import BaseNearestNeighbors
 
 class Aklpe():
     """Implementation of Averaged K nearest neighbors Localized P-value 

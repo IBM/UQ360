@@ -2,7 +2,7 @@ import torch
 
 import numpy as np
 
-from ..preprocessing.group_scaler import GroupScaler
+from uq360.utils.transformers.group_scaler import GroupScaler
 from sklearn.covariance import EmpiricalCovariance
 
 

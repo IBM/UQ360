@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..nearest_neighbors.base import BaseNearestNeighbors
+from uq360.utils.nearest_neighbors import BaseNearestNeighbors
 
 
 class Knn:
