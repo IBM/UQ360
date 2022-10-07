@@ -1,7 +1,12 @@
 import faiss
+from .base import BaseNearestNeighbors
 
 
-class NearestNeighbors:
+class NearestNeighbors(BaseNearestNeighbors):
+    def __int__(self):
+        super(NearestNeighbors, self).__int__()
+        self.index = None
+
     def fit(self, X, use_gpu=False, **kwargs):
 
         n_features = X.shape[1]
@@ -14,7 +19,7 @@ class NearestNeighbors:
 
         return self
 
-    def kneighbors(self, X, n_neighbors):
+    def transform(self, X, n_neighbors):
         distances, indices = self.index.search(X, n_neighbors)
 
         return distances, indices

@@ -1,6 +1,6 @@
 import numpy as np
 
-from uq360.utils.nearest_neighbors import BaseNearestNeighbors
+from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 
 class Knn:
@@ -19,7 +19,7 @@ class Knn:
 
     def score(self, X, k, method="knn"):
 
-        dist, idxs = self.index.kneighbors(X, k)
+        dist, idxs = self.index.transform(X, k)
 
         if method == "knn":
             return np.max(dist, axis=1)

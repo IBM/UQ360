@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 class BaseNearestNeighbors(ABC):
     @abstractmethod
-    def fit():
+    def fit(self, X, **kwargs):
         pass
 
     @abstractmethod
-    def kneighbors():
+    def transform(self, X, n_neighbors):
         pass
