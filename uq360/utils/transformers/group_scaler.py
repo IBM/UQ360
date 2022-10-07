@@ -2,8 +2,11 @@ import numpy as np
 
 
 class GroupScaler:
-    def fit(self, X, y):
+    def __init__(self):
+        super(GroupScaler, self).__init__()
+        self.class_means = None
 
+    def fit(self, X, y):
         self.class_means = {
             loop_y: np.mean(X[loop_y == y], axis=0) for loop_y in set(list(y))
         }
@@ -11,11 +14,9 @@ class GroupScaler:
         return self
 
     def transform(self, X, y):
-
         old_idxs = []
         X_norm = []
         for loop_y in set(list(y)):
-
             mask_idxs = (y == loop_y).nonzero()
 
             temp_X = X[mask_idxs] - self.class_means[loop_y]

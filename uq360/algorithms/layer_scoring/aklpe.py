@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.model_selection import ShuffleSplit
 
-from uq360.utils.nearest_neighbors import BaseNearestNeighbors
+from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 class Aklpe():
     """Implementation of Averaged K nearest neighbors Localized P-value 
@@ -12,13 +12,13 @@ class Aklpe():
     """
 
     def __init__(
-        self,
-        nearest_neighbors: BaseNearestNeighbors,
-        nearest_neighbors_kwargs={},
-        n_neighbors: int = 50,
-        n_bootstraps: int = 10,
-        batch_size: int = 1,
-        random_state: int = 123,
+            self,
+            nearest_neighbors: BaseNearestNeighbors,
+            nearest_neighbors_kwargs={},
+            n_neighbors: int = 50,
+            n_bootstraps: int = 10,
+            batch_size: int = 1,
+            random_state: int = 123,
     ):
         self.nearest_neighbors = nearest_neighbors
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
@@ -26,6 +26,7 @@ class Aklpe():
         self.n_neighbors = n_neighbors
         self.batch_size = batch_size
         self.random_state = random_state
+        self.null_distribution = None
 
     def fit(self, X: np.ndarray, y=None):
 
@@ -51,7 +52,7 @@ class Aklpe():
         lower_k = self.n_neighbors - (self.n_neighbors - 1) // 2
         upper_k = self.n_neighbors + self.n_neighbors // 2
 
-        dist, idxs = nearest_neighbors.kneighbors(X, upper_k)
+        dist, idxs = nearest_neighbors.transform(X, upper_k)
         g_stat = np.sort(dist, axis=1)[:, lower_k:]
         g_stat = np.mean(g_stat, axis=1)
 
@@ -61,8 +62,7 @@ class Aklpe():
 
         scores = []
         for start_idx in range(0, len(X), self.batch_size):
-
-            batch = X[start_idx : start_idx + self.batch_size]
+            batch = X[start_idx: start_idx + self.batch_size]
 
             g_stat = self._g_statistic(batch, nearest_neighbors)
 
@@ -77,7 +77,6 @@ class Aklpe():
         nn_graphs = []
         self.rand_subs = []
         for _ in range(self.n_bootstraps):
-
             rand_sub = np.random.randint(len(X), size=(len(X) // 2,))
             nn_graph = self.nearest_neighbors().fit(
                 X[rand_sub], **self.nearest_neighbors_kwargs
@@ -96,7 +95,6 @@ class Aklpe():
 
         g_stats = []
         for s1, s2 in split_generator.split(X):
-
             # Fit nn graphs on len(X) // 2 instances
             s1_nn = self.nearest_neighbors().fit(X[s1], **self.nearest_neighbors_kwargs)
             s2_nn = self.nearest_neighbors().fit(X[s2], **self.nearest_neighbors_kwargs)
@@ -123,7 +121,6 @@ class Aklpe():
 
         g_stats = []
         for nn_graph in self.nn_graphs:
-
             g_stat = self._compute_g_statistic(X, nn_graph)
 
             g_stats.append(g_stat)
