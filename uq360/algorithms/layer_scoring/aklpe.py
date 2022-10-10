@@ -2,9 +2,11 @@ import numpy as np
 from sklearn.model_selection import ShuffleSplit
 
 from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
+from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
 
-class Aklpe():
-    """Implementation of Averaged K nearest neighbors Localized P-value 
+
+class AKLPE(LatentScorer):
+    """Implementation of Averaged K nearest neighbors Localized P-value
     Estimation (aK_LPE) [1].
 
     [1] J. Qian and V. Saligrama, "New statistic in P-value estimation for
@@ -28,7 +30,7 @@ class Aklpe():
         self.random_state = random_state
         self.null_distribution = None
 
-    def fit(self, X: np.ndarray, y=None):
+    def _fit(self, X: np.ndarray):
 
         self.null_distribution = self._compute_null_distribution(X)
 
@@ -36,7 +38,7 @@ class Aklpe():
 
         return self
 
-    def score(self, X: np.ndarray, y=None):
+    def _predict(self, X: np.ndarray):
 
         # Compute g_scores
         test_g_stats = self._test_bootstrap(X)

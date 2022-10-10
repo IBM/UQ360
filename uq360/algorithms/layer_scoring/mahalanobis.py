@@ -1,30 +1,30 @@
-import torch
-
 import numpy as np
-
-from uq360.utils.transformers.group_scaler import GroupScaler
+import torch
 from sklearn.covariance import EmpiricalCovariance
 
+from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
+from uq360.utils.transformers.group_scaler import GroupScaler
 
-class Mahalanobis:
+
+class Mahalanobis(LatentScorer):
     """Implementation of Mahalanobis Adversarial/Out-of-distribution detector [1].
 
     [1] "A Simple Unified Framework for Detecting Out-of-Distribution Samples and
     Adversarial Attacks", K. Lee et al., NIPS 2018.
     """
 
-    def fit(self, X: np.ndarray, y: np.ndarray):
+    def __init__(self, model=None, layer=None):
+        super(Mahalanobis, self).__init__(model=model, layer=layer)
+        self.scaler = None
 
+    def _fit(self, X: np.ndarray, y: np.ndarray):
         self.scaler = GroupScaler()
-
         X = self.scaler.fit_transform(X, y)
-
         self._set_covariance(X)
 
         return self
 
-    def score(self, X, y=None) -> np.ndarray:
-
+    def _predict(self, X) -> np.ndarray:
         all_scores = []
         class_means = self.scaler.class_means.values()
         for mean in class_means:
@@ -64,3 +64,10 @@ class Mahalanobis:
 
         else:
             raise NotImplementedError()
+
+    def _process_pretrained_model(self, X, model, layer):
+        pass
+
+    def get_params(self):
+        """This method is parameterless"""
+        pass
