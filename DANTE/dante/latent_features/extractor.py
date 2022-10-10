@@ -1,15 +1,14 @@
 import logging
 import os
 from functools import reduce
-from typing import Callable, List, Tuple, Union
+from typing import Callable, List, Tuple
 
-import numpy as np
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from .latent_features import LatentFeatures
+from uq360.utils.latent_features import LatentFeatures
 
 
 class ModelFeatureExtractor:
