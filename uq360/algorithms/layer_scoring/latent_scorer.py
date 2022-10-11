@@ -18,7 +18,9 @@ class LatentScorer(PostHocUQ, ABC):
 
     def get_latents(self, X):
         if self.extractor is not None:
-            X = self.extractor.extract(torch.tensor(X))[0].numpy()
+            X = self.extractor.extract(torch.tensor(X))[0]
+        if isinstance(X, torch.Tensor):
+            X = X.numpy()
         return X
 
     @abc.abstractmethod
@@ -27,7 +29,7 @@ class LatentScorer(PostHocUQ, ABC):
 
     def fit(self, X, *args, **kwargs):
         X = self.get_latents(X)
-        return self._fit(X, *args, kwargs)
+        return self._fit(X, *args, **kwargs)
 
     @abc.abstractmethod
     def _predict(self, X, *args, **kwargs):
