@@ -5,6 +5,15 @@ from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 
 class KNN(LatentScorer):
+    def _process_pretrained_model(self, *argv, **kwargs):
+        pass
+
+    def get_params(self):
+        return {
+            'nearest_neighbors': self.nearest_neighbors.__class__.__name__,
+            'nearest_neighbor_kwargs': self.nearest_neighbors_kwargs,
+        }
+
     def __init__(
             self,
             nearest_neighbors: BaseNearestNeighbors,

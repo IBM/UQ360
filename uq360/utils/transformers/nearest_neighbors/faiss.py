@@ -1,4 +1,5 @@
 import faiss
+import numpy as np
 
 from .base import BaseNearestNeighbors
 
@@ -30,6 +31,9 @@ class FAISSNearestNeighbors(BaseNearestNeighbors):
 
     def transform(self, X, n_neighbors):
         distances, indices = self.index.search(X, n_neighbors)
+
+        #FAISS reports the squared distance
+        distances = np.sqrt(distances)
 
         return distances, indices
 

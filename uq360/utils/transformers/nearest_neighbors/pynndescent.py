@@ -3,13 +3,13 @@ import pynndescent
 from .base import BaseNearestNeighbors
 
 
-class NearestNeighbors(BaseNearestNeighbors):
+class PyNNDNearestNeighbors(BaseNearestNeighbors):
     def __init__(self):
-        super(NearestNeighbors, self).__init__()
+        super(PyNNDNearestNeighbors, self).__init__()
         self.index = None
 
     def fit(self, X, **kwargs):
-        self.index = pynndescent.NNDescent(X, kwargs)
+        self.index = pynndescent.NNDescent(X, **kwargs)
         self.index.prepare()
 
         return self
