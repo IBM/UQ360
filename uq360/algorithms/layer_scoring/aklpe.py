@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.model_selection import ShuffleSplit
 
-from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
+from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 
 class AKLPE(LatentScorer):
@@ -13,6 +13,18 @@ class AKLPE(LatentScorer):
     anomaly detection," 2012 IEEE Statistical Signal Processing Workshop (SSP)
     """
 
+    def get_params(self):
+        return {
+            "nearest_neighbors": self.nearest_neighbors.__class__.__name__,
+            "nearest_neighbors_kwargs": self.nearest_neighbors_kwargs,
+            "n_bootstraps": self.n_bootstraps,
+            "n_neighbors": self.n_neighbors,
+            "batch_size": self.batch_size,
+        }
+
+    def _process_pretrained_model(self, *argv, **kwargs):
+        pass
+
     def __init__(
             self,
             nearest_neighbors: BaseNearestNeighbors,
@@ -21,7 +33,10 @@ class AKLPE(LatentScorer):
             n_bootstraps: int = 10,
             batch_size: int = 1,
             random_state: int = 123,
+            model=None,
+            layer=None
     ):
+        super(AKLPE, self).__init__(model=model, layer=layer)
         self.nearest_neighbors = nearest_neighbors
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
         self.n_bootstraps = n_bootstraps

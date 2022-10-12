@@ -1,4 +1,10 @@
-import faiss
+try:
+    import faiss
+except ImportError as e:
+    raise ImportError(
+        f"This optional module depends on the uninstalled 'faiss' optional dependency: {__name__}"
+        "Please note that faiss must be installed with conda."
+    ) from e
 import numpy as np
 
 from .base import BaseNearestNeighbors

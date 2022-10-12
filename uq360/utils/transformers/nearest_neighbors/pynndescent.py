@@ -1,9 +1,20 @@
-import pynndescent
+from typing import Union, List
+
+try:
+    import pynndescent
+except ImportError as e:
+    raise ImportError(
+        f"This optional module depends on the uninstalled 'pynndescent' optional dependency: {__name__}"
+    ) from e
 
 from .base import BaseNearestNeighbors
 
 
 class PyNNDNearestNeighbors(BaseNearestNeighbors):
+    @classmethod
+    def name(cls):
+        return "pynndescent_nearest_neighbors"
+
     def __init__(self):
         super(PyNNDNearestNeighbors, self).__init__()
         self.index = None
