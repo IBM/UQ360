@@ -11,6 +11,7 @@ from .base import BaseNearestNeighbors
 
 
 class FAISSNearestNeighbors(BaseNearestNeighbors):
+    """Approximate nearest neighbor search using FAISS L2"""
     def __init__(self):
         super(FAISSNearestNeighbors, self).__init__()
         self.index = None
@@ -22,6 +23,17 @@ class FAISSNearestNeighbors(BaseNearestNeighbors):
         return 'faiss_nearest_neighbors'
 
     def fit(self, X, use_gpu=False, **kwargs):
+        """Index a set of reference points
+
+        Args:
+            X: numpy array of reference points
+            use_gpu: boolean, run on GPU?
+            **kwargs: keyword arguments to be passed to faiss.IndexFlatL2
+
+        Returns:
+            self
+
+        """
         self.X = X.copy()
         self.fit_kwargs = dict(kwargs, use_gpu=use_gpu)
 
@@ -36,6 +48,16 @@ class FAISSNearestNeighbors(BaseNearestNeighbors):
         return self
 
     def transform(self, X, n_neighbors):
+        """Perform a k-nearest-neighbor search on a set of query points
+
+        Args:
+            X: numpy array of query points
+            n_neighbors: number of nearest neighbors to be searched
+
+        Returns:
+            a pair of numpy arrays containing respectively the distances to and indices of the k nearest neighbors
+            of each query point (each array of shape (X.shape[0], n_neighbors) )
+        """
         distances, indices = self.index.search(X, n_neighbors)
 
         #FAISS reports the squared distance
