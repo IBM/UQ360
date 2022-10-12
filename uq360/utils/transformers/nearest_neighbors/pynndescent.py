@@ -11,6 +11,7 @@ from .base import BaseNearestNeighbors
 
 
 class PyNNDNearestNeighbors(BaseNearestNeighbors):
+    """Approximate nearest neighbor search using pynndescent"""
     @classmethod
     def name(cls):
         return "pynndescent_nearest_neighbors"
@@ -20,12 +21,32 @@ class PyNNDNearestNeighbors(BaseNearestNeighbors):
         self.index = None
 
     def fit(self, X, **kwargs):
+        """Index a set of reference points
+
+        Args:
+            X: a numpy array of reference vectors
+            **kwargs: keyword arguments to be passed to pynndescent.NNDescent
+
+        Returns:
+            self
+
+        """
         self.index = pynndescent.NNDescent(X, **kwargs)
         self.index.prepare()
 
         return self
 
     def transform(self, X, n_neighbors):
+        """Perform a k-nearest-neighbor search on a set of query points
+
+        Args:
+            X: numpy array of query points
+            n_neighbors: number of nearest neighbors to be searched
+
+        Returns:
+            a pair of numpy arrays containing respectively the distances to and indices of the k nearest neighbors
+            of each query point (each array of shape (X.shape[0], n_neighbors) )
+        """
         indices, distances = self.index.query(X, n_neighbors)
 
         return distances, indices
