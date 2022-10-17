@@ -4,7 +4,7 @@ python:
 
 # command to install dependencies
 install:
-  - pip3 install .
+  - pip install --upgrade importlib-metadata; pip3 install .
 
 # commands to run tes
 # before_script: redis-cli ping
