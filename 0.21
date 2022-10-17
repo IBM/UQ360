@@ -1,0 +1,2 @@
+Requirement already satisfied: importlib-metadata in /Users/psattig/anaconda3/lib/python3.8/site-packages (0.20)
+Requirement already satisfied: zipp>=0.5 in /Users/psattig/anaconda3/lib/python3.8/site-packages (from importlib-metadata) (3.1.0)
