@@ -7,7 +7,7 @@ from uq360.utils.transformers.nearest_neighbors.faiss import FAISSNearestNeighbo
 from uq360.utils.transformers.nearest_neighbors.pynndescent import PyNNDNearestNeighbors
 
 
-class KNN_tester:
+class KNNTester:
     n_classes = 5
     n_per_class = 3
     d = 10
@@ -60,19 +60,19 @@ class KNN_tester:
             self.assertSetEqual(set(idx[i]), {i * self.n_per_class + k for k in range(self.n_per_class)})
 
 
-class TestExactKNN(TestCase, KNN_tester):
+class TestExactKNN(TestCase, KNNTester):
     knn_class = ExactNearestNeighbors
-    fit_kwargs = {'n_neighbors': KNN_tester.n_per_class}
-    transform_kwargs = {'n_neighbors': KNN_tester.n_per_class}
+    fit_kwargs = {'n_neighbors': KNNTester.n_per_class}
+    transform_kwargs = {'n_neighbors': KNNTester.n_per_class}
 
 
-class TestPynnDescentKNN(TestCase, KNN_tester):
+class TestPynnDescentKNN(TestCase, KNNTester):
     knn_class = PyNNDNearestNeighbors
-    fit_kwargs = {'n_neighbors': KNN_tester.n_per_class}
-    transform_kwargs = {'n_neighbors': KNN_tester.n_per_class}
+    fit_kwargs = {'n_neighbors': KNNTester.n_per_class}
+    transform_kwargs = {'n_neighbors': KNNTester.n_per_class}
 
 
-class TestFaissKNN(TestCase, KNN_tester):
+class TestFaissKNN(TestCase, KNNTester):
     knn_class = FAISSNearestNeighbors
     fit_kwargs = {}
-    transform_kwargs = {'n_neighbors': KNN_tester.n_per_class}
+    transform_kwargs = {'n_neighbors': KNNTester.n_per_class}
