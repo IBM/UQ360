@@ -1,5 +1,3 @@
-from typing import Union, List
-
 try:
     import pynndescent
 except ImportError as e:
@@ -12,6 +10,7 @@ from .base import BaseNearestNeighbors
 
 class PyNNDNearestNeighbors(BaseNearestNeighbors):
     """Approximate nearest neighbor search using pynndescent"""
+
     @classmethod
     def name(cls):
         return "pynndescent_nearest_neighbors"
