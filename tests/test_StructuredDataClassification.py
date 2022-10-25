@@ -10,7 +10,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from tests.test_utils import create_train_test_prod_split
+from tests.utils import create_train_test_prod_split
 from uq360.algorithms.blackbox_metamodel.structured_data_classification import StructuredDataClassificationWrapper
 
 

@@ -3,7 +3,7 @@ import unittest
 from unittest import TestCase
 
 import pandas as pd
-from tests.test_utils import create_train_test_prod_split, split
+from tests.utils import create_train_test_prod_split, split
 from uq360.utils.utils import UseTransformer
 
 from uq360.algorithms.blackbox_metamodel.short_text_classification import ShortTextClassificationWrapper
