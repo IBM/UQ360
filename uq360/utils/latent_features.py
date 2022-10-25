@@ -29,7 +29,7 @@ class LatentFeatures:
             hooks.append(hook)
 
         with no_grad():
-            self.model(*input)
+            self.model(input)
 
         for hook in hooks:
             hook.remove()
