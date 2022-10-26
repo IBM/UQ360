@@ -4,8 +4,8 @@ from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
 from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 
-class KNN(LatentScorer):
-    """KNN latent space anomaly detector. Return some measure of distance to the training data."""
+class KNNScorer(LatentScorer):
+    """KNN-based latent space anomaly detector. Return some measure of distance to the training data."""
 
     def _process_pretrained_model(self, *argv, **kwargs):
         pass
@@ -39,14 +39,14 @@ class KNN(LatentScorer):
         if nearest_neighbors is None:
             raise ValueError(
                 "nearest neighbor must be nearest neighbor algorithm. See uq360.utils.transformers.nearest_neighbors")
-        super(KNN, self).__init__(model=model, layer=layer)
+        super(KNNScorer, self).__init__(model=model, layer=layer)
         self.nearest_neighbors = nearest_neighbors
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
         self.index = None
 
     def fit(self, X: np.ndarray):
         """Register X as in-distribution data"""
-        return super(KNN, self).fit(X)
+        return super(KNNScorer, self).fit(X)
 
     def _fit(self, X):
         self.index = self.nearest_neighbors().fit(X, **self.nearest_neighbors_kwargs)
@@ -66,7 +66,7 @@ class KNN(LatentScorer):
             anomaly scores
 
         """
-        return super(KNN, self).predict(X, k, method=method)
+        return super(KNNScorer, self).predict(X, k, method=method)
 
     def _predict(self, X, k, method="knn"):
         dist, idxs = self.index.transform(X, k)

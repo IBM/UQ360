@@ -34,12 +34,12 @@ class FAISSNearestNeighbors(BaseNearestNeighbors):
             self
 
         """
-        self.X = X.copy()
+        self.X = X.copy().astype(np.float32)
         self.fit_kwargs = dict(kwargs, use_gpu=use_gpu)
 
-        n_features = X.shape[1]
+        n_features = self.X.shape[1]
         self.index = faiss.IndexFlatL2(n_features, **kwargs)
-        self.index.add(X)
+        self.index.add(self.X)
 
         if use_gpu:
             res = faiss.StandardGpuResources()

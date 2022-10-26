@@ -2,12 +2,8 @@ from unittest import TestCase
 
 import torch
 
+from tests.utils import PlusOne
 from uq360.utils.latent_features import LatentFeatures
-
-
-class PlusOne(torch.nn.Module):
-    def forward(self, x):
-        return x + 1
 
 
 class TestLatentFeatures(TestCase):

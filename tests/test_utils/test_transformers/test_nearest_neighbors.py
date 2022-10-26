@@ -54,7 +54,7 @@ class KNNTester:
         except Exception as e:
             self.fail(f"{self.__class__.__name__}.fit raised exception {e}")
 
-        self.assertTrue(np.all(dist == 0))
+        self.assertTrue(np.allclose(dist,0))
 
         for i in range(self.n_classes):
             self.assertSetEqual(set(idx[i]), {i * self.n_per_class + k for k in range(self.n_per_class)})

@@ -1,5 +1,9 @@
-from sklearn.model_selection import StratifiedKFold, train_test_split
+import unittest
+
 import numpy as np
+import torch
+from sklearn.model_selection import train_test_split
+
 
 def create_train_test_prod_split(x, y, test_size=0.25):
     """
@@ -45,7 +49,7 @@ def split(x, y, bucket_1_indices, bucket_2_indices, split_ratio=0.3, test_size=0
     prod_test_data = x[prod_indices]
     prod_test_label = y[prod_indices]
 
-    from sklearn.model_selection import StratifiedKFold, train_test_split
+    from sklearn.model_selection import train_test_split
     x_train_new, x_test_new, y_train_new, y_test_new = train_test_split(training_test_data, training_test_label,
                                                                         test_size=test_size,
                                                                         random_state=42)
@@ -56,3 +60,19 @@ def split(x, y, bucket_1_indices, bucket_2_indices, split_ratio=0.3, test_size=0
 
     return x_train_new, y_train_new, x_test_new, y_test_new, prod_test_data, prod_test_label
 
+
+class PlusOne(torch.nn.Module):
+    def forward(self, x):
+        return x + 1
+
+
+def base_test_case(cls):
+    """Decorator for TestCases that are base classes not to be run"""
+
+    def setUpClass(my_cls):
+        if my_cls is cls:
+            raise unittest.SkipTest("Skipping base class LatentScorerTester")
+        super().setUpClass()
+
+    cls.setUpClass = classmethod(setUpClass)
+    return cls
