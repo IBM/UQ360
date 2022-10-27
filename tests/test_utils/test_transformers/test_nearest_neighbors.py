@@ -8,9 +8,9 @@ from uq360.utils.transformers.nearest_neighbors.pynndescent import PyNNDNearestN
 
 
 class KNNTester:
-    n_classes = 5
-    n_per_class = 3
-    d = 10
+    n_classes = 3
+    n_per_class = 50
+    d = 3
 
     def get_perfect_X(self):
         Xs = []
