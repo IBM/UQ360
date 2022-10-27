@@ -58,7 +58,7 @@ class FAISSNearestNeighbors(BaseNearestNeighbors):
             a pair of numpy arrays containing respectively the distances to and indices of the k nearest neighbors
             of each query point (each array of shape (X.shape[0], n_neighbors) )
         """
-        distances, indices = self.index.search(X, n_neighbors)
+        distances, indices = self.index.search(X.astype(np.float32), n_neighbors)
 
         #FAISS reports the squared distance
         distances = np.sqrt(distances)
