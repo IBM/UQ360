@@ -18,6 +18,8 @@ class KNNScorer(LatentScorer):
 
     def __init__(
             self,
+            n_neighbors: int,
+            method: str = "knn",
             nearest_neighbors: BaseNearestNeighbors = None,
             nearest_neighbors_kwargs={},
             model=None,
@@ -26,6 +28,8 @@ class KNNScorer(LatentScorer):
         """
         
         Args:
+            n_neighbors: number of nearest neighbors to consider in in-distribution data
+            method: one of ("knn", "avg", "lid"). These correspond respectively to the distance to the k-th neighbor, the mean of the kNN,
             nearest_neighbors: nearest neighbor algorithm, see uq360.utils.transformers.nearest_neighbors
             nearest_neighbors_kwargs: keyword arguments for the NN algorithm
             model: torch Module to analyze
@@ -40,6 +44,10 @@ class KNNScorer(LatentScorer):
             raise ValueError(
                 "nearest neighbor must be nearest neighbor algorithm. See uq360.utils.transformers.nearest_neighbors")
         super(KNNScorer, self).__init__(model=model, layer=layer)
+        self.n_neighbors = n_neighbors
+        assert method in ("knn", "avg", "lid")
+        self.method = method
+
         self.nearest_neighbors = nearest_neighbors
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
         self.index = None
@@ -53,30 +61,33 @@ class KNNScorer(LatentScorer):
 
         return self
 
-    def predict(self, X: np.ndarray, k: int, method: str = "knn"):
+    def predict(self, X: np.ndarray, n_neighbors=None, method: str = None):
         """Compute a KNN-distance-based anomaly score on query data X.
 
         Args:
             X: query data
-            k: number of nearest neighbors to consider in in-distribution data method:
-                one of ("knn", "avg", "lid"). These correspond respectively to the distance to the k-th neighbor,
-                the mean of the kNN,
+            n_neighbors: number of nearest neighbors to consider in in-distribution data
+            method: one of ("knn", "avg", "lid"). These correspond respectively to the distance to the k-th neighbor, the mean of the kNN,
 
         Returns:
             anomaly scores
 
         """
-        return super(KNNScorer, self).predict(X, k, method=method)
+        return super(KNNScorer, self).predict(X, n_neighbors, method=method)
 
-    def _predict(self, X, k, method="knn"):
-        dist, idxs = self.index.transform(X, k)
+    def _predict(self, X, n_neighbors=None, method="knn"):
+        if n_neighbors is None:
+            n_neighbors = self.n_neighbors
+        if method is None:
+            method = self.method
+        dist, idxs = self.index.transform(X, n_neighbors)
 
         if method == "knn":
             return np.max(dist, axis=1)
         elif method == "avg":
             return np.mean(dist, axis=1)
         elif method == "lid":
-            return -k / np.sum(np.log(dist / np.max(dist)))
+            return -n_neighbors / np.sum(np.log(dist / np.max(dist)))
         elif method is None:
             return dist, idxs
         else:

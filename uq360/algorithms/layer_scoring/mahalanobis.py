@@ -6,7 +6,7 @@ from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
 from uq360.utils.transformers.group_scaler import GroupScaler
 
 
-class Mahalanobis(LatentScorer):
+class MahalanobisScorer(LatentScorer):
     """Implementation of the Mahalanobis Adversarial/Out-of-distribution detector [1].
 
     [1] "A Simple Unified Framework for Detecting Out-of-Distribution Samples and
@@ -25,12 +25,12 @@ class Mahalanobis(LatentScorer):
             If both a model and layers are provided, inputs are expected to be model inputs
             to be mapped to latent vectors.
         """
-        super(Mahalanobis, self).__init__(model=model, layer=layer)
+        super(MahalanobisScorer, self).__init__(model=model, layer=layer)
         self.scaler = None
 
     def fit(self, X: np.ndarray, y: np.ndarray):
         """Register data X and class labels y as in-distribution data"""
-        return super(Mahalanobis, self).fit(X,y)
+        return super(MahalanobisScorer, self).fit(X, y)
 
     def _fit(self, X: np.ndarray, y: np.ndarray):
         self.scaler = GroupScaler()
@@ -41,7 +41,7 @@ class Mahalanobis(LatentScorer):
 
     def predict(self, X: np.ndarray):
         """Compute the Mahalanobis distance between query data X and the in-distribution data classes"""
-        return super(Mahalanobis, self).predict(X)
+        return super(MahalanobisScorer, self).predict(X)
 
     def _predict(self, X) -> np.ndarray:
         all_scores = []
@@ -51,7 +51,7 @@ class Mahalanobis(LatentScorer):
             scores = np.matmul(X_centered, self.precision)
             scores = np.matmul(scores, X_centered.T)
             scores = np.diag(scores)
-            all_scores.append(-scores)
+            all_scores.append(scores)
 
         all_scores = np.stack(all_scores).T
 
