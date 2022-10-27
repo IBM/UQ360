@@ -3,12 +3,19 @@ This is an open source project, and we appreciate your help!
 We use the GitHub issue tracker to discuss new features and non-trivial bugs.
 
 To contribute code, documentation, or tests, please submit a pull request to
-the GitHub repository. The pull request template includes a disclaimer based
-on the [Developer's Certificate of Origin 1.1](https://elinux.org/Developer_Certificate_Of_Origin)
-and provides your assurance to the community that you wrote the code you are
-contributing or have the right to pass on the code that you are contributing.
+the GitHub repository. 
 
-Please follow the guidelines specified in [MAINTAINERS](MAINTAINERS.md) before
+## Signing off your contribution
+This project uses [DCO][1]. Be sure to [sign off][2] your contributions using 
+the `-s` flag or adding `Signed-off-By: Name<Email>` in the git commit message.
+We will not be able to accept non-signed contributions.
+
+### Example commit message
+```bash
+git commit -s -m 'Informative commit message'
+```
+
+Please follow the additional guidelines specified in [MAINTAINERS](MAINTAINERS.md) before
 submitting your pull request.
 
 Generally, we expect two maintainers to review your pull
@@ -27,3 +34,6 @@ via code, tests, or documentation:
 * Prasanna Sattigeri
 * Kush Varshney
 * Yunfeng Zhang
+
+  [1]: https://developercertificate.org/    "DCO"
+  [2]: https://docs.github.com/en/github/authenticating-to-github/signing-commits    "gitSignoff"

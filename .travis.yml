@@ -4,6 +4,7 @@ python:
 
 # command to install dependencies
 install:
+  - pip install --upgrade importlib-metadata
   - pip3 install .
   - pip3 install pynndescent==0.5.7
   - pip3 install faiss-cpu==1.6.5 --no-cache
