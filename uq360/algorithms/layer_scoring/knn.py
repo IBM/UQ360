@@ -87,7 +87,7 @@ class KNNScorer(LatentScorer):
         elif method == "avg":
             return np.mean(dist, axis=1)
         elif method == "lid":
-            return -n_neighbors / np.sum(np.log(dist / np.max(dist)))
+            return -n_neighbors / np.sum(np.log(dist / np.max(dist, axis=1, keepdims=True)), axis=1)
         elif method is None:
             return dist, idxs
         else:
