@@ -16,9 +16,13 @@
 # %%
 from uq360.algorithms.layer_scoring import (aklpe, knn, mahalanobis)
 from uq360.utils.transformers.nearest_neighbors.exact import ExactNearestNeighbors
+from uq360.utils.transformers.nearest_neighbors.faiss import FAISSNearestNeighbors
+
 
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
+
+from scipy.stats import bootstrap
 
 import numpy as np
 
@@ -349,30 +353,68 @@ plt.show()
 # %%
 # Here we will compute the latents outside of the uncertainty estimator
 aklpe_uq = aklpe.AKLPE(n_neighbors=10, 
-                       nearest_neighbors=ExactNearestNeighbors)
+                       nearest_neighbors=FAISSNearestNeighbors)
 
 # %%
 headless_model = model[:12]
 print(headless_model[-1])
 
 with torch.no_grad():
-    z_train = headless_model(noise_offset_inputs(img_train,0,0))
+        z_train = headless_model(noise_offset_inputs(img_train,0,0))
 
 
 # %%
 aklpe_uq.fit(X=z_train)
 
 # %%
-z_noises = dict()
+z_noises = []
 for noise_lvl in tqdm(np.linspace(0,0.7,8)):
     img_noised = noise_offset_inputs(img_test, noise_lvl)
-    z_noises.update(noise_lvl= headless_model(img_noised))
+    with torch.no_grad():
+        z_noises.append(headless_model(img_noised))
 
 # %%
-distances = aklpe_uq.predict(img_noised)
-dists.append(distances)
+dist = []
+for z_noise in tqdm(z_noises):
+    distances = aklpe_uq.predict(z_noise)
+    dist.append(distances)
 
 # %%
-for noise_lvl in tqdm(np.linspace(0,0.7,8)):
-    img_noised = noise_offset_inputs(img_test, noise_lvl)
-    z_noises.update(noise_lvl= headless_model(img_noised))
+ax = plt.gca()
+ax.fill_between(np.linspace(0,0.7,8), 
+                 [np.mean(d[1])-np.std(d[1]) for d in dist], 
+                 [np.mean(d[1])+np.std(d[1]) for d in dist],
+                 alpha=0.3
+                )
+ax.plot(np.linspace(0,0.7,8), [np.mean(d[1]) for d in dist], c='blue')
+ax.set(xlabel='Offset', ylabel='p-value')
+ax.set(ylim=[0,None])
+plt.show()
+
+# %% [markdown]
+# # Measuring Epistemic uncertainty with Mahalanobis
+
+# %%
+# Here we will compute the latents outside of the uncertainty estimator
+maha_uq = mahalanobis.MahalanobisScorer()
+
+# %%
+maha_uq.fit(X=z_train, y=y_train)
+
+# %%
+dist = []
+for z_noise in tqdm(z_noises):
+    distances = maha_uq.predict(z_noise)
+    dist.append(distances)
+
+# %%
+ax = plt.gca()
+ax.fill_between(np.linspace(0,0.7,8), 
+                 [np.mean(d)-np.std(d) for d in dist], 
+                 [np.mean(d)+np.std(d) for d in dist],
+                 alpha=0.3
+                )
+ax.plot(np.linspace(0,0.7,8), [np.mean(d) for d in dist], c='blue')
+ax.set(xlabel='Offset', ylabel='Mahalanobis Distance')
+plt.show()
+
