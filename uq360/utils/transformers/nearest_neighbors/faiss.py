@@ -11,7 +11,17 @@ from .base import BaseNearestNeighbors
 
 
 class FAISSNearestNeighbors(BaseNearestNeighbors):
-    """Approximate nearest neighbor search using FAISS L2"""
+    """Approximate nearest neighbor search using FAISS L2.
+
+    Notes
+    -----
+    This requires the external dependency `faiss-cpu` or `faiss-gpu`.
+    The CPU version can be installed through the unofficial PyPI version using
+    `pip install faiss-cpu==1.6.5 ----no-cache`.
+
+    The 'proper' procedure (which is nearly required for the GPU version) is to use `conda`,
+    which works best by re-installing UQ360 and as many of its dependencies with `conda install`.
+    """
     def __init__(self):
         super(FAISSNearestNeighbors, self).__init__()
         self.index = None

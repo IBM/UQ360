@@ -352,8 +352,8 @@ plt.show()
 
 # %%
 # Here we will compute the latents outside of the uncertainty estimator
-aklpe_uq = aklpe.AKLPE(n_neighbors=10, 
-                       nearest_neighbors=FAISSNearestNeighbors)
+aklpe_uq = aklpe.AKLPEScorer(n_neighbors=10,
+                             nearest_neighbors=FAISSNearestNeighbors)
 
 # %%
 headless_model = model[:12]

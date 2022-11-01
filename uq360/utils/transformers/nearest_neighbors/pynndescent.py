@@ -9,7 +9,11 @@ from .base import BaseNearestNeighbors
 
 
 class PyNNDNearestNeighbors(BaseNearestNeighbors):
-    """Approximate nearest neighbor search using pynndescent"""
+    """Approximate nearest neighbor search using pynndescent.
+
+    Notes
+    -----
+    This requires the optional depdendency `pynndescent`."""
 
     @classmethod
     def name(cls):

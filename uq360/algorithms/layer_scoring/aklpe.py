@@ -5,7 +5,7 @@ from uq360.algorithms.layer_scoring.latent_scorer import LatentScorer
 from uq360.utils.transformers.nearest_neighbors import BaseNearestNeighbors
 
 
-class AKLPE(LatentScorer):
+class AKLPEScorer(LatentScorer):
     """Implementation of Averaged K nearest neighbors Localized P-value
     Estimation (aK_LPE) [1].
 
@@ -56,7 +56,7 @@ class AKLPE(LatentScorer):
         if nearest_neighbors is None:
             raise ValueError(
                 "nearest neighbor must be nearest neighbor algorithm. See uq360.utils.transformers.nearest_neighbors")
-        super(AKLPE, self).__init__(model=model, layer=layer)
+        super(AKLPEScorer, self).__init__(model=model, layer=layer)
         self.nearest_neighbors = nearest_neighbors
         self.nearest_neighbors_kwargs = nearest_neighbors_kwargs
         self.n_bootstraps = n_bootstraps
@@ -67,7 +67,7 @@ class AKLPE(LatentScorer):
 
     def fit(self, X: np.ndarray):
         """Register X as in-distribution data"""
-        return super(AKLPE, self).fit(X)
+        return super(AKLPEScorer, self).fit(X)
 
     def _fit(self, X: np.ndarray):
 
@@ -87,7 +87,7 @@ class AKLPE(LatentScorer):
             pair of numpy arrays: g_stats, p_value containing respectively the G-statistics and the corresponding
             AKLPE anomaly p-value.
         """
-        return super(AKLPE, self).predict(X)
+        return super(AKLPEScorer, self).predict(X)
 
     def _predict(self, X: np.ndarray):
 
