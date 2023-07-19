@@ -6,7 +6,7 @@
 The Uncertainty Quantification 360 (UQ360) is an open-source toolkit with a Python package to provide data science 
 practitioners and developers access to state-of-the-art algorithms, to streamline the process of estimating, evaluating,
 improving, and communicating uncertainty of machine learning models as common practices for AI transparency.
-The [UQ360 interactive experience](http://uq360.mybluemix.net/) provides a gentle introduction to the concepts and 
+The [UQ360 interactive experience](https://uq360.res.ibm.com/) provides a gentle introduction to the concepts and 
 capabilities by walking through an example use case. The [tutorials and example notebooks](./examples) offer a deeper,
 data scientist-oriented introduction. The [complete API](https://uq360.readthedocs.io/) is also available.
 
@@ -16,20 +16,20 @@ To get started as a contributor, please join the #uq360-users or #uq360-develope
 the [AIF360 Community on Slack](https://aif360.slack.com) by requesting an 
 invitation [here](https://join.slack.com/t/aif360/shared_invite/zt-5hfvuafo-X0~g6tgJQ~7tIAT~S294TQ).
 
-![alt text](https://uq360.mybluemix.net/imgs/flowchart.png "UQ Pipeline")
+![alt text](https://uq360.res.ibm.com/imgs/flowchart.png "UQ Pipeline")
 
 # Resources
 
-- [Introduction](https://uq360.mybluemix.net/overview) to Uncertainty Quantification 360.
-- [Demo](https://uq360.mybluemix.net/demo/0) House Price Prediction Model.
+- [Introduction](https://uq360.res.ibm.com/overview) to Uncertainty Quantification 360.
+- [Demo](https://uq360.res.ibm.com/demo/0) House Price Prediction Model.
 - List of [Algorithms](https://uq360.readthedocs.io/en/latest/algorithms.html) supported.
 - List of [Metrics](https://uq360.readthedocs.io/en/latest/metrics.html) supported.
-- [Guidance](https://uq360.mybluemix.net/resources/guidance) on Choosing UQ Algorithms and Metrics.
-- [Guidance](https://uq360.mybluemix.net/resources/communication) on Communicating Uncertainty.
-- [Glossary](https://uq360.mybluemix.net/resources/glossary) of UQ Terms.
-- Read our [papers](https://uq360.mybluemix.net/resources/papers).
+- [Guidance](https://uq360.res.ibm.com/resources/guidance) on Choosing UQ Algorithms and Metrics.
+- [Guidance](https://uq360.res.ibm.com/resources/communication) on Communicating Uncertainty.
+- [Glossary](https://uq360.res.ibm.com/resources/glossary) of UQ Terms.
+- Read our [papers](https://uq360.res.ibm.com/resources/papers).
 - Complete list of [tutorials](https://github.com/IBM/UQ360/tree/main/examples).
-- Join the Slack [Community](https://uq360.mybluemix.net/community).
+- Join the Slack [Community](https://uq360.res.ibm.com/community).
 
 # Example Use-cases
 
