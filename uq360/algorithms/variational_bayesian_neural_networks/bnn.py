@@ -64,6 +64,9 @@ class BnnRegression(BuiltinUQ):
             self
 
         """
+        assert type(X) == torch.Tensor, f"Expected X type torch.Tensor but found {type(X)}"
+        assert type(y) == torch.Tensor, f"Expected y type torch.Tensor but found {type(y)}"
+
         torch.manual_seed(1234)
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.config['step_size'])
         neg_elbo = torch.zeros([self.config['num_epochs'], 1])
