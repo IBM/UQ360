@@ -15,7 +15,9 @@ Below is a list of additional notebooks that demonstrate the use of UQ360:
 
 [demo_auxiliary_interval_predictor.ipynb](./auxiliary_interval_predictor/demo_auxiliary_interval_predictor.ipynb): demonstrates the use of Auxiliary Interval Predictors for calibration aware regression.
 
-[demo_blackbox_metamodel.ipynb](./blackbox_metamodel/demo_blackbox_metamodel.ipynb): demonstrates the use of Blackbox MetaModel for post-hoc extraction of uncertainty from pre-trained models.
+[demo_blackbox_metamodel_regression.ipynb](./blackbox_metamodel/demo_blackbox_metamodel_regression.ipynb): demonstrates the use of Blackbox MetaModel for post-hoc extraction of uncertainty from pre-trained regression models.
+
+[demo_blackbox_metamodel_classification.ipynb](./blackbox_metamodel/demo_blackbox_metamodel_classification.ipynb): demonstrates the use of Blackbox MetaModel for post-hoc extraction of uncertainty from pre-trained classification models.
 
 [demo_bnn_classification.ipynb](./bnn_classification/demo_bnn_classification.ipynb
 ): demonstrates the use of BNNs and uncertainty decomposition for selective classificaiton on UCI Adult Income Dataset.
